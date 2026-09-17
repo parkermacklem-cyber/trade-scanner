@@ -2,37 +2,37 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradeScan V3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TradeScan</title>
 
 <style>
 *{box-sizing:border-box}
 
 :root{
---bg:#f5f6fa;
---card:#ffffff;
---text:#11121a;
---muted:#73798c;
---line:#e9eaf1;
---purple:#6d4aff;
+--bg:#f6f7fb;
+--card:#fff;
+--text:#11131a;
+--muted:#777d8d;
+--line:#e9eaf0;
+--purple:#7047eb;
 --purple2:#9b7cff;
---green:#16a66a;
+--green:#15965e;
 --red:#e5484d;
---orange:#f08c35;
---yellow:#e2b93b;
+--orange:#ef8c36;
+--yellow:#d7b438;
 }
 
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 background:
-radial-gradient(circle at 80% 0%,rgba(109,74,255,.09),transparent 28%),
+radial-gradient(circle at 80% 0%,rgba(112,71,235,.08),transparent 25%),
 var(--bg);
 color:var(--text);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
 .app{
-width:min(1180px,100%);
+max-width:1200px;
 margin:auto;
 padding:22px;
 }
@@ -41,96 +41,88 @@ header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:15px;
-margin-bottom:22px;
+margin-bottom:20px;
 }
 
-.brand h1{
-margin:0;
+.logo{
 font-size:28px;
-letter-spacing:-1px;
+font-weight:950;
+letter-spacing:-1.2px;
 }
 
-.brand span{
-color:var(--purple);
-}
+.logo span{color:var(--purple)}
 
-.subtitle{
+.sub{
 color:var(--muted);
-font-size:13px;
+font-size:12px;
 margin-top:4px;
 }
 
 .live{
+background:#eeeaff;
+color:var(--purple);
 padding:8px 12px;
 border-radius:100px;
-background:#f0edff;
-color:var(--purple);
-font-weight:800;
-font-size:11px;
+font-size:10px;
+font-weight:900;
 }
 
 .toolbar{
-background:rgba(255,255,255,.9);
-border:1px solid var(--line);
-border-radius:18px;
-padding:13px;
 display:flex;
 gap:10px;
-margin-bottom:18px;
-box-shadow:0 10px 35px rgba(20,20,40,.04);
+background:var(--card);
+border:1px solid var(--line);
+padding:12px;
+border-radius:17px;
+box-shadow:0 8px 30px rgba(30,30,50,.04);
 }
 
 input{
 flex:1;
 border:0;
-background:#f5f6fa;
-border-radius:12px;
-padding:13px;
 outline:none;
+background:#f5f6fa;
+border-radius:11px;
+padding:13px;
 font-size:14px;
 }
 
 button{
 border:0;
-border-radius:12px;
-padding:12px 17px;
 background:var(--purple);
-color:white;
-font-weight:800;
+color:#fff;
+border-radius:11px;
+padding:12px 18px;
+font-weight:850;
 cursor:pointer;
 }
 
 .status{
-font-size:12px;
+margin:10px 2px 17px;
+font-size:11px;
 color:var(--muted);
-margin:10px 2px 18px;
 }
 
 .scanner{
 display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
 }
 
 .stock{
 background:var(--card);
 border:1px solid var(--line);
-border-radius:17px;
-padding:15px;
+border-radius:15px;
+padding:13px;
 cursor:pointer;
 transition:.15s;
-box-shadow:0 6px 24px rgba(30,30,60,.035);
 }
 
-.stock:hover{
-transform:translateY(-2px);
-box-shadow:0 12px 35px rgba(30,30,60,.08);
-}
+.stock:hover{transform:translateY(-2px)}
 
 .stock.selected{
-border:1px solid rgba(109,74,255,.5);
-box-shadow:0 0 0 3px rgba(109,74,255,.07);
+border-color:rgba(112,71,235,.55);
+box-shadow:0 0 0 3px rgba(112,71,235,.07);
 }
 
 .stocktop{
@@ -140,65 +132,85 @@ align-items:center;
 }
 
 .symbol{
-font-weight:900;
-font-size:17px;
+font-size:16px;
+font-weight:950;
 }
 
 .price{
-font-size:13px;
 color:var(--muted);
-margin-top:5px;
-}
-
-.scorepill{
-min-width:47px;
-text-align:center;
-padding:7px 9px;
-border-radius:10px;
-color:white;
-font-weight:900;
-}
-
-.smallstate{
-margin-top:11px;
 font-size:11px;
+margin-top:4px;
+}
+
+.score{
+color:#fff;
+font-size:13px;
+font-weight:950;
+min-width:40px;
+text-align:center;
+padding:7px;
+border-radius:9px;
+}
+
+.stockbottom{
+margin-top:9px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:5px;
+}
+
+.badge{
+font-size:9px;
+font-weight:900;
+padding:5px 7px;
+border-radius:7px;
+}
+
+.reasonmini{
 color:var(--muted);
+font-size:9px;
 }
 
-.dashboard{
-margin-top:18px;
+.main{
 display:grid;
-grid-template-columns:1.65fr .85fr;
-gap:15px;
+grid-template-columns:1.75fr .75fr;
+gap:14px;
+margin-top:15px;
 }
 
-.panel{
+.card{
 background:var(--card);
 border:1px solid var(--line);
 border-radius:20px;
+box-shadow:0 10px 35px rgba(30,30,50,.04);
+}
+
+.chartcard{
 padding:18px;
-box-shadow:0 10px 35px rgba(30,30,60,.04);
 }
 
-.paneltitle{
+.charthead{
 display:flex;
-align-items:center;
 justify-content:space-between;
-margin-bottom:15px;
+align-items:flex-start;
+margin-bottom:10px;
 }
 
-.paneltitle h2{
+.charthead h2{
 margin:0;
-font-size:18px;
+font-size:21px;
 }
 
-.muted{
+.chartmeta{
 color:var(--muted);
-font-size:12px;
+font-size:11px;
+margin-top:4px;
 }
 
 .chartwrap{
-height:360px;
+width:100%;
+height:430px;
 position:relative;
 }
 
@@ -207,738 +219,714 @@ width:100%;
 height:100%;
 }
 
+.tradeSummary{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+margin-top:12px;
+}
+
+.stat{
+background:#f7f7fa;
+padding:11px;
+border-radius:11px;
+}
+
+.stat span{
+display:block;
+color:var(--muted);
+font-size:9px;
+margin-bottom:4px;
+}
+
+.stat strong{
+font-size:12px;
+}
+
+.side{
+padding:18px;
+}
+
+.sideTitle{
+font-size:11px;
+color:var(--muted);
+font-weight:800;
+}
+
 .gauge{
-width:190px;
-height:190px;
+width:175px;
+height:175px;
 border-radius:50%;
-margin:8px auto 18px;
-position:relative;
+margin:18px auto;
 display:grid;
 place-items:center;
+position:relative;
 background:conic-gradient(
 #e5484d 0deg 108deg,
-#f08c35 108deg 180deg,
-#e2b93b 180deg 234deg,
-#79c98c 234deg 288deg,
-#16965f 288deg 342deg,
+#ef8c36 108deg 180deg,
+#d7b438 180deg 234deg,
+#76c88a 234deg 288deg,
+#15965e 288deg 342deg,
 #7047eb 342deg 360deg
 );
-box-shadow:0 15px 45px rgba(80,60,150,.14);
 }
 
 .gauge:before{
 content:"";
 position:absolute;
-width:145px;
-height:145px;
-border-radius:50%;
+width:134px;
+height:134px;
 background:white;
+border-radius:50%;
 }
 
-.gaugeinner{
+.gaugeinside{
 z-index:2;
 text-align:center;
 }
 
 .bigscore{
-font-size:43px;
+font-size:42px;
 font-weight:950;
 line-height:1;
 }
 
-.scorelabel{
-font-size:10px;
+.scoreword{
 color:var(--muted);
+font-size:9px;
+font-weight:900;
 margin-top:6px;
-font-weight:800;
 }
 
-.metrics{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:9px;
-margin-top:16px;
+.setup{
+background:linear-gradient(145deg,#171821,#25213c);
+color:#fff;
+padding:15px;
+border-radius:15px;
 }
 
-.metric{
-background:#f7f7fa;
-border-radius:13px;
-padding:11px;
-}
-
-.metricname{
-color:var(--muted);
-font-size:10px;
-margin-bottom:5px;
-}
-
-.metricvalue{
-font-weight:850;
-font-size:13px;
-}
-
-.tradebox{
-margin-top:15px;
-background:linear-gradient(135deg,#171822,#25223b);
-color:white;
-border-radius:17px;
-padding:16px;
-}
-
-.tradehead{
+.setupTop{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:13px;
+margin-bottom:12px;
 }
 
-.tradehead strong{
-font-size:14px;
+.setupName{
+font-size:16px;
+font-weight:900;
 }
 
-.research{
-color:#aaa5bd;
+.direction{
+padding:5px 8px;
+border-radius:7px;
 font-size:9px;
+font-weight:900;
 }
 
-.levels{
+.tradegrid{
 display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:8px;
+grid-template-columns:1fr 1fr;
+gap:7px;
 }
 
-.level{
+.tradelevel{
 background:rgba(255,255,255,.07);
-border-radius:10px;
-padding:10px;
+border-radius:9px;
+padding:9px;
 }
 
-.level span{
+.tradelevel span{
+color:#aaa8b7;
 display:block;
-font-size:9px;
-color:#aaa5bd;
+font-size:8px;
 margin-bottom:4px;
 }
 
-.level strong{
-font-size:13px;
+.tradelevel strong{
+font-size:12px;
 }
 
-.components{
+.why{
 margin-top:15px;
 }
 
-.component{
-margin-bottom:11px;
+.why h3{
+font-size:12px;
+margin:0 0 10px;
 }
 
-.comprow{
+.reason{
+padding:9px 0;
+border-bottom:1px solid var(--line);
 display:flex;
-justify-content:space-between;
-font-size:10px;
-margin-bottom:5px;
+gap:8px;
+font-size:11px;
+line-height:1.35;
 }
 
-.bar{
+.dot{
+width:7px;
 height:7px;
-background:#efeff4;
-border-radius:20px;
-overflow:hidden;
+border-radius:50%;
+background:var(--purple);
+margin-top:4px;
+flex:none;
 }
 
-.fill{
-height:100%;
-background:linear-gradient(90deg,var(--purple2),var(--purple));
-border-radius:20px;
-}
-
-.footerNote{
-margin:20px 0 5px;
+.disclaimer{
 text-align:center;
-font-size:10px;
 color:var(--muted);
+font-size:9px;
+margin:18px;
 }
 
-@media(max-width:850px){
+@media(max-width:900px){
+.scanner{grid-template-columns:repeat(4,1fr)}
+.main{grid-template-columns:1fr}
+}
+
+@media(max-width:600px){
+.app{padding:13px}
 .scanner{grid-template-columns:repeat(2,1fr)}
-.dashboard{grid-template-columns:1fr}
-}
-
-@media(max-width:520px){
-.app{padding:14px}
-header{align-items:flex-start}
-.scanner{grid-template-columns:1fr 1fr}
-.stock{padding:12px}
 .toolbar{flex-direction:column}
-.chartwrap{height:300px}
-.metrics{grid-template-columns:repeat(2,1fr)}
-.gauge{width:165px;height:165px}
-.gauge:before{width:125px;height:125px}
-.bigscore{font-size:38px}
+.chartwrap{height:370px}
+.tradeSummary{grid-template-columns:repeat(2,1fr)}
+.logo{font-size:24px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
 <header>
-<div class="brand">
-<h1>Trade<span>Scan</span> V3</h1>
-<div class="subtitle">Quantitative market research dashboard</div>
+<div>
+<div class="logo">Trade<span>Scan</span></div>
+<div class="sub">Intraday setup scanner · 5-minute market data</div>
 </div>
-<div class="live">REAL MARKET DATA</div>
+<div class="live">LIVE DATA</div>
 </header>
 
 <div class="toolbar">
 <input id="search" placeholder="Search ticker...">
-<button onclick="scanAll()">Refresh Market Data</button>
+<button onclick="scanAll()">Refresh Scan</button>
 </div>
 
-<div class="status" id="status">
-Loading 5-minute market data from Massive...
-</div>
+<div class="status" id="status">Starting scanner...</div>
 
 <div class="scanner" id="scanner"></div>
 
-<div class="dashboard">
+<div class="main">
 
-<div class="panel">
-<div class="paneltitle">
+<div class="card chartcard">
+
+<div class="charthead">
 <div>
-<h2 id="chartTitle">Select a stock</h2>
-<div class="muted" id="chartSub">
-5-minute quantitative price structure
+<h2 id="chartTitle">Loading...</h2>
+<div class="chartmeta" id="chartMeta">
+Entry · Stop · Take-profit projections
 </div>
 </div>
-<div class="muted" id="freshness">—</div>
+
+<div class="chartmeta" id="updated">—</div>
 </div>
 
 <div class="chartwrap">
 <canvas id="chart"></canvas>
 </div>
 
-<div class="metrics" id="metrics"></div>
+<div class="tradeSummary" id="summary"></div>
+
 </div>
 
-<div class="panel">
+<div class="card side">
 
-<div class="paneltitle">
-<h2>Signal Engine</h2>
-<span class="muted">0–100</span>
-</div>
+<div class="sideTitle">SETUP QUALITY</div>
 
 <div class="gauge">
-<div class="gaugeinner">
+<div class="gaugeinside">
 <div class="bigscore" id="bigScore">—</div>
-<div class="scorelabel" id="scoreText">WAITING</div>
+<div class="scoreword" id="scoreWord">SCANNING</div>
 </div>
 </div>
 
-<div class="components" id="components"></div>
+<div class="setup">
 
-<div class="tradebox">
-<div class="tradehead">
-<strong>Projected Trade Map</strong>
-<span class="research">PAPER / RESEARCH</span>
-</div>
-
-<div class="levels" id="tradeLevels">
-<div class="level">
-<span>REFERENCE ENTRY</span>
-<strong>—</strong>
+<div class="setupTop">
+<div class="setupName" id="setupName">—</div>
+<div class="direction" id="direction">—</div>
 </div>
 
-<div class="level">
-<span>INVALIDATION</span>
-<strong>—</strong>
-</div>
-
-<div class="level">
-<span>1R PROJECTION</span>
-<strong>—</strong>
-</div>
-
-<div class="level">
-<span>2R PROJECTION</span>
-<strong>—</strong>
-</div>
-
-<div class="level">
-<span>3R PROJECTION</span>
-<strong>—</strong>
-</div>
-
-<div class="level">
-<span>EST. HOLD</span>
-<strong>—</strong>
-</div>
-</div>
-</div>
+<div class="tradegrid" id="tradeGrid"></div>
 
 </div>
 
+<div class="why">
+<h3>Why this setup?</h3>
+<div id="reasons"></div>
 </div>
 
-<div class="footerNote">
-Quantitative research tool only. Scores and projected levels are derived from historical price/volume data and are not guarantees or predictions.
+</div>
+</div>
+
+<div class="disclaimer">
+Paper-trading / research tool. Entry, stop and target levels are model-derived reference levels, not predictions or guarantees.
 </div>
 
 </div>
 
 <script>
 
-/* =========================================================
-BACKEND
-========================================================= */
+/* CORRECT CLOUDFLARE WORKER — ONE N IN SCANER */
+const API="https://trade-scaner-api.parkermacklem.workers.dev";
 
-const API = "https://trade-scaner-api.parkermacklem.workers.dev"; 
-
-const SYMBOLS = [
+const SYMBOLS=[
 "AAPL","MSFT","NVDA","AMZN","GOOGL",
 "META","AVGO","TSLA","JPM","V",
 "MA","WMT","COST","NFLX","AMD",
 "ORCL","CRM","BAC","XOM","LLY"
 ];
 
-let stocks = {};
-let selected = null;
+let stocks={};
+let errors={};
+let selected=null;
+let scanning=false;
 
 
-/* =========================================================
-BASIC MATH
-========================================================= */
+/* ---------- UTILITIES ---------- */
 
-function clamp(v,min=0,max=100){
-return Math.max(min,Math.min(max,v));
-}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 function avg(a){
-if(!a.length) return 0;
-return a.reduce((x,y)=>x+y,0)/a.length;
+return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+}
+
+function clamp(v,a=0,b=100){
+return Math.max(a,Math.min(b,v));
+}
+
+function fmt(v){
+return Number.isFinite(v)?"$"+v.toFixed(2):"—";
 }
 
 function pct(a,b){
-if(!b) return 0;
-return ((a-b)/b)*100;
-}
-
-function fmt(n){
-if(!Number.isFinite(n)) return "—";
-return "$"+n.toFixed(2);
+return b?((a-b)/b)*100:0;
 }
 
 
-/* =========================================================
-INDICATORS
-========================================================= */
+/* ---------- INDICATORS USED BEHIND THE SCENES ---------- */
 
 function ema(values,length){
 
-if(!values.length) return [];
+if(!values.length)return[];
 
 const k=2/(length+1);
 const out=[values[0]];
 
-for(let i=1;i<values.length;i++){
+for(let i=1;i<values.length;i++)
 out.push(values[i]*k+out[i-1]*(1-k));
-}
 
 return out;
 }
 
 function rsi(values,length=14){
 
-if(values.length<length+1) return 50;
+if(values.length<length+1)return 50;
 
-let gains=0;
-let losses=0;
+let gain=0,loss=0;
 
 for(let i=values.length-length;i<values.length;i++){
-
 const d=values[i]-values[i-1];
-
-if(d>0) gains+=d;
-else losses-=d;
+if(d>0)gain+=d;
+else loss-=d;
 }
 
-if(losses===0) return 100;
+if(!loss)return 100;
 
-const rs=(gains/length)/(losses/length);
+const rs=(gain/length)/(loss/length);
 
 return 100-(100/(1+rs));
 }
 
-function atr(candles,length=14){
+function atr(c,length=14){
 
-if(candles.length<2) return 0;
+if(c.length<2)return 0;
 
-const trs=[];
+const tr=[];
 
-for(let i=1;i<candles.length;i++){
+for(let i=1;i<c.length;i++){
 
-const h=candles[i].high;
-const l=candles[i].low;
-const pc=candles[i-1].close;
-
-trs.push(
-Math.max(
-h-l,
-Math.abs(h-pc),
-Math.abs(l-pc)
-)
-);
+tr.push(Math.max(
+c[i].high-c[i].low,
+Math.abs(c[i].high-c[i-1].close),
+Math.abs(c[i].low-c[i-1].close)
+));
 }
 
-return avg(trs.slice(-length));
+return avg(tr.slice(-length));
 }
 
 
-/* =========================================================
-TREND CONSISTENCY
-========================================================= */
+/* ---------- ANALYSIS ---------- */
 
-function regression(values){
-
-const n=values.length;
-
-if(n<2) return {slope:0,r2:0};
-
-let sx=0,sy=0,sxy=0,sxx=0;
-
-for(let i=0;i<n;i++){
-sx+=i;
-sy+=values[i];
-sxy+=i*values[i];
-sxx+=i*i;
-}
-
-const slope=
-(n*sxy-sx*sy)/
-((n*sxx-sx*sx)||1);
-
-const mean=sy/n;
-
-let ssTot=0;
-let ssRes=0;
-
-const intercept=(sy-slope*sx)/n;
-
-for(let i=0;i<n;i++){
-
-const pred=intercept+slope*i;
-
-ssTot+=(values[i]-mean)**2;
-ssRes+=(values[i]-pred)**2;
-}
-
-const r2=ssTot ? 1-(ssRes/ssTot) : 0;
-
-return {
-slope,
-r2:clamp(r2*100)
-};
-}
-
-
-/* =========================================================
-SCORE ENGINE
-========================================================= */
-
-function calculate(symbol,candles,data){
+function analyze(symbol,candles,data){
 
 candles=candles
-.filter(c =>
-Number.isFinite(c.open) &&
-Number.isFinite(c.high) &&
-Number.isFinite(c.low) &&
-Number.isFinite(c.close)
+.filter(c=>
+Number.isFinite(+c.open)&&
+Number.isFinite(+c.high)&&
+Number.isFinite(+c.low)&&
+Number.isFinite(+c.close)
 )
-.sort((a,b)=>
-(a.timestamp||new Date(a.datetime)) -
-(b.timestamp||new Date(b.datetime))
-);
+.map(c=>({
+...c,
+open:+c.open,
+high:+c.high,
+low:+c.low,
+close:+c.close,
+volume:+c.volume||0
+}))
+.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
 
-if(candles.length<20){
-throw new Error("Not enough candles");
-}
+if(candles.length<20)
+throw new Error("Not enough candle history");
 
 const closes=candles.map(c=>c.close);
-const volumes=candles.map(c=>Number(c.volume)||0);
+const volumes=candles.map(c=>c.volume);
 
 const price=closes.at(-1);
 
-const e9=ema(closes,9);
-const e20=ema(closes,20);
-const e50=ema(closes,50);
+const E9=ema(closes,9);
+const E20=ema(closes,20);
+const E50=ema(closes,50);
 
-const ema9=e9.at(-1);
-const ema20=e20.at(-1);
-const ema50=e50.at(-1);
+const ema9=E9.at(-1);
+const ema20=E20.at(-1);
+const ema50=E50.at(-1);
 
-const RSI=rsi(closes,14);
-const ATR=atr(candles,14);
-const atrPct=price ? ATR/price*100 : 0;
+const RSI=rsi(closes);
+const ATR=atr(candles);
 
-const momentum5=
-closes.length>5 ?
-pct(price,closes.at(-6)) : 0;
+const mom5=
+closes.length>5?pct(price,closes.at(-6)):0;
 
-const momentum15=
-closes.length>15 ?
-pct(price,closes.at(-16)) : momentum5;
+const mom15=
+closes.length>15?pct(price,closes.at(-16)):0;
 
-const recentVol=avg(volumes.slice(-10));
-const priorVol=avg(volumes.slice(-30,-10));
+const recentVol=avg(volumes.slice(-8));
+const baseVol=avg(volumes.slice(-28,-8));
 
-const relVolume=
-priorVol ?
-recentVol/priorVol :
-1;
+const relVol=baseVol?recentVol/baseVol:1;
 
-const recentHigh=Math.max(
-...candles.slice(-30).map(c=>c.high)
-);
+const recent=candles.slice(-25);
 
-const recentLow=Math.min(
-...candles.slice(-30).map(c=>c.low)
-);
+const high=Math.max(...recent.map(c=>c.high));
+const low=Math.min(...recent.map(c=>c.low));
 
-const range=recentHigh-recentLow;
+const rangePos=
+high!==low?(price-low)/(high-low):.5;
 
-const rangePosition=
-range ?
-(price-recentLow)/range*100 :
-50;
+const bullish=
+price>ema20 &&
+ema9>ema20;
 
-const pullback=
-recentHigh ?
-(recentHigh-price)/recentHigh*100 :
-0;
+const bearish=
+price<ema20 &&
+ema9<ema20;
 
-const reg=regression(closes.slice(-40));
+let direction="NEUTRAL";
+if(bullish)direction="LONG BIAS";
+if(bearish)direction="SHORT BIAS";
 
-const trendScore=clamp(
-50
-+(price>ema20 ? 15:-15)
-+(ema9>ema20 ? 15:-15)
-+(ema20>ema50 ? 15:-15)
-);
+let setup="No Clear Setup";
+
+if(bullish && mom5>0 && rangePos>.65)
+setup="Trend Continuation";
+
+else if(bullish && price<=ema9+ATR*.35)
+setup="Pullback Setup";
+
+else if(bullish && price>=high-ATR*.35)
+setup="Breakout Setup";
+
+else if(bearish && mom5<0)
+setup="Bearish Momentum";
+
+else if(price>ema20)
+setup="Developing Trend";
+
+let trendScore=50;
+
+trendScore+=price>ema20?18:-18;
+trendScore+=ema9>ema20?16:-16;
+
+if(closes.length>=50)
+trendScore+=ema20>ema50?12:-12;
+
+trendScore=clamp(trendScore);
 
 const momentumScore=clamp(
-50+
-momentum5*8+
-momentum15*4
-);
-
-const rsiScore=clamp(
-RSI>=50 && RSI<=70
-? 70+(RSI-50)
-: RSI<50
-? RSI
-: 90-(RSI-70)*2
+50+mom5*12+mom15*5
 );
 
 const volumeScore=clamp(
-45+(relVolume-1)*35
+45+(relVol-1)*35
 );
 
-const structureScore=clamp(
-rangePosition*.65+
-reg.r2*.35
-);
+let rsiScore=50;
 
-const consistencyScore=clamp(reg.r2);
+if(RSI>=50&&RSI<=70)
+rsiScore=70+(RSI-50);
 
-const volatilityScore=clamp(
-75-Math.abs(atrPct-1.2)*25
-);
+else if(RSI<50)
+rsiScore=RSI;
+
+else
+rsiScore=90-(RSI-70)*2;
+
+rsiScore=clamp(rsiScore);
+
+const structureScore=clamp(rangePos*100);
 
 const score=Math.round(clamp(
-trendScore*.25+
-momentumScore*.18+
-structureScore*.18+
-consistencyScore*.13+
-volumeScore*.10+
-rsiScore*.09+
-volatilityScore*.07
+trendScore*.35+
+momentumScore*.25+
+structureScore*.20+
+volumeScore*.12+
+rsiScore*.08
 ));
 
 /*
-Research-only projected map.
+MODEL-DERIVED PAPER-TRADE MAP
+--------------------------------
+This does NOT predict where price will go.
 
-Reference entry = latest price.
-Invalidation uses recent structure + ATR.
+For bullish setups:
+entry = current reference price
+stop = recent structure / ATR reference
+targets = multiples of defined risk
 */
 
-const entry=price;
+let entry=price;
+let stop,tp1,tp2,tp3;
 
-const structureStop=
-Math.min(
+if(direction==="SHORT BIAS"){
+
+const recentHigh=Math.max(
+...candles.slice(-12).map(c=>c.high)
+);
+
+stop=Math.min(
+recentHigh,
+entry+ATR*1.6
+);
+
+if(stop<=entry)
+stop=entry+ATR*1.25;
+
+const risk=Math.max(stop-entry,ATR*.5);
+
+tp1=entry-risk;
+tp2=entry-risk*2;
+tp3=entry-risk*3;
+
+}else{
+
+const recentLow=Math.min(
 ...candles.slice(-12).map(c=>c.low)
 );
 
-let invalidation=
-Math.max(
-structureStop,
+stop=Math.max(
+recentLow,
 entry-ATR*1.6
 );
 
-if(invalidation>=entry){
-invalidation=entry-ATR*1.25;
+if(stop>=entry)
+stop=entry-ATR*1.25;
+
+const risk=Math.max(entry-stop,ATR*.5);
+
+tp1=entry+risk;
+tp2=entry+risk*2;
+tp3=entry+risk*3;
 }
 
-const risk=Math.max(
-entry-invalidation,
-ATR*.5
-);
+const risk=Math.abs(entry-stop);
 
-const oneR=entry+risk;
-const twoR=entry+risk*2;
-const threeR=entry+risk*3;
+const rr2=risk?
+Math.abs(tp2-entry)/risk:
+0;
 
-let hold="30–90 min";
+let hold="30–120 min";
 
-if(score>=85) hold="1–4 hrs";
-else if(score>=70) hold="45–180 min";
-else if(score<55) hold="No strong setup";
+if(score>=85)hold="45 min–3 hrs";
+else if(score>=70)hold="30–2 hrs";
+else if(score<55)hold="Wait / weak setup";
 
-return {
+const reasons=[];
+
+if(bullish)
+reasons.push("Price structure is above the short-term trend.");
+
+if(bearish)
+reasons.push("Price structure is below the short-term trend.");
+
+if(mom5>.15)
+reasons.push("Short-term momentum is accelerating upward.");
+
+else if(mom5<-.15)
+reasons.push("Short-term momentum is negative.");
+
+if(relVol>1.15)
+reasons.push("Recent volume is elevated versus its short baseline.");
+
+if(rangePos>.75)
+reasons.push("Price is trading near the upper part of its recent range.");
+
+if(RSI>=50&&RSI<=70)
+reasons.push("Momentum is positive without the RSI filter being extremely extended.");
+
+if(!reasons.length)
+reasons.push("Current conditions do not show strong confirmation yet.");
+
+return{
 symbol,
 candles,
 price,
-ema9,
+score,
+setup,
+direction,
+hold,
 ema20,
-ema50,
 RSI,
 ATR,
-atrPct,
-momentum5,
-momentum15,
-relVolume,
-rangePosition,
-pullback,
-r2:reg.r2,
-score,
-
-components:{
-Trend:trendScore,
-Momentum:momentumScore,
-Structure:structureScore,
-Consistency:consistencyScore,
-Volume:volumeScore,
-RSI:rsiScore,
-Volatility:volatilityScore
-},
-
+mom5,
+relVol,
+reasons:reasons.slice(0,3),
+fetchedAt:data.fetchedAt,
 trade:{
 entry,
-invalidation,
-oneR,
-twoR,
-threeR,
+stop,
+tp1,
+tp2,
+tp3,
 risk,
-hold
-},
-
-fetchedAt:data.fetchedAt || null
+rr2
+}
 };
 }
 
 
-/* =========================================================
-FETCH
-========================================================= */
+/* ---------- FETCH WITH RETRIES ---------- */
 
 async function fetchStock(symbol){
 
 const url=
 `${API}/timeseries?symbol=${encodeURIComponent(symbol)}`
-+ `&interval=5min&outputsize=500`;
++`&interval=5min&outputsize=500`;
 
-const res=await fetch(url,{
+let lastError;
+
+for(let attempt=1;attempt<=3;attempt++){
+
+try{
+
+const response=await fetch(url,{
 cache:"no-store"
 });
 
-if(!res.ok){
-throw new Error(`HTTP ${res.status}`);
+if(!response.ok)
+throw new Error(`HTTP ${response.status}`);
+
+const data=await response.json();
+
+if(data.error)
+throw new Error(data.details||data.error);
+
+if(!Array.isArray(data.candles)||!data.candles.length)
+throw new Error("No candle data");
+
+return analyze(symbol,data.candles,data);
+
+}catch(e){
+
+lastError=e;
+
+/*
+Increasing delay before retry:
+1.5 sec -> 3 sec -> 4.5 sec
+*/
+
+if(attempt<3)
+await sleep(1500*attempt);
+}
 }
 
-const data=await res.json();
-
-if(data.error){
-throw new Error(
-data.details ||
-data.error ||
-"Provider error"
-);
-}
-
-if(
-!Array.isArray(data.candles) ||
-!data.candles.length
-){
-throw new Error("No candles returned");
-}
-
-return calculate(
-symbol,
-data.candles,
-data
-);
-}
-
-
-/* =========================================================
-SCORE COLORS
-========================================================= */
-
-function scoreColor(score){
-
-if(score>=95) return "#7047eb";
-if(score>=80) return "#168d59";
-if(score>=65) return "#78c98b";
-if(score>=50) return "#d8b338";
-if(score>=30) return "#ef8c36";
-
-return "#e5484d";
-}
-
-function scoreName(score){
-
-if(score>=95) return "EXTREME";
-if(score>=80) return "STRONG";
-if(score>=65) return "POSITIVE";
-if(score>=50) return "NEUTRAL";
-if(score>=30) return "WEAK";
-
-return "LOW";
+throw lastError;
 }
 
 
-/* =========================================================
-SCANNER
-========================================================= */
+/* ---------- COLORS ---------- */
+
+function scoreColor(n){
+if(n>=95)return"#7047eb";
+if(n>=80)return"#15965e";
+if(n>=65)return"#75c989";
+if(n>=50)return"#d7b438";
+if(n>=30)return"#ef8c36";
+return"#e5484d";
+}
+
+function scoreWord(n){
+if(n>=95)return"EXTREME MATCH";
+if(n>=80)return"STRONG MATCH";
+if(n>=65)return"POSITIVE";
+if(n>=50)return"MIXED";
+if(n>=30)return"WEAK";
+return"LOW";
+}
+
+function directionStyle(direction){
+
+if(direction==="LONG BIAS")
+return{
+bg:"rgba(21,150,94,.18)",
+color:"#62d69d"
+};
+
+if(direction==="SHORT BIAS")
+return{
+bg:"rgba(229,72,77,.18)",
+color:"#ff8589"
+};
+
+return{
+bg:"rgba(255,255,255,.1)",
+color:"#ddd"
+};
+}
+
+
+/* ---------- STOCK GRID ---------- */
 
 function renderScanner(){
 
-const scanner=
-document.getElementById("scanner");
+const el=document.getElementById("scanner");
 
-const query=
-document.getElementById("search")
+const q=document
+.getElementById("search")
 .value
 .trim()
 .toUpperCase();
 
-scanner.innerHTML="";
+el.innerHTML="";
 
 const ordered=[...SYMBOLS]
-.filter(s=>s.includes(query))
+.filter(s=>s.includes(q))
 .sort((a,b)=>
-(stocks[b]?.score ?? -1) -
-(stocks[a]?.score ?? -1)
+(stocks[b]?.score??-1)-
+(stocks[a]?.score??-1)
 );
 
 ordered.forEach(symbol=>{
@@ -949,9 +937,54 @@ const div=document.createElement("div");
 
 div.className=
 "stock"+
-(selected===symbol ? " selected":"");
+(selected===symbol?" selected":"");
 
-if(!s){
+if(s){
+
+const ds=directionStyle(s.direction);
+
+div.innerHTML=`
+<div class="stocktop">
+<div>
+<div class="symbol">${symbol}</div>
+<div class="price">${fmt(s.price)}</div>
+</div>
+
+<div
+class="score"
+style="background:${scoreColor(s.score)}">
+${s.score}
+</div>
+</div>
+
+<div class="stockbottom">
+
+<div
+class="badge"
+style="
+background:${ds.bg};
+color:${s.direction==="LONG BIAS"?"#14895a":
+s.direction==="SHORT BIAS"?"#d9474c":"#777"};
+">
+${s.direction}
+</div>
+
+<div class="reasonmini">
+${s.setup}
+</div>
+
+</div>
+`;
+
+div.onclick=()=>{
+selected=symbol;
+renderScanner();
+renderDetail(s);
+};
+
+}else{
+
+const failed=errors[symbol];
 
 div.innerHTML=`
 <div class="stocktop">
@@ -959,236 +992,137 @@ div.innerHTML=`
 <div class="symbol">${symbol}</div>
 <div class="price">—</div>
 </div>
-<div
-class="scorepill"
-style="background:#c9cad2">
+
+<div class="score" style="background:#c8cad2">
 —
 </div>
 </div>
 
-<div class="smallstate">
-Loading / unavailable
+<div class="stockbottom">
+<div class="reasonmini">
+${failed?"Retry later":"Waiting..."}
 </div>
-`;
-
-}else{
-
-div.innerHTML=`
-<div class="stocktop">
-<div>
-<div class="symbol">${symbol}</div>
-<div class="price">
-${fmt(s.price)}
-</div>
-</div>
-
-<div
-class="scorepill"
-style="background:${scoreColor(s.score)}">
-${s.score}
-</div>
-</div>
-
-<div class="smallstate">
-${scoreName(s.score)}
-· RSI ${s.RSI.toFixed(0)}
-· ${s.momentum5>=0?"+":""}${s.momentum5.toFixed(2)}%
 </div>
 `;
 }
 
-div.onclick=()=>{
-
-if(!stocks[symbol]) return;
-
-selected=symbol;
-
-renderScanner();
-renderDetail(stocks[symbol]);
-};
-
-scanner.appendChild(div);
+el.appendChild(div);
 });
 }
 
 
-/* =========================================================
-DETAIL
-========================================================= */
+/* ---------- DETAIL ---------- */
 
 function renderDetail(s){
 
-document.getElementById("chartTitle")
-.textContent=
+document.getElementById("chartTitle").textContent=
 `${s.symbol} · ${fmt(s.price)}`;
 
-document.getElementById("chartSub")
-.textContent=
-`5-minute candles · EMA 9 / 20 · ATR ${s.ATR.toFixed(2)}`;
+document.getElementById("chartMeta").textContent=
+`${s.setup} · 5-minute chart`;
 
-document.getElementById("bigScore")
-.textContent=s.score;
-
-document.getElementById("scoreText")
-.textContent=scoreName(s.score);
-
-document.getElementById("freshness")
-.textContent=
+document.getElementById("updated").textContent=
 s.fetchedAt
 ? "Updated "+new Date(s.fetchedAt).toLocaleTimeString()
-: "Live dataset";
+: "";
 
-document.getElementById("metrics")
-.innerHTML=`
+document.getElementById("bigScore").textContent=s.score;
+document.getElementById("scoreWord").textContent=scoreWord(s.score);
 
-<div class="metric">
-<div class="metricname">EMA 9</div>
-<div class="metricvalue">${fmt(s.ema9)}</div>
-</div>
+document.getElementById("setupName").textContent=s.setup;
 
-<div class="metric">
-<div class="metricname">EMA 20</div>
-<div class="metricvalue">${fmt(s.ema20)}</div>
-</div>
+const direction=document.getElementById("direction");
+const ds=directionStyle(s.direction);
 
-<div class="metric">
-<div class="metricname">EMA 50</div>
-<div class="metricvalue">${fmt(s.ema50)}</div>
-</div>
-
-<div class="metric">
-<div class="metricname">RSI 14</div>
-<div class="metricvalue">${s.RSI.toFixed(1)}</div>
-</div>
-
-<div class="metric">
-<div class="metricname">ATR</div>
-<div class="metricvalue">${s.ATR.toFixed(2)}</div>
-</div>
-
-<div class="metric">
-<div class="metricname">ATR %</div>
-<div class="metricvalue">${s.atrPct.toFixed(2)}%</div>
-</div>
-
-<div class="metric">
-<div class="metricname">5m Momentum</div>
-<div class="metricvalue">
-${s.momentum5>=0?"+":""}${s.momentum5.toFixed(2)}%
-</div>
-</div>
-
-<div class="metric">
-<div class="metricname">15m Momentum</div>
-<div class="metricvalue">
-${s.momentum15>=0?"+":""}${s.momentum15.toFixed(2)}%
-</div>
-</div>
-
-<div class="metric">
-<div class="metricname">Relative Volume</div>
-<div class="metricvalue">${s.relVolume.toFixed(2)}×</div>
-</div>
-
-<div class="metric">
-<div class="metricname">Trend Consistency</div>
-<div class="metricvalue">${s.r2.toFixed(0)}/100</div>
-</div>
-
-<div class="metric">
-<div class="metricname">Range Position</div>
-<div class="metricvalue">${s.rangePosition.toFixed(0)}%</div>
-</div>
-
-<div class="metric">
-<div class="metricname">Pullback</div>
-<div class="metricvalue">${s.pullback.toFixed(2)}%</div>
-</div>
-`;
-
-document.getElementById("components")
-.innerHTML=
-Object.entries(s.components)
-.map(([name,value])=>`
-
-<div class="component">
-
-<div class="comprow">
-<span>${name}</span>
-<strong>${Math.round(value)}</strong>
-</div>
-
-<div class="bar">
-<div
-class="fill"
-style="width:${clamp(value)}%">
-</div>
-</div>
-
-</div>
-`)
-.join("");
+direction.textContent=s.direction;
+direction.style.background=ds.bg;
+direction.style.color=ds.color;
 
 const t=s.trade;
 
-document.getElementById("tradeLevels")
-.innerHTML=`
-
-<div class="level">
-<span>REFERENCE ENTRY</span>
+document.getElementById("tradeGrid").innerHTML=`
+<div class="tradelevel">
+<span>ENTRY</span>
 <strong>${fmt(t.entry)}</strong>
 </div>
 
-<div class="level">
-<span>INVALIDATION</span>
-<strong>${fmt(t.invalidation)}</strong>
+<div class="tradelevel">
+<span>STOP</span>
+<strong>${fmt(t.stop)}</strong>
 </div>
 
-<div class="level">
-<span>1R PROJECTION</span>
-<strong>${fmt(t.oneR)}</strong>
+<div class="tradelevel">
+<span>TP1 · 1R</span>
+<strong>${fmt(t.tp1)}</strong>
 </div>
 
-<div class="level">
-<span>2R PROJECTION</span>
-<strong>${fmt(t.twoR)}</strong>
+<div class="tradelevel">
+<span>TP2 · 2R</span>
+<strong>${fmt(t.tp2)}</strong>
 </div>
 
-<div class="level">
-<span>3R PROJECTION</span>
-<strong>${fmt(t.threeR)}</strong>
+<div class="tradelevel">
+<span>TP3 · 3R</span>
+<strong>${fmt(t.tp3)}</strong>
 </div>
 
-<div class="level">
-<span>EST. HOLD</span>
-<strong>${t.hold}</strong>
+<div class="tradelevel">
+<span>WINDOW</span>
+<strong>${s.hold}</strong>
 </div>
 `;
+
+document.getElementById("summary").innerHTML=`
+<div class="stat">
+<span>SETUP</span>
+<strong>${s.setup}</strong>
+</div>
+
+<div class="stat">
+<span>ENTRY</span>
+<strong>${fmt(t.entry)}</strong>
+</div>
+
+<div class="stat">
+<span>STOP</span>
+<strong>${fmt(t.stop)}</strong>
+</div>
+
+<div class="stat">
+<span>TP2</span>
+<strong>${fmt(t.tp2)}</strong>
+</div>
+
+<div class="stat">
+<span>RISK / REWARD</span>
+<strong>1 : ${t.rr2.toFixed(1)}</strong>
+</div>
+`;
+
+document.getElementById("reasons").innerHTML=
+s.reasons.map(r=>`
+<div class="reason">
+<div class="dot"></div>
+<div>${r}</div>
+</div>
+`).join("");
 
 drawChart(s);
 }
 
 
-/* =========================================================
-CHART
-========================================================= */
+/* ---------- CHART ---------- */
 
 function drawChart(s){
 
-const canvas=
-document.getElementById("chart");
-
-const rect=
-canvas.getBoundingClientRect();
-
-const dpr=
-window.devicePixelRatio || 1;
+const canvas=document.getElementById("chart");
+const rect=canvas.getBoundingClientRect();
+const dpr=window.devicePixelRatio||1;
 
 canvas.width=rect.width*dpr;
 canvas.height=rect.height*dpr;
 
 const ctx=canvas.getContext("2d");
-
 ctx.scale(dpr,dpr);
 
 const W=rect.width;
@@ -1196,260 +1130,310 @@ const H=rect.height;
 
 ctx.clearRect(0,0,W,H);
 
-const candles=
-s.candles.slice(-70);
+const candles=s.candles.slice(-65);
 
-const closes=
-candles.map(c=>c.close);
+const t=s.trade;
 
-const e9=ema(closes,9);
-const e20=ema(closes,20);
-
-const levelValues=[
+const values=[
 ...candles.map(c=>c.high),
 ...candles.map(c=>c.low),
-s.trade.invalidation,
-s.trade.oneR,
-s.trade.twoR,
-s.trade.threeR
+t.entry,t.stop,t.tp1,t.tp2,t.tp3
 ];
 
-let min=Math.min(...levelValues);
-let max=Math.max(...levelValues);
+let min=Math.min(...values);
+let max=Math.max(...values);
 
-const padding=(max-min)*.08 || 1;
+const pad=(max-min)*.08||1;
 
-min-=padding;
-max+=padding;
+min-=pad;
+max+=pad;
 
-const left=8;
-const right=58;
-const top=12;
-const bottom=25;
+const LEFT=12;
+const RIGHT=72;
+const TOP=15;
+const BOTTOM=25;
 
-const cw=W-left-right;
-const ch=H-top-bottom;
+const width=W-LEFT-RIGHT;
+const height=H-TOP-BOTTOM;
 
-function y(v){
-return top+
-(max-v)/(max-min)*ch;
-}
+const Y=v=>
+TOP+(max-v)/(max-min)*height;
 
-function x(i){
-return left+
-i*(cw/candles.length)+
-cw/candles.length/2;
-}
+const X=i=>
+LEFT+
+(i+.5)*(width/candles.length);
 
-/* grid */
+/* horizontal grid */
 
-ctx.strokeStyle="#ececf2";
 ctx.lineWidth=1;
 
 for(let i=0;i<5;i++){
 
-const gy=
-top+(ch/4)*i;
+const yy=TOP+(height/4)*i;
+
+ctx.strokeStyle="#ececf2";
 
 ctx.beginPath();
-ctx.moveTo(left,gy);
-ctx.lineTo(W-right,gy);
+ctx.moveTo(LEFT,yy);
+ctx.lineTo(W-RIGHT,yy);
 ctx.stroke();
 
-const value=
-max-(max-min)*(i/4);
+const val=max-(max-min)*(i/4);
 
-ctx.fillStyle="#8a8e9d";
+ctx.fillStyle="#8b8f9e";
 ctx.font="10px -apple-system";
 
 ctx.fillText(
-value.toFixed(2),
-W-right+6,
-gy+3
+val.toFixed(2),
+W-RIGHT+8,
+yy+3
 );
 }
-
-/* projected levels */
-
-const lines=[
-{
-value:s.trade.invalidation,
-label:"INVALIDATION",
-color:"#e5484d"
-},
-{
-value:s.trade.entry,
-label:"ENTRY",
-color:"#6d4aff"
-},
-{
-value:s.trade.oneR,
-label:"1R",
-color:"#7b8190"
-},
-{
-value:s.trade.twoR,
-label:"2R",
-color:"#16a66a"
-},
-{
-value:s.trade.threeR,
-label:"3R",
-color:"#7047eb"
-}
-];
-
-lines.forEach(line=>{
-
-const yy=y(line.value);
-
-ctx.save();
-
-ctx.strokeStyle=line.color;
-ctx.globalAlpha=.55;
-ctx.setLineDash([5,5]);
-
-ctx.beginPath();
-ctx.moveTo(left,yy);
-ctx.lineTo(W-right,yy);
-ctx.stroke();
-
-ctx.restore();
-
-ctx.fillStyle=line.color;
-ctx.font="bold 9px -apple-system";
-
-ctx.fillText(
-line.label,
-left+4,
-yy-4
-);
-});
 
 /* candles */
 
-const slot=
-cw/candles.length;
-
-const bodyWidth=
-Math.max(2,slot*.55);
+const slot=width/candles.length;
+const body=Math.max(2,slot*.58);
 
 candles.forEach((c,i)=>{
 
-const xx=x(i);
-
-const up=
-c.close>=c.open;
-
-const color=
-up ? "#16a66a" : "#e5484d";
+const x=X(i);
+const up=c.close>=c.open;
+const color=up?"#15965e":"#e5484d";
 
 ctx.strokeStyle=color;
 ctx.fillStyle=color;
 
 ctx.beginPath();
-ctx.moveTo(xx,y(c.high));
-ctx.lineTo(xx,y(c.low));
+ctx.moveTo(x,Y(c.high));
+ctx.lineTo(x,Y(c.low));
 ctx.stroke();
 
-const yo=y(c.open);
-const yc=y(c.close);
-
-const bh=
-Math.max(
-1,
-Math.abs(yc-yo)
-);
+const a=Y(c.open);
+const b=Y(c.close);
 
 ctx.fillRect(
-xx-bodyWidth/2,
-Math.min(yo,yc),
-bodyWidth,
-bh
+x-body/2,
+Math.min(a,b),
+body,
+Math.max(1,Math.abs(a-b))
 );
 });
 
-/* EMA */
+/* subtle EMA20 only */
 
-function drawLine(values,color){
+const closes=candles.map(c=>c.close);
+const e20=ema(closes,20);
 
-ctx.strokeStyle=color;
-ctx.lineWidth=1.6;
+ctx.strokeStyle="#a4a6b0";
+ctx.lineWidth=1.3;
+ctx.globalAlpha=.65;
 ctx.beginPath();
 
-values.forEach((v,i)=>{
-
-if(i===0)
-ctx.moveTo(x(i),y(v));
-else
-ctx.lineTo(x(i),y(v));
+e20.forEach((v,i)=>{
+if(i===0)ctx.moveTo(X(i),Y(v));
+else ctx.lineTo(X(i),Y(v));
 });
 
 ctx.stroke();
+ctx.globalAlpha=1;
+
+/*
+LEVEL LINES + LABEL ARROWS
+*/
+
+const levels=[
+{
+name:"STOP",
+value:t.stop,
+color:"#e5484d"
+},
+{
+name:"ENTRY",
+value:t.entry,
+color:"#7047eb"
+},
+{
+name:"TP1",
+value:t.tp1,
+color:"#6aaf82"
+},
+{
+name:"TP2",
+value:t.tp2,
+color:"#15965e"
+},
+{
+name:"TP3",
+value:t.tp3,
+color:"#7047eb"
+}
+];
+
+levels.forEach(level=>{
+
+const yy=Y(level.value);
+
+ctx.save();
+
+ctx.strokeStyle=level.color;
+ctx.lineWidth=
+level.name==="ENTRY"||level.name==="STOP"
+?1.7:1.2;
+
+ctx.globalAlpha=.75;
+ctx.setLineDash([6,5]);
+
+ctx.beginPath();
+ctx.moveTo(LEFT,yy);
+ctx.lineTo(W-RIGHT,yy);
+ctx.stroke();
+
+ctx.restore();
+
+/*
+label pill
+*/
+
+const label=
+`${level.name} ${level.value.toFixed(2)}`;
+
+ctx.font="bold 9px -apple-system";
+
+const tw=ctx.measureText(label).width;
+
+const boxW=tw+13;
+const boxH=18;
+
+const bx=W-RIGHT-boxW;
+const by=yy-boxH/2;
+
+ctx.fillStyle=level.color;
+
+ctx.beginPath();
+
+if(ctx.roundRect)
+ctx.roundRect(bx,by,boxW,boxH,5);
+else
+ctx.rect(bx,by,boxW,boxH);
+
+ctx.fill();
+
+ctx.fillStyle="#fff";
+
+ctx.fillText(
+label,
+bx+6,
+yy+3
+);
+
+/*
+small arrow pointing into chart
+*/
+
+ctx.fillStyle=level.color;
+
+ctx.beginPath();
+ctx.moveTo(bx-7,yy);
+ctx.lineTo(bx,yy-5);
+ctx.lineTo(bx,yy+5);
+ctx.closePath();
+ctx.fill();
+});
 }
 
-drawLine(e20,"#8c8fa0");
-drawLine(e9,"#6d4aff");
-}
 
-
-/* =========================================================
-SCAN
-========================================================= */
+/* ---------- SCAN ---------- */
 
 async function scanAll(){
 
-const status=
-document.getElementById("status");
+if(scanning)return;
+
+scanning=true;
 
 stocks={};
+errors={};
 selected=null;
 
 renderScanner();
 
-let success=0;
-let failed=0;
+const status=document.getElementById("status");
 
-status.textContent=
-`Scanning ${SYMBOLS.length} stocks...`;
-
-/*
-Sequential loading is intentional.
-It reduces provider rate-limit spikes.
-*/
+let loaded=0;
 
 for(let i=0;i<SYMBOLS.length;i++){
 
 const symbol=SYMBOLS[i];
 
 status.textContent=
-`Loading ${symbol} · ${i+1}/${SYMBOLS.length}`;
+`Scanning ${symbol} · ${i+1}/${SYMBOLS.length} · ${loaded} loaded`;
 
 try{
 
-const result=
-await fetchStock(symbol);
+const result=await fetchStock(symbol);
 
 stocks[symbol]=result;
-success++;
+loaded++;
 
 if(!selected){
-
 selected=symbol;
 renderDetail(result);
 }
 
-}catch(err){
+}catch(e){
 
-failed++;
+errors[symbol]=e.message;
 
 console.error(
+"Failed:",
 symbol,
-err
+e
 );
 }
 
 renderScanner();
+
+/*
+Important:
+wait between symbols so we don't fire
+all 20 provider requests at once.
+*/
+
+if(i<SYMBOLS.length-1)
+await sleep(1400);
+}
+
+/*
+ONE RETRY PASS FOR FAILED SYMBOLS
+*/
+
+const failed=SYMBOLS.filter(s=>!stocks[s]);
+
+if(failed.length){
+
+status.textContent=
+`Retrying ${failed.length} unavailable stocks...`;
+
+await sleep(3000);
+
+for(const symbol of failed){
+
+try{
+
+const result=await fetchStock(symbol);
+
+stocks[symbol]=result;
+delete errors[symbol];
+loaded++;
+
+}catch(e){
+errors[symbol]=e.message;
+}
+
+renderScanner();
+
+await sleep(1800);
+}
 }
 
 const ranked=
@@ -1464,40 +1448,36 @@ renderScanner();
 renderDetail(ranked[0]);
 }
 
+const remaining=
+SYMBOLS.length-loaded;
+
 status.textContent=
-`Scan complete · ${success} loaded`
-+(failed ? ` · ${failed} unavailable` : "")
-+" · 5-minute data";
+`Scan complete · ${loaded}/${SYMBOLS.length} loaded`
++(remaining
+?` · ${remaining} temporarily unavailable`
+:" · all stocks loaded");
+
+scanning=false;
 }
 
 
-/* =========================================================
-EVENTS
-========================================================= */
+/* ---------- EVENTS ---------- */
 
 document
 .getElementById("search")
-.addEventListener(
-"input",
-renderScanner
-);
+.addEventListener("input",renderScanner);
 
-window.addEventListener(
-"resize",
-()=>{
-if(selected && stocks[selected]){
+window.addEventListener("resize",()=>{
+if(selected&&stocks[selected])
 drawChart(stocks[selected]);
-}
-}
-);
+});
 
 
-/* START */
+/* GO */
 
 renderScanner();
 scanAll();
 
 </script>
-
 </body>
 </html>
