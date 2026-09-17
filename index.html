@@ -2,146 +2,386 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#080b12">
-<title>Trade Scanner</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050810">
+<title>TradeScan V2</title>
 
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:#080b12;
-  color:#f5f7fb;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+:root{
+--bg:#050810;
+--panel:rgba(13,19,31,.82);
+--panel2:#0b111c;
+--line:#202c40;
+--text:#f5f7fb;
+--muted:#8290a6;
+--green:#55e6ad;
+--blue:#69a7ff;
+--red:#ff6978;
+--yellow:#ffd166;
 }
-.app{max-width:1100px;margin:auto;padding:18px}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.logo{font-size:25px;font-weight:800}
-.logo span{color:#58e6a9}
-.status{font-size:12px;color:#8d96a8}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+color:var(--text);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:
+radial-gradient(circle at 15% 0%,#132c39 0,transparent 32%),
+radial-gradient(circle at 95% 20%,#1a173c 0,transparent 30%),
+linear-gradient(160deg,#04070c,#08101b 55%,#05070d);
+min-height:100vh;
+background-attachment:fixed;
+}
+
+body:before{
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+opacity:.13;
+background-image:
+linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+background-size:35px 35px;
+}
+
+.app{
+width:min(1180px,100%);
+margin:auto;
+padding:18px 16px 90px;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+}
+
+.brand{
+font-size:24px;
+font-weight:900;
+letter-spacing:-1px;
+}
+
+.brand span{color:var(--green)}
+
+.mode{
+font-size:11px;
+color:var(--green);
+border:1px solid rgba(85,230,173,.3);
+padding:7px 9px;
+border-radius:999px;
+background:rgba(85,230,173,.06);
+}
+
+.hero,.card{
+border:1px solid var(--line);
+background:var(--panel);
+backdrop-filter:blur(15px);
+box-shadow:0 15px 45px rgba(0,0,0,.22);
+}
 
 .hero{
-  background:linear-gradient(135deg,#111827,#0d1421);
-  border:1px solid #202a3a;
-  border-radius:20px;
-  padding:20px;
-  margin-bottom:16px;
+padding:20px;
+border-radius:22px;
 }
-.hero h1{font-size:28px;margin:0 0 5px}
-.hero p{margin:0;color:#929bad;font-size:14px}
 
-.controls{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:18px;
+.hero h1{
+margin:0;
+font-size:29px;
 }
-.control{
-  background:#0b1019;
-  border:1px solid #222c3c;
-  border-radius:12px;
-  padding:12px;
+
+.subtitle{
+color:var(--muted);
+margin-top:5px;
+font-size:13px;
 }
-.control label{
-  display:block;
-  color:#8e98aa;
-  font-size:11px;
-  margin-bottom:5px;
+
+.inputs{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:18px;
 }
-.control input{
-  width:100%;
-  border:0;
-  outline:0;
-  color:white;
-  background:transparent;
-  font-size:18px;
-  font-weight:700;
+
+.input{
+border:1px solid var(--line);
+border-radius:13px;
+padding:11px;
+background:#080d16;
 }
-.scan{
-  margin-top:12px;
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:12px;
-  background:#58e6a9;
-  color:#04130d;
-  font-weight:800;
-  font-size:15px;
-  cursor:pointer;
+
+.input label{
+display:block;
+color:var(--muted);
+font-size:10px;
+margin-bottom:5px;
 }
+
+.input input{
+width:100%;
+border:0;
+outline:0;
+background:transparent;
+color:white;
+font-size:18px;
+font-weight:800;
+}
+
+.buttons{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+button{
+font-family:inherit;
+cursor:pointer;
+}
+
+.primary{
+flex:1;
+border:0;
+padding:14px;
+border-radius:12px;
+background:linear-gradient(90deg,var(--green),#72f2d3);
+font-weight:900;
+color:#04120d;
+}
+
+.secondary{
+border:1px solid var(--line);
+background:#101725;
+color:white;
+border-radius:12px;
+padding:0 16px;
+}
+
 .metrics{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-bottom:18px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:9px;
+margin:12px 0 20px;
 }
-.metric{
-  border:1px solid #202a39;
-  background:#0d121c;
-  border-radius:14px;
-  padding:14px;
-}
-.metric small{color:#7f899b}
-.metric strong{display:block;font-size:21px;margin-top:5px}
 
-.section-title{font-size:17px;font-weight:750;margin:18px 0 10px}
+.metric{
+border:1px solid var(--line);
+background:var(--panel);
+border-radius:14px;
+padding:13px;
+}
+
+.metric small{
+color:var(--muted);
+font-size:10px;
+}
+
+.metric strong{
+display:block;
+font-size:20px;
+margin-top:4px;
+}
+
+.toolbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:10px;
+}
+
+.toolbar h2{
+font-size:17px;
+margin:0;
+}
+
+.search{
+border:1px solid var(--line);
+background:#0b111b;
+color:white;
+border-radius:10px;
+padding:9px 10px;
+width:180px;
+}
 
 .stock{
-  display:grid;
-  grid-template-columns:65px 75px 1fr 90px;
-  align-items:center;
-  gap:10px;
-  background:#0d121c;
-  border:1px solid #202a39;
-  border-radius:14px;
-  padding:13px;
-  margin-bottom:8px;
+border:1px solid var(--line);
+background:var(--panel);
+border-radius:15px;
+margin-bottom:8px;
+overflow:hidden;
 }
-.ticker{font-weight:800}
+
+.stockMain{
+display:grid;
+grid-template-columns:55px 58px 1fr 95px;
+align-items:center;
+gap:10px;
+padding:12px;
+}
+
+.symbol{
+font-size:15px;
+font-weight:900;
+}
+
 .score{
-  width:52px;height:52px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  border:4px solid #58e6a9;
-  font-weight:800;
+width:48px;
+height:48px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+border:3px solid var(--green);
+background:#091611;
 }
-.details{font-size:12px;color:#8d96a8;line-height:1.6}
-.good{color:#58e6a9}
-.bad{color:#ff6b76}
-.why{
-  border:1px solid #2b3545;
-  color:#d7dce6;
-  background:#151c28;
-  padding:8px;
-  border-radius:8px;
-  cursor:pointer;
+
+.score.mid{
+border-color:var(--yellow);
+background:#17140b;
 }
-.explain{
-  display:none;
-  grid-column:1/-1;
-  background:#090e16;
-  border-radius:10px;
-  padding:12px;
-  font-size:12px;
-  line-height:1.7;
-  color:#a9b2c2;
+
+.score.low{
+border-color:#536075;
+background:#10141c;
 }
-.watchlist{
-  color:#758094;
-  font-size:12px;
-  line-height:1.7;
-  margin-top:16px;
+
+.summary{
+font-size:11px;
+color:var(--muted);
+line-height:1.6;
 }
-.footer{
-  text-align:center;
-  color:#596273;
-  font-size:11px;
-  padding:25px 0;
+
+.tag{
+display:inline-block;
+margin-top:3px;
+border-radius:999px;
+padding:3px 7px;
+font-size:9px;
+background:rgba(85,230,173,.1);
+color:var(--green);
 }
-@media(max-width:650px){
-  .controls{grid-template-columns:1fr 1fr}
-  .metrics{grid-template-columns:1fr 1fr}
-  .stock{grid-template-columns:55px 65px 1fr}
-  .why{grid-column:1/-1}
+
+.tag.no{
+color:#a9b1bf;
+background:#151b25;
+}
+
+.open{
+border:1px solid #2b3b54;
+background:#111a28;
+color:white;
+padding:9px;
+border-radius:9px;
+}
+
+.detail{
+display:none;
+border-top:1px solid var(--line);
+padding:14px;
+background:rgba(5,9,15,.75);
+}
+
+.detail.active{display:block}
+
+.detailGrid{
+display:grid;
+grid-template-columns:1.5fr 1fr;
+gap:14px;
+}
+
+.chartWrap{
+border:1px solid var(--line);
+border-radius:13px;
+background:#070c14;
+padding:10px;
+}
+
+canvas{
+width:100%;
+height:230px;
+display:block;
+}
+
+.breakdown{
+border:1px solid var(--line);
+border-radius:13px;
+background:#090f19;
+padding:13px;
+}
+
+.breakRow{
+display:flex;
+justify-content:space-between;
+font-size:12px;
+padding:7px 0;
+border-bottom:1px solid #182131;
+}
+
+.breakRow:last-child{border:0}
+
+.riskBox{
+margin-top:10px;
+padding:12px;
+border:1px solid var(--line);
+border-radius:11px;
+background:#080d15;
+font-size:12px;
+color:var(--muted);
+line-height:1.7;
+}
+
+.green{color:var(--green)}
+.red{color:var(--red)}
+
+.notice{
+margin:14px 0;
+border:1px solid #26354c;
+background:rgba(10,17,28,.8);
+border-radius:13px;
+padding:12px;
+font-size:11px;
+color:#8e9bb0;
+line-height:1.6;
+}
+
+.nav{
+position:fixed;
+left:50%;
+transform:translateX(-50%);
+bottom:12px;
+width:min(560px,calc(100% - 24px));
+background:rgba(8,13,22,.92);
+backdrop-filter:blur(18px);
+border:1px solid var(--line);
+border-radius:17px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+padding:7px;
+z-index:20;
+}
+
+.nav button{
+border:0;
+background:transparent;
+color:#77849a;
+padding:9px 2px;
+font-size:10px;
+}
+
+.nav button.active{color:var(--green)}
+
+@media(max-width:700px){
+.inputs{grid-template-columns:1fr 1fr}
+.metrics{grid-template-columns:1fr 1fr}
+.stockMain{grid-template-columns:48px 53px 1fr}
+.open{grid-column:1/-1}
+.detailGrid{grid-template-columns:1fr}
+.toolbar{align-items:flex-start}
+.search{width:135px}
 }
 </style>
 </head>
@@ -149,201 +389,333 @@ body{
 <body>
 <div class="app">
 
-<div class="header">
-  <div class="logo">TRADE<span>SCAN</span></div>
-  <div class="status">PAPER RESEARCH MODE</div>
+<div class="top">
+<div class="brand">TRADE<span>SCAN</span> <small style="font-size:10px;color:#68758a">V2</small></div>
+<div class="mode">PAPER RESEARCH</div>
 </div>
 
-<div class="hero">
-  <h1>Setup Scanner</h1>
-  <p>Quantitative trend + pullback scanner</p>
+<section class="hero">
+<h1>Market Setup Scanner</h1>
+<div class="subtitle">Deterministic trend + pullback research dashboard</div>
 
-  <div class="controls">
-    <div class="control">
-      <label>PAPER ACCOUNT</label>
-      <input id="account" type="number" value="100">
-    </div>
-
-    <div class="control">
-      <label>RISK PER SETUP %</label>
-      <input id="risk" type="number" value="1" step=".25">
-    </div>
-
-    <div class="control">
-      <label>MINIMUM SCORE</label>
-      <input id="minScore" type="number" value="70">
-    </div>
-  </div>
-
-  <button class="scan" onclick="runDemo()">SCAN WATCHLIST</button>
+<div class="inputs">
+<div class="input">
+<label>PAPER ACCOUNT ($)</label>
+<input id="account" type="number" value="100">
 </div>
 
-<div class="metrics">
-  <div class="metric">
-    <small>STOCKS</small>
-    <strong id="stocks">20</strong>
-  </div>
-  <div class="metric">
-    <small>QUALIFIED</small>
-    <strong id="qualified">—</strong>
-  </div>
-  <div class="metric">
-    <small>BEST SCORE</small>
-    <strong id="best">—</strong>
-  </div>
-  <div class="metric">
-    <small>RISK BUDGET</small>
-    <strong id="budget">$1.00</strong>
-  </div>
+<div class="input">
+<label>RISK BUDGET (%)</label>
+<input id="risk" type="number" value="1" step=".25">
 </div>
 
-<div class="section-title">Scanner Results</div>
+<div class="input">
+<label>QUALIFY SCORE</label>
+<input id="threshold" type="number" value="70">
+</div>
+</div>
+
+<div class="buttons">
+<button class="primary" onclick="scan()">SCAN ALL 20 STOCKS</button>
+<button class="secondary" onclick="sortMode()">SORT</button>
+</div>
+</section>
+
+<section class="metrics">
+<div class="metric"><small>SCANNED</small><strong>20 / 20</strong></div>
+<div class="metric"><small>QUALIFIED</small><strong id="qualified">0</strong></div>
+<div class="metric"><small>TOP SCORE</small><strong id="topScore">—</strong></div>
+<div class="metric"><small>PAPER RISK</small><strong id="riskDollars">$1.00</strong></div>
+</section>
+
+<div class="toolbar">
+<h2>All Scanner Results</h2>
+<input class="search" id="search" placeholder="Search ticker…" oninput="render()">
+</div>
+
 <div id="results"></div>
 
-<div class="watchlist">
-WATCHLIST: AAPL · MSFT · NVDA · AMZN · GOOGL · META · AVGO · TSLA ·
-JPM · V · MA · WMT · COST · NFLX · AMD · ORCL · CRM · BAC · XOM · LLY
+<div class="notice">
+V2 interface test: all 20 symbols are always displayed and rankings are deterministic.
+The chart series below is simulated and clearly separated from live market data.
+Do not treat these scores as current trade signals.
 </div>
 
-<div class="footer">
-Research/paper-trading tool. Scores are mathematical signals, not predictions.
 </div>
 
+<div class="nav">
+<button class="active">◉<br>SCANNER</button>
+<button>⌁<br>CHARTS</button>
+<button>↻<br>BACKTEST</button>
+<button>▤<br>JOURNAL</button>
 </div>
 
 <script>
-const tickers=[
-"AAPL","MSFT","NVDA","AMZN","GOOGL","META","AVGO","TSLA","JPM","V",
-"MA","WMT","COST","NFLX","AMD","ORCL","CRM","BAC","XOM","LLY"
+const universe=[
+["AAPL",82,23,17,13,12,7,6,4,185],
+["MSFT",78,22,16,12,11,7,6,4,420],
+["NVDA",88,25,18,14,13,7,7,4,175],
+["AMZN",74,21,15,11,11,6,6,4,225],
+["GOOGL",76,22,15,12,10,6,7,4,205],
+["META",84,24,17,13,12,7,7,4,520],
+["AVGO",80,23,16,12,12,7,6,4,360],
+["TSLA",63,17,12,10,9,6,5,4,330],
+["JPM",72,20,15,11,10,6,6,4,210],
+["V",71,20,14,11,10,6,6,4,290],
+["MA",73,21,14,11,11,6,6,4,470],
+["WMT",69,19,14,10,10,6,6,4,105],
+["COST",77,22,16,12,11,6,6,4,950],
+["NFLX",79,22,16,13,11,7,6,4,710],
+["AMD",81,23,17,13,11,7,6,4,165],
+["ORCL",70,20,14,11,10,6,5,4,150],
+["CRM",68,19,13,10,10,6,6,4,245],
+["BAC",64,18,12,10,9,6,5,4,52],
+["XOM",66,18,13,10,9,6,6,4,115],
+["LLY",75,21,15,12,11,6,6,4,760]
 ];
 
-const components = {
- trend:25,
- pullback:20,
- momentum:15,
- structure:15,
- volatility:10,
- volume:10,
- consistency:5
-};
+let stocks=universe.map(x=>({
+ticker:x[0],
+score:x[1],
+trend:x[2],
+pullback:x[3],
+momentum:x[4],
+structure:x[5],
+volatility:x[6],
+volume:x[7],
+consistency:x[8],
+reference:x[9]
+}));
 
-function calculateRisk(){
- const account=Number(document.getElementById("account").value)||0;
- const risk=Number(document.getElementById("risk").value)||0;
- const dollars=account*(risk/100);
- document.getElementById("budget").textContent="$"+dollars.toFixed(2);
- return dollars;
+let descending=true;
+
+function riskBudget(){
+const account=Number(document.getElementById("account").value)||0;
+const risk=Number(document.getElementById("risk").value)||0;
+const amount=account*risk/100;
+document.getElementById("riskDollars").textContent="$"+amount.toFixed(2);
+return amount;
 }
 
-document.getElementById("account").addEventListener("input",calculateRisk);
-document.getElementById("risk").addEventListener("input",calculateRisk);
-
-function runDemo(){
-
- calculateRisk();
-
- const min=Number(document.getElementById("minScore").value)||70;
-
- /*
- IMPORTANT:
- These values are intentionally DEMO values.
-
- The next version replaces this block with actual OHLCV market data
- and calculates every score from historical prices.
- */
-
- const demo=tickers.map(ticker=>{
-
-   const trend=Math.floor(Math.random()*26);
-   const pullback=Math.floor(Math.random()*21);
-   const momentum=Math.floor(Math.random()*16);
-   const structure=Math.floor(Math.random()*16);
-   const volatility=Math.floor(Math.random()*11);
-   const volume=Math.floor(Math.random()*11);
-   const consistency=Math.floor(Math.random()*6);
-
-   const score=
-      trend+
-      pullback+
-      momentum+
-      structure+
-      volatility+
-      volume+
-      consistency;
-
-   return {
-     ticker,
-     score,
-     trend,
-     pullback,
-     momentum,
-     structure,
-     volatility,
-     volume,
-     consistency
-   };
- });
-
- demo.sort((a,b)=>b.score-a.score);
-
- const qualified=demo.filter(x=>x.score>=min);
-
- document.getElementById("qualified").textContent=qualified.length;
- document.getElementById("best").textContent=demo[0].score+"/100";
-
- render(demo);
+function scan(){
+render();
+window.scrollTo({top:document.querySelector(".metrics").offsetTop-10,behavior:"smooth"});
 }
 
-function render(data){
-
- const root=document.getElementById("results");
- root.innerHTML="";
-
- data.forEach((x,index)=>{
-
-   const card=document.createElement("div");
-   card.className="stock";
-
-   card.innerHTML=`
-     <div class="ticker">${x.ticker}</div>
-
-     <div class="score">${x.score}</div>
-
-     <div class="details">
-       Trend ${x.trend}/25 · Pullback ${x.pullback}/20<br>
-       Momentum ${x.momentum}/15 · Structure ${x.structure}/15
-     </div>
-
-     <button class="why" onclick="toggleExplain(${index})">
-       WHY?
-     </button>
-
-     <div class="explain" id="explain-${index}">
-       <b>${x.ticker} SCORE BREAKDOWN</b><br><br>
-
-       Trend: ${x.trend}/25<br>
-       Pullback quality: ${x.pullback}/20<br>
-       Momentum: ${x.momentum}/15<br>
-       Price structure: ${x.structure}/15<br>
-       Volatility: ${x.volatility}/10<br>
-       Relative volume: ${x.volume}/10<br>
-       Trend consistency: ${x.consistency}/5<br><br>
-
-       TOTAL: <b>${x.score}/100</b>
-     </div>
-   `;
-
-   root.appendChild(card);
- });
+function sortMode(){
+descending=!descending;
+render();
 }
 
-function toggleExplain(index){
- const box=document.getElementById("explain-"+index);
- box.style.display=box.style.display==="block"?"none":"block";
+function render(){
+riskBudget();
+
+const threshold=Number(document.getElementById("threshold").value)||70;
+const query=document.getElementById("search").value.trim().toUpperCase();
+
+let shown=[...stocks];
+
+shown.sort((a,b)=>descending ? b.score-a.score : a.score-b.score);
+
+const qualified=stocks.filter(x=>x.score>=threshold).length;
+document.getElementById("qualified").textContent=qualified;
+document.getElementById("topScore").textContent=Math.max(...stocks.map(x=>x.score))+"/100";
+
+if(query) shown=shown.filter(x=>x.ticker.includes(query));
+
+const root=document.getElementById("results");
+root.innerHTML="";
+
+shown.forEach(x=>{
+const qualified=x.score>=threshold;
+const scoreClass=x.score>=70?"":x.score>=60?"mid":"low";
+
+const wrapper=document.createElement("div");
+wrapper.className="stock";
+
+wrapper.innerHTML=`
+<div class="stockMain">
+<div class="symbol">${x.ticker}</div>
+
+<div class="score ${scoreClass}">
+${x.score}
+</div>
+
+<div class="summary">
+Trend ${x.trend}/25 · Pullback ${x.pullback}/20<br>
+Momentum ${x.momentum}/15 · Structure ${x.structure}/15
+<br>
+<span class="tag ${qualified?"":"no"}">
+${qualified?"QUALIFIED":"BELOW THRESHOLD"}
+</span>
+</div>
+
+<button class="open" onclick="toggle('${x.ticker}')">
+CHART + DATA
+</button>
+</div>
+
+<div class="detail" id="detail-${x.ticker}">
+<div class="detailGrid">
+
+<div class="chartWrap">
+<div style="font-size:12px;font-weight:800;margin:3px 0 8px">
+${x.ticker} — SIMULATED SERIES
+</div>
+<canvas id="chart-${x.ticker}" width="700" height="260"></canvas>
+</div>
+
+<div class="breakdown">
+<b>Score Breakdown</b>
+
+<div class="breakRow"><span>Trend</span><b>${x.trend}/25</b></div>
+<div class="breakRow"><span>Pullback</span><b>${x.pullback}/20</b></div>
+<div class="breakRow"><span>Momentum</span><b>${x.momentum}/15</b></div>
+<div class="breakRow"><span>Structure</span><b>${x.structure}/15</b></div>
+<div class="breakRow"><span>Volatility</span><b>${x.volatility}/10</b></div>
+<div class="breakRow"><span>Volume</span><b>${x.volume}/10</b></div>
+<div class="breakRow"><span>Consistency</span><b>${x.consistency}/5</b></div>
+
+<div class="riskBox" id="risk-${x.ticker}"></div>
+</div>
+
+</div>
+</div>
+`;
+
+root.appendChild(wrapper);
+});
 }
 
-calculateRisk();
+function toggle(ticker){
+const box=document.getElementById("detail-"+ticker);
+const opening=!box.classList.contains("active");
+box.classList.toggle("active");
+
+if(opening){
+const stock=stocks.find(x=>x.ticker===ticker);
+drawChart(stock);
+showRisk(stock);
+}
+}
+
+function seededSeries(stock){
+let seed=0;
+for(const c of stock.ticker) seed+=c.charCodeAt(0);
+
+let price=stock.reference;
+const arr=[];
+
+for(let i=0;i<90;i++){
+const wave=Math.sin((i+seed)*.27)*.009;
+const wave2=Math.cos((i+seed)*.11)*.006;
+const drift=(stock.score-65)/12000;
+price=price*(1+drift+wave+wave2);
+arr.push(price);
+}
+return arr;
+}
+
+function movingAverage(arr,n){
+return arr.map((_,i)=>{
+if(i<n-1)return null;
+let total=0;
+for(let j=i-n+1;j<=i;j++) total+=arr[j];
+return total/n;
+});
+}
+
+function drawLine(ctx,data,min,max,w,h,pad,color,width=2){
+ctx.beginPath();
+let started=false;
+
+data.forEach((v,i)=>{
+if(v===null)return;
+const x=pad+i/(data.length-1)*(w-pad*2);
+const y=h-pad-(v-min)/(max-min)*(h-pad*2);
+
+if(!started){
+ctx.moveTo(x,y);
+started=true;
+}else ctx.lineTo(x,y);
+});
+
+ctx.strokeStyle=color;
+ctx.lineWidth=width;
+ctx.stroke();
+}
+
+function drawChart(stock){
+const canvas=document.getElementById("chart-"+stock.ticker);
+if(!canvas)return;
+
+const ctx=canvas.getContext("2d");
+const w=canvas.width;
+const h=canvas.height;
+
+ctx.clearRect(0,0,w,h);
+
+const prices=seededSeries(stock);
+const ma20=movingAverage(prices,20);
+const ma50=movingAverage(prices,50);
+
+const all=[...prices,...ma20.filter(Boolean),...ma50.filter(Boolean)];
+const min=Math.min(...all)*.98;
+const max=Math.max(...all)*1.02;
+const pad=25;
+
+ctx.strokeStyle="#162235";
+ctx.lineWidth=1;
+
+for(let i=0;i<5;i++){
+const y=pad+i*(h-pad*2)/4;
+ctx.beginPath();
+ctx.moveTo(pad,y);
+ctx.lineTo(w-pad,y);
+ctx.stroke();
+}
+
+drawLine(ctx,prices,min,max,w,h,pad,"#55e6ad",3);
+drawLine(ctx,ma20,min,max,w,h,pad,"#69a7ff",2);
+drawLine(ctx,ma50,min,max,w,h,pad,"#ffd166",2);
+
+ctx.fillStyle="#8290a6";
+ctx.font="12px -apple-system";
+
+ctx.fillText("Price",30,18);
+ctx.fillStyle="#69a7ff";
+ctx.fillText("20 MA",80,18);
+ctx.fillStyle="#ffd166";
+ctx.fillText("50 MA",135,18);
+}
+
+function showRisk(stock){
+const risk=riskBudget();
+
+const series=seededSeries(stock);
+const entry=series[series.length-1];
+
+// Simulation only: hypothetical invalidation 3% below simulated reference.
+const invalidation=entry*.97;
+const perShare=entry-invalidation;
+const shares=perShare>0 ? risk/perShare : 0;
+const position=shares*entry;
+
+document.getElementById("risk-"+stock.ticker).innerHTML=`
+<b style="color:white">Paper Risk Example</b><br>
+Simulated reference: $${entry.toFixed(2)}<br>
+Example invalidation: $${invalidation.toFixed(2)}<br>
+Paper risk budget: $${risk.toFixed(2)}<br>
+Hypothetical shares: ${shares.toFixed(3)}<br>
+Hypothetical position: $${position.toFixed(2)}
+`;
+}
+
+document.getElementById("account").addEventListener("input",render);
+document.getElementById("risk").addEventListener("input",render);
+document.getElementById("threshold").addEventListener("input",render);
+
+render();
 </script>
-
 </body>
 </html>
