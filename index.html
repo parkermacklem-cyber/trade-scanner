@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080b12">
+<title>Trade Scanner</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#080b12;
+  color:#f5f7fb;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.app{max-width:1100px;margin:auto;padding:18px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.logo{font-size:25px;font-weight:800}
+.logo span{color:#58e6a9}
+.status{font-size:12px;color:#8d96a8}
+
+.hero{
+  background:linear-gradient(135deg,#111827,#0d1421);
+  border:1px solid #202a3a;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.hero h1{font-size:28px;margin:0 0 5px}
+.hero p{margin:0;color:#929bad;font-size:14px}
+
+.controls{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:18px;
+}
+.control{
+  background:#0b1019;
+  border:1px solid #222c3c;
+  border-radius:12px;
+  padding:12px;
+}
+.control label{
+  display:block;
+  color:#8e98aa;
+  font-size:11px;
+  margin-bottom:5px;
+}
+.control input{
+  width:100%;
+  border:0;
+  outline:0;
+  color:white;
+  background:transparent;
+  font-size:18px;
+  font-weight:700;
+}
+.scan{
+  margin-top:12px;
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  background:#58e6a9;
+  color:#04130d;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+}
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:18px;
+}
+.metric{
+  border:1px solid #202a39;
+  background:#0d121c;
+  border-radius:14px;
+  padding:14px;
+}
+.metric small{color:#7f899b}
+.metric strong{display:block;font-size:21px;margin-top:5px}
+
+.section-title{font-size:17px;font-weight:750;margin:18px 0 10px}
+
+.stock{
+  display:grid;
+  grid-template-columns:65px 75px 1fr 90px;
+  align-items:center;
+  gap:10px;
+  background:#0d121c;
+  border:1px solid #202a39;
+  border-radius:14px;
+  padding:13px;
+  margin-bottom:8px;
+}
+.ticker{font-weight:800}
+.score{
+  width:52px;height:52px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:4px solid #58e6a9;
+  font-weight:800;
+}
+.details{font-size:12px;color:#8d96a8;line-height:1.6}
+.good{color:#58e6a9}
+.bad{color:#ff6b76}
+.why{
+  border:1px solid #2b3545;
+  color:#d7dce6;
+  background:#151c28;
+  padding:8px;
+  border-radius:8px;
+  cursor:pointer;
+}
+.explain{
+  display:none;
+  grid-column:1/-1;
+  background:#090e16;
+  border-radius:10px;
+  padding:12px;
+  font-size:12px;
+  line-height:1.7;
+  color:#a9b2c2;
+}
+.watchlist{
+  color:#758094;
+  font-size:12px;
+  line-height:1.7;
+  margin-top:16px;
+}
+.footer{
+  text-align:center;
+  color:#596273;
+  font-size:11px;
+  padding:25px 0;
+}
+@media(max-width:650px){
+  .controls{grid-template-columns:1fr 1fr}
+  .metrics{grid-template-columns:1fr 1fr}
+  .stock{grid-template-columns:55px 65px 1fr}
+  .why{grid-column:1/-1}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<div class="header">
+  <div class="logo">TRADE<span>SCAN</span></div>
+  <div class="status">PAPER RESEARCH MODE</div>
+</div>
+
+<div class="hero">
+  <h1>Setup Scanner</h1>
+  <p>Quantitative trend + pullback scanner</p>
+
+  <div class="controls">
+    <div class="control">
+      <label>PAPER ACCOUNT</label>
+      <input id="account" type="number" value="100">
+    </div>
+
+    <div class="control">
+      <label>RISK PER SETUP %</label>
+      <input id="risk" type="number" value="1" step=".25">
+    </div>
+
+    <div class="control">
+      <label>MINIMUM SCORE</label>
+      <input id="minScore" type="number" value="70">
+    </div>
+  </div>
+
+  <button class="scan" onclick="runDemo()">SCAN WATCHLIST</button>
+</div>
+
+<div class="metrics">
+  <div class="metric">
+    <small>STOCKS</small>
+    <strong id="stocks">20</strong>
+  </div>
+  <div class="metric">
+    <small>QUALIFIED</small>
+    <strong id="qualified">—</strong>
+  </div>
+  <div class="metric">
+    <small>BEST SCORE</small>
+    <strong id="best">—</strong>
+  </div>
+  <div class="metric">
+    <small>RISK BUDGET</small>
+    <strong id="budget">$1.00</strong>
+  </div>
+</div>
+
+<div class="section-title">Scanner Results</div>
+<div id="results"></div>
+
+<div class="watchlist">
+WATCHLIST: AAPL · MSFT · NVDA · AMZN · GOOGL · META · AVGO · TSLA ·
+JPM · V · MA · WMT · COST · NFLX · AMD · ORCL · CRM · BAC · XOM · LLY
+</div>
+
+<div class="footer">
+Research/paper-trading tool. Scores are mathematical signals, not predictions.
+</div>
+
+</div>
+
+<script>
+const tickers=[
+"AAPL","MSFT","NVDA","AMZN","GOOGL","META","AVGO","TSLA","JPM","V",
+"MA","WMT","COST","NFLX","AMD","ORCL","CRM","BAC","XOM","LLY"
+];
+
+const components = {
+ trend:25,
+ pullback:20,
+ momentum:15,
+ structure:15,
+ volatility:10,
+ volume:10,
+ consistency:5
+};
+
+function calculateRisk(){
+ const account=Number(document.getElementById("account").value)||0;
+ const risk=Number(document.getElementById("risk").value)||0;
+ const dollars=account*(risk/100);
+ document.getElementById("budget").textContent="$"+dollars.toFixed(2);
+ return dollars;
+}
+
+document.getElementById("account").addEventListener("input",calculateRisk);
+document.getElementById("risk").addEventListener("input",calculateRisk);
+
+function runDemo(){
+
+ calculateRisk();
+
+ const min=Number(document.getElementById("minScore").value)||70;
+
+ /*
+ IMPORTANT:
+ These values are intentionally DEMO values.
+
+ The next version replaces this block with actual OHLCV market data
+ and calculates every score from historical prices.
+ */
+
+ const demo=tickers.map(ticker=>{
+
+   const trend=Math.floor(Math.random()*26);
+   const pullback=Math.floor(Math.random()*21);
+   const momentum=Math.floor(Math.random()*16);
+   const structure=Math.floor(Math.random()*16);
+   const volatility=Math.floor(Math.random()*11);
+   const volume=Math.floor(Math.random()*11);
+   const consistency=Math.floor(Math.random()*6);
+
+   const score=
+      trend+
+      pullback+
+      momentum+
+      structure+
+      volatility+
+      volume+
+      consistency;
+
+   return {
+     ticker,
+     score,
+     trend,
+     pullback,
+     momentum,
+     structure,
+     volatility,
+     volume,
+     consistency
+   };
+ });
+
+ demo.sort((a,b)=>b.score-a.score);
+
+ const qualified=demo.filter(x=>x.score>=min);
+
+ document.getElementById("qualified").textContent=qualified.length;
+ document.getElementById("best").textContent=demo[0].score+"/100";
+
+ render(demo);
+}
+
+function render(data){
+
+ const root=document.getElementById("results");
+ root.innerHTML="";
+
+ data.forEach((x,index)=>{
+
+   const card=document.createElement("div");
+   card.className="stock";
+
+   card.innerHTML=`
+     <div class="ticker">${x.ticker}</div>
+
+     <div class="score">${x.score}</div>
+
+     <div class="details">
+       Trend ${x.trend}/25 · Pullback ${x.pullback}/20<br>
+       Momentum ${x.momentum}/15 · Structure ${x.structure}/15
+     </div>
+
+     <button class="why" onclick="toggleExplain(${index})">
+       WHY?
+     </button>
+
+     <div class="explain" id="explain-${index}">
+       <b>${x.ticker} SCORE BREAKDOWN</b><br><br>
+
+       Trend: ${x.trend}/25<br>
+       Pullback quality: ${x.pullback}/20<br>
+       Momentum: ${x.momentum}/15<br>
+       Price structure: ${x.structure}/15<br>
+       Volatility: ${x.volatility}/10<br>
+       Relative volume: ${x.volume}/10<br>
+       Trend consistency: ${x.consistency}/5<br><br>
+
+       TOTAL: <b>${x.score}/100</b>
+     </div>
+   `;
+
+   root.appendChild(card);
+ });
+}
+
+function toggleExplain(index){
+ const box=document.getElementById("explain-"+index);
+ box.style.display=box.style.display==="block"?"none":"block";
+}
+
+calculateRisk();
+</script>
+
+</body>
+</html>
