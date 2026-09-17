@@ -2,720 +2,2313 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050810">
-<title>TradeScan V2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8fc">
+
+<title>TradeScan V3</title>
 
 <style>
 :root{
---bg:#050810;
---panel:rgba(13,19,31,.82);
---panel2:#0b111c;
---line:#202c40;
---text:#f5f7fb;
---muted:#8290a6;
---green:#55e6ad;
---blue:#69a7ff;
---red:#ff6978;
---yellow:#ffd166;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --card2:#f8f9fd;
+  --line:#e4e7ef;
+  --text:#111827;
+  --muted:#6b7280;
+  --purple:#6d28d9;
+  --blue:#2563eb;
+  --green:#15803d;
+  --red:#dc2626;
+  --orange:#ea580c;
+  --yellow:#ca8a04;
+  --shadow:0 10px 30px rgba(15,23,42,.07);
 }
 
 *{box-sizing:border-box}
 
 body{
-margin:0;
-color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-background:
-radial-gradient(circle at 15% 0%,#132c39 0,transparent 32%),
-radial-gradient(circle at 95% 20%,#1a173c 0,transparent 30%),
-linear-gradient(160deg,#04070c,#08101b 55%,#05070d);
-min-height:100vh;
-background-attachment:fixed;
+  margin:0;
+  background:
+    radial-gradient(circle at top right,#eee9ff 0,transparent 32%),
+    var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
-body:before{
-content:"";
-position:fixed;
-inset:0;
-pointer-events:none;
-opacity:.13;
-background-image:
-linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-background-size:35px 35px;
-}
+button,input,select{font:inherit}
 
 .app{
-width:min(1180px,100%);
-margin:auto;
-padding:18px 16px 90px;
+  width:min(1180px,100%);
+  margin:auto;
+  padding:18px 14px 90px;
 }
 
-.top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:18px;
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  margin-bottom:16px;
 }
 
-.brand{
-font-size:24px;
-font-weight:900;
-letter-spacing:-1px;
+.brand h1{
+  margin:0;
+  font-size:26px;
+  letter-spacing:-.8px;
 }
 
-.brand span{color:var(--green)}
-
-.mode{
-font-size:11px;
-color:var(--green);
-border:1px solid rgba(85,230,173,.3);
-padding:7px 9px;
-border-radius:999px;
-background:rgba(85,230,173,.06);
+.brand p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:13px;
 }
 
-.hero,.card{
-border:1px solid var(--line);
-background:var(--panel);
-backdrop-filter:blur(15px);
-box-shadow:0 15px 45px rgba(0,0,0,.22);
+.live-pill{
+  border:1px solid #d8dbea;
+  background:#fff;
+  padding:8px 11px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
 }
+
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  background:#9ca3af;
+  border-radius:50%;
+  margin-right:6px;
+}
+
+.dot.good{background:#16a34a}
+.dot.bad{background:#dc2626}
 
 .hero{
-padding:20px;
-border-radius:22px;
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:14px;
+  margin-bottom:14px;
 }
 
-.hero h1{
-margin:0;
-font-size:29px;
+.card{
+  background:rgba(255,255,255,.94);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
 }
 
-.subtitle{
-color:var(--muted);
-margin-top:5px;
-font-size:13px;
+.hero-main{padding:20px}
+
+.eyebrow{
+  color:var(--purple);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.3px;
 }
 
-.inputs{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-top:18px;
+.hero-main h2{
+  margin:7px 0 8px;
+  font-size:28px;
+  letter-spacing:-1px;
 }
 
-.input{
-border:1px solid var(--line);
-border-radius:13px;
-padding:11px;
-background:#080d16;
+.hero-main p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.5;
+  font-size:14px;
 }
 
-.input label{
-display:block;
-color:var(--muted);
-font-size:10px;
-margin-bottom:5px;
+.hero-stats{
+  padding:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-.input input{
-width:100%;
-border:0;
-outline:0;
-background:transparent;
-color:white;
-font-size:18px;
-font-weight:800;
+.mini{
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
 }
 
-.buttons{
-display:flex;
-gap:8px;
-margin-top:12px;
+.mini .label{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
 }
 
-button{
-font-family:inherit;
-cursor:pointer;
+.mini .value{
+  margin-top:4px;
+  font-size:15px;
+  font-weight:900;
 }
 
-.primary{
-flex:1;
-border:0;
-padding:14px;
-border-radius:12px;
-background:linear-gradient(90deg,var(--green),#72f2d3);
-font-weight:900;
-color:#04120d;
-}
-
-.secondary{
-border:1px solid var(--line);
-background:#101725;
-color:white;
-border-radius:12px;
-padding:0 16px;
-}
-
-.metrics{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:9px;
-margin:12px 0 20px;
-}
-
-.metric{
-border:1px solid var(--line);
-background:var(--panel);
-border-radius:14px;
-padding:13px;
-}
-
-.metric small{
-color:var(--muted);
-font-size:10px;
-}
-
-.metric strong{
-display:block;
-font-size:20px;
-margin-top:4px;
-}
-
-.toolbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin-bottom:10px;
-}
-
-.toolbar h2{
-font-size:17px;
-margin:0;
+.controls{
+  display:flex;
+  gap:9px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
 }
 
 .search{
-border:1px solid var(--line);
-background:#0b111b;
-color:white;
-border-radius:10px;
-padding:9px 10px;
-width:180px;
+  flex:1;
+  min-width:180px;
+  border:1px solid var(--line);
+  background:#fff;
+  padding:12px 14px;
+  border-radius:13px;
+  outline:none;
 }
 
-.stock{
-border:1px solid var(--line);
-background:var(--panel);
-border-radius:15px;
-margin-bottom:8px;
-overflow:hidden;
+select{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:11px;
+  border-radius:13px;
+  outline:none;
 }
 
-.stockMain{
-display:grid;
-grid-template-columns:55px 58px 1fr 95px;
-align-items:center;
-gap:10px;
-padding:12px;
+.scan{
+  border:0;
+  background:#111827;
+  color:white;
+  padding:12px 17px;
+  border-radius:13px;
+  font-weight:900;
+  cursor:pointer;
 }
+
+.scan:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.progress-wrap{
+  display:none;
+  margin:-3px 0 14px;
+}
+
+.progress-text{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.progress{
+  height:7px;
+  background:#e5e7eb;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress div{
+  height:100%;
+  width:0%;
+  background:#6d28d9;
+  transition:width .2s;
+}
+
+.table-card{
+  overflow:hidden;
+}
+
+.table-head,
+.stock-row{
+  display:grid;
+  grid-template-columns:
+    1.1fr .7fr .7fr .8fr .8fr .8fr;
+  align-items:center;
+  gap:8px;
+}
+
+.table-head{
+  padding:11px 16px;
+  background:#fafbfe;
+  color:var(--muted);
+  border-bottom:1px solid var(--line);
+  font-size:10px;
+  text-transform:uppercase;
+  font-weight:900;
+}
+
+.stock-row{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+  transition:.15s;
+}
+
+.stock-row:last-child{border-bottom:0}
+.stock-row:hover{background:#fafaff}
 
 .symbol{
-font-size:15px;
-font-weight:900;
+  font-weight:950;
+  font-size:16px;
 }
 
-.score{
-width:48px;
-height:48px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:900;
-border:3px solid var(--green);
-background:#091611;
+.sub{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:600;
+  margin-top:2px;
 }
 
-.score.mid{
-border-color:var(--yellow);
-background:#17140b;
+.price{
+  font-weight:850;
 }
 
-.score.low{
-border-color:#536075;
-background:#10141c;
+.metric{
+  font-size:13px;
+  font-weight:800;
 }
 
-.summary{
-font-size:11px;
-color:var(--muted);
-line-height:1.6;
+.score-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:46px;
+  padding:7px 8px;
+  color:white;
+  border-radius:10px;
+  font-weight:950;
 }
 
-.tag{
-display:inline-block;
-margin-top:3px;
-border-radius:999px;
-padding:3px 7px;
-font-size:9px;
-background:rgba(85,230,173,.1);
-color:var(--green);
+.loading{
+  color:var(--muted);
+  font-size:12px;
 }
 
-.tag.no{
-color:#a9b1bf;
-background:#151b25;
-}
-
-.open{
-border:1px solid #2b3b54;
-background:#111a28;
-color:white;
-padding:9px;
-border-radius:9px;
+.error-text{
+  color:var(--red);
+  font-size:11px;
+  font-weight:700;
 }
 
 .detail{
-display:none;
-border-top:1px solid var(--line);
-padding:14px;
-background:rgba(5,9,15,.75);
+  margin-top:14px;
+  display:none;
 }
 
-.detail.active{display:block}
+.detail.show{display:block}
 
-.detailGrid{
-display:grid;
-grid-template-columns:1.5fr 1fr;
-gap:14px;
+.detail-grid{
+  display:grid;
+  grid-template-columns:330px 1fr;
+  gap:14px;
 }
 
-.chartWrap{
-border:1px solid var(--line);
-border-radius:13px;
-background:#070c14;
-padding:10px;
+.score-card{
+  padding:20px;
+}
+
+.score-card h3{
+  margin:0;
+  font-size:20px;
+}
+
+.score-card .desc{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:3px;
+}
+
+.gauge{
+  width:220px;
+  height:220px;
+  margin:17px auto;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  position:relative;
+  background:conic-gradient(
+    #dc2626 0deg 108deg,
+    #ea580c 108deg 180deg,
+    #eab308 180deg 234deg,
+    #65a30d 234deg 288deg,
+    #15803d 288deg 342deg,
+    #581c87 342deg 360deg
+  );
+}
+
+.gauge:after{
+  content:"";
+  width:174px;
+  height:174px;
+  position:absolute;
+  background:white;
+  border-radius:50%;
+}
+
+.gauge-center{
+  position:relative;
+  z-index:2;
+  text-align:center;
+}
+
+.gauge-number{
+  font-size:48px;
+  font-weight:950;
+  letter-spacing:-2px;
+}
+
+.gauge-label{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+}
+
+.score-note{
+  color:var(--muted);
+  text-align:center;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.chart-card{
+  padding:18px;
+}
+
+.chart-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.chart-symbol{
+  font-size:22px;
+  font-weight:950;
+}
+
+.chart-price{
+  font-size:25px;
+  font-weight:950;
+  margin-top:3px;
+}
+
+.timestamp{
+  color:var(--muted);
+  font-size:10px;
+  text-align:right;
+}
+
+.chart-wrap{
+  width:100%;
+  height:270px;
+  background:linear-gradient(#fafbff,#fff);
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
 }
 
 canvas{
-width:100%;
-height:230px;
-display:block;
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.section{
+  margin-top:14px;
+}
+
+.section-title{
+  font-size:16px;
+  font-weight:950;
+  margin:0 0 9px 2px;
+}
+
+.metrics-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+
+.metric-card{
+  padding:13px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.metric-card .name{
+  color:var(--muted);
+  text-transform:uppercase;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.metric-card .num{
+  font-size:17px;
+  font-weight:950;
+  margin-top:5px;
+}
+
+.metric-card .small{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
 }
 
 .breakdown{
-border:1px solid var(--line);
-border-radius:13px;
-background:#090f19;
-padding:13px;
+  padding:17px;
 }
 
-.breakRow{
-display:flex;
-justify-content:space-between;
-font-size:12px;
-padding:7px 0;
-border-bottom:1px solid #182131;
+.break-row{
+  display:grid;
+  grid-template-columns:110px 1fr 45px;
+  gap:10px;
+  align-items:center;
+  margin:11px 0;
 }
 
-.breakRow:last-child{border:0}
-
-.riskBox{
-margin-top:10px;
-padding:12px;
-border:1px solid var(--line);
-border-radius:11px;
-background:#080d15;
-font-size:12px;
-color:var(--muted);
-line-height:1.7;
+.break-name{
+  font-size:11px;
+  font-weight:850;
 }
 
-.green{color:var(--green)}
-.red{color:var(--red)}
-
-.notice{
-margin:14px 0;
-border:1px solid #26354c;
-background:rgba(10,17,28,.8);
-border-radius:13px;
-padding:12px;
-font-size:11px;
-color:#8e9bb0;
-line-height:1.6;
+.bar{
+  height:8px;
+  background:#eceef4;
+  border-radius:99px;
+  overflow:hidden;
 }
 
-.nav{
-position:fixed;
-left:50%;
-transform:translateX(-50%);
-bottom:12px;
-width:min(560px,calc(100% - 24px));
-background:rgba(8,13,22,.92);
-backdrop-filter:blur(18px);
-border:1px solid var(--line);
-border-radius:17px;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-padding:7px;
-z-index:20;
+.bar > div{
+  height:100%;
+  border-radius:99px;
+  background:#6d28d9;
 }
 
-.nav button{
-border:0;
-background:transparent;
-color:#77849a;
-padding:9px 2px;
-font-size:10px;
+.break-score{
+  text-align:right;
+  font-size:11px;
+  font-weight:950;
 }
 
-.nav button.active{color:var(--green)}
+.risk-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
 
-@media(max-width:700px){
-.inputs{grid-template-columns:1fr 1fr}
-.metrics{grid-template-columns:1fr 1fr}
-.stockMain{grid-template-columns:48px 53px 1fr}
-.open{grid-column:1/-1}
-.detailGrid{grid-template-columns:1fr}
-.toolbar{align-items:flex-start}
-.search{width:135px}
+.risk-card{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:white;
+}
+
+.risk-card .rlabel{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.risk-card .rnum{
+  font-size:17px;
+  font-weight:950;
+  margin-top:4px;
+}
+
+.warning{
+  margin-top:12px;
+  padding:12px;
+  background:#fff8e6;
+  border:1px solid #fde7a7;
+  border-radius:12px;
+  color:#7c5b09;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  padding:9px 15px calc(9px + env(safe-area-inset-bottom));
+  z-index:20;
+}
+
+.bottom-inner{
+  width:min(600px,100%);
+  margin:auto;
+  display:flex;
+  justify-content:space-around;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:850;
+}
+
+.bottom .active{color:var(--purple)}
+
+@media(max-width:800px){
+  .hero{grid-template-columns:1fr}
+  .detail-grid{grid-template-columns:1fr}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .risk-grid{grid-template-columns:1fr 1fr}
+
+  .table-head,
+  .stock-row{
+    grid-template-columns:1fr .8fr .65fr .65fr;
+  }
+
+  .hide-mobile{display:none}
+}
+
+@media(max-width:430px){
+  .app{padding:12px 10px 85px}
+  .brand h1{font-size:22px}
+  .hero-main h2{font-size:24px}
+  .hero-main{padding:16px}
+
+  .table-head,
+  .stock-row{
+    padding-left:11px;
+    padding-right:11px;
+  }
+
+  .gauge{
+    width:200px;
+    height:200px;
+  }
+
+  .gauge:after{
+    width:158px;
+    height:158px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
-<div class="top">
-<div class="brand">TRADE<span>SCAN</span> <small style="font-size:10px;color:#68758a">V2</small></div>
-<div class="mode">PAPER RESEARCH</div>
+  <div class="topbar">
+    <div class="brand">
+      <h1>TradeScan V3</h1>
+      <p>Quantitative market research dashboard</p>
+    </div>
+
+    <div class="live-pill">
+      <span id="liveDot" class="dot"></span>
+      <span id="liveText">NOT SCANNED</span>
+    </div>
+  </div>
+
+  <div class="hero">
+
+    <div class="card hero-main">
+      <div class="eyebrow">REAL MARKET DATA</div>
+
+      <h2>20-stock quantitative scanner.</h2>
+
+      <p>
+        Scores are calculated from OHLCV market data returned by your
+        Massive-powered Cloudflare API. The score summarizes trend,
+        momentum, volatility and volume conditions. It is not a prediction
+        or guarantee of future returns.
+      </p>
+    </div>
+
+    <div class="card hero-stats">
+
+      <div class="mini">
+        <div class="label">Provider</div>
+        <div class="value">Massive</div>
+      </div>
+
+      <div class="mini">
+        <div class="label">Primary interval</div>
+        <div class="value">5 MIN</div>
+      </div>
+
+      <div class="mini">
+        <div class="label">Universe</div>
+        <div class="value">20 STOCKS</div>
+      </div>
+
+      <div class="mini">
+        <div class="label">Last refresh</div>
+        <div class="value" id="lastRefresh">—</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="controls">
+
+    <input
+      id="search"
+      class="search"
+      placeholder="Search symbol..."
+      autocomplete="off"
+    >
+
+    <select id="sort">
+      <option value="score">Highest score</option>
+      <option value="symbol">Symbol A–Z</option>
+      <option value="momentum">Momentum</option>
+      <option value="volume">Relative volume</option>
+    </select>
+
+    <button id="scanBtn" class="scan">
+      SCAN WATCHLIST
+    </button>
+
+  </div>
+
+  <div id="progressWrap" class="progress-wrap">
+    <div id="progressText" class="progress-text">
+      Preparing scan...
+    </div>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+  </div>
+
+  <div class="card table-card">
+
+    <div class="table-head">
+      <div>Stock</div>
+      <div>Price</div>
+      <div>Score</div>
+      <div>Momentum</div>
+      <div class="hide-mobile">RSI</div>
+      <div class="hide-mobile">Rel Volume</div>
+    </div>
+
+    <div id="stockList"></div>
+
+  </div>
+
+  <div id="detail" class="detail">
+
+    <div class="detail-grid">
+
+      <div class="card score-card">
+
+        <h3 id="detailName">NVDA</h3>
+
+        <div class="desc">
+          Quant Signal Score
+        </div>
+
+        <div class="gauge">
+          <div class="gauge-center">
+            <div id="gaugeNumber" class="gauge-number">—</div>
+            <div id="gaugeLabel" class="gauge-label">NO DATA</div>
+          </div>
+        </div>
+
+        <div class="score-note">
+          0–100 mathematical condition score.
+          Higher scores mean more of the scanner's selected
+          trend/momentum/volume conditions are currently aligned.
+        </div>
+
+      </div>
+
+      <div class="card chart-card">
+
+        <div class="chart-top">
+
+          <div>
+            <div id="chartSymbol" class="chart-symbol">NVDA</div>
+            <div id="chartPrice" class="chart-price">—</div>
+          </div>
+
+          <div id="chartTime" class="timestamp">
+            —
+          </div>
+
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="chart"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-title">
+        Quant Metrics
+      </div>
+
+      <div id="metricsGrid" class="metrics-grid"></div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-title">
+        Score Breakdown
+      </div>
+
+      <div class="card breakdown" id="breakdown"></div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="section-title">
+        Paper Risk Framework
+      </div>
+
+      <div id="riskGrid" class="risk-grid"></div>
+
+      <div class="warning">
+        Research / paper-trading reference only. The invalidation level is
+        calculated from ATR and recent price structure. A real stop order is
+        not guaranteed to execute at the stop price during fast markets or gaps.
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
-<section class="hero">
-<h1>Market Setup Scanner</h1>
-<div class="subtitle">Deterministic trend + pullback research dashboard</div>
-
-<div class="inputs">
-<div class="input">
-<label>PAPER ACCOUNT ($)</label>
-<input id="account" type="number" value="100">
-</div>
-
-<div class="input">
-<label>RISK BUDGET (%)</label>
-<input id="risk" type="number" value="1" step=".25">
-</div>
-
-<div class="input">
-<label>QUALIFY SCORE</label>
-<input id="threshold" type="number" value="70">
-</div>
-</div>
-
-<div class="buttons">
-<button class="primary" onclick="scan()">SCAN ALL 20 STOCKS</button>
-<button class="secondary" onclick="sortMode()">SORT</button>
-</div>
-</section>
-
-<section class="metrics">
-<div class="metric"><small>SCANNED</small><strong>20 / 20</strong></div>
-<div class="metric"><small>QUALIFIED</small><strong id="qualified">0</strong></div>
-<div class="metric"><small>TOP SCORE</small><strong id="topScore">—</strong></div>
-<div class="metric"><small>PAPER RISK</small><strong id="riskDollars">$1.00</strong></div>
-</section>
-
-<div class="toolbar">
-<h2>All Scanner Results</h2>
-<input class="search" id="search" placeholder="Search ticker…" oninput="render()">
-</div>
-
-<div id="results"></div>
-
-<div class="notice">
-V2 interface test: all 20 symbols are always displayed and rankings are deterministic.
-The chart series below is simulated and clearly separated from live market data.
-Do not treat these scores as current trade signals.
-</div>
-
-</div>
-
-<div class="nav">
-<button class="active">◉<br>SCANNER</button>
-<button>⌁<br>CHARTS</button>
-<button>↻<br>BACKTEST</button>
-<button>▤<br>JOURNAL</button>
+<div class="bottom">
+  <div class="bottom-inner">
+    <div class="active">SCANNER</div>
+    <div>QUANT</div>
+    <div>RISK</div>
+    <div>DATA</div>
+  </div>
 </div>
 
 <script>
-const universe=[
-["AAPL",82,23,17,13,12,7,6,4,185],
-["MSFT",78,22,16,12,11,7,6,4,420],
-["NVDA",88,25,18,14,13,7,7,4,175],
-["AMZN",74,21,15,11,11,6,6,4,225],
-["GOOGL",76,22,15,12,10,6,7,4,205],
-["META",84,24,17,13,12,7,7,4,520],
-["AVGO",80,23,16,12,12,7,6,4,360],
-["TSLA",63,17,12,10,9,6,5,4,330],
-["JPM",72,20,15,11,10,6,6,4,210],
-["V",71,20,14,11,10,6,6,4,290],
-["MA",73,21,14,11,11,6,6,4,470],
-["WMT",69,19,14,10,10,6,6,4,105],
-["COST",77,22,16,12,11,6,6,4,950],
-["NFLX",79,22,16,13,11,7,6,4,710],
-["AMD",81,23,17,13,11,7,6,4,165],
-["ORCL",70,20,14,11,10,6,5,4,150],
-["CRM",68,19,13,10,10,6,6,4,245],
-["BAC",64,18,12,10,9,6,5,4,52],
-["XOM",66,18,13,10,9,6,6,4,115],
-["LLY",75,21,15,12,11,6,6,4,760]
+const API =
+  "https://trade-scanner-api.parkermacklem.workers.dev";
+
+const WATCHLIST = [
+  "AAPL","MSFT","NVDA","AMZN","GOOGL",
+  "META","AVGO","TSLA","JPM","V",
+  "MA","WMT","COST","NFLX","AMD",
+  "ORCL","CRM","BAC","XOM","LLY"
 ];
 
-let stocks=universe.map(x=>({
-ticker:x[0],
-score:x[1],
-trend:x[2],
-pullback:x[3],
-momentum:x[4],
-structure:x[5],
-volatility:x[6],
-volume:x[7],
-consistency:x[8],
-reference:x[9]
-}));
+const state = {};
+let selectedSymbol = null;
 
-let descending=true;
+/* -------------------------------
+   BASIC HELPERS
+-------------------------------- */
 
-function riskBudget(){
-const account=Number(document.getElementById("account").value)||0;
-const risk=Number(document.getElementById("risk").value)||0;
-const amount=account*risk/100;
-document.getElementById("riskDollars").textContent="$"+amount.toFixed(2);
-return amount;
+function clamp(v,min=0,max=100){
+  return Math.min(max,Math.max(min,v));
 }
 
-function scan(){
-render();
-window.scrollTo({top:document.querySelector(".metrics").offsetTop-10,behavior:"smooth"});
+function mean(arr){
+  if(!arr.length) return 0;
+  return arr.reduce((a,b)=>a+b,0)/arr.length;
 }
 
-function sortMode(){
-descending=!descending;
-render();
+function pct(a,b){
+  if(!b) return 0;
+  return ((a/b)-1)*100;
 }
 
-function render(){
-riskBudget();
-
-const threshold=Number(document.getElementById("threshold").value)||70;
-const query=document.getElementById("search").value.trim().toUpperCase();
-
-let shown=[...stocks];
-
-shown.sort((a,b)=>descending ? b.score-a.score : a.score-b.score);
-
-const qualified=stocks.filter(x=>x.score>=threshold).length;
-document.getElementById("qualified").textContent=qualified;
-document.getElementById("topScore").textContent=Math.max(...stocks.map(x=>x.score))+"/100";
-
-if(query) shown=shown.filter(x=>x.ticker.includes(query));
-
-const root=document.getElementById("results");
-root.innerHTML="";
-
-shown.forEach(x=>{
-const qualified=x.score>=threshold;
-const scoreClass=x.score>=70?"":x.score>=60?"mid":"low";
-
-const wrapper=document.createElement("div");
-wrapper.className="stock";
-
-wrapper.innerHTML=`
-<div class="stockMain">
-<div class="symbol">${x.ticker}</div>
-
-<div class="score ${scoreClass}">
-${x.score}
-</div>
-
-<div class="summary">
-Trend ${x.trend}/25 · Pullback ${x.pullback}/20<br>
-Momentum ${x.momentum}/15 · Structure ${x.structure}/15
-<br>
-<span class="tag ${qualified?"":"no"}">
-${qualified?"QUALIFIED":"BELOW THRESHOLD"}
-</span>
-</div>
-
-<button class="open" onclick="toggle('${x.ticker}')">
-CHART + DATA
-</button>
-</div>
-
-<div class="detail" id="detail-${x.ticker}">
-<div class="detailGrid">
-
-<div class="chartWrap">
-<div style="font-size:12px;font-weight:800;margin:3px 0 8px">
-${x.ticker} — SIMULATED SERIES
-</div>
-<canvas id="chart-${x.ticker}" width="700" height="260"></canvas>
-</div>
-
-<div class="breakdown">
-<b>Score Breakdown</b>
-
-<div class="breakRow"><span>Trend</span><b>${x.trend}/25</b></div>
-<div class="breakRow"><span>Pullback</span><b>${x.pullback}/20</b></div>
-<div class="breakRow"><span>Momentum</span><b>${x.momentum}/15</b></div>
-<div class="breakRow"><span>Structure</span><b>${x.structure}/15</b></div>
-<div class="breakRow"><span>Volatility</span><b>${x.volatility}/10</b></div>
-<div class="breakRow"><span>Volume</span><b>${x.volume}/10</b></div>
-<div class="breakRow"><span>Consistency</span><b>${x.consistency}/5</b></div>
-
-<div class="riskBox" id="risk-${x.ticker}"></div>
-</div>
-
-</div>
-</div>
-`;
-
-root.appendChild(wrapper);
-});
+function money(v){
+  if(v == null || !Number.isFinite(v)) return "—";
+  return "$" + v.toFixed(2);
 }
 
-function toggle(ticker){
-const box=document.getElementById("detail-"+ticker);
-const opening=!box.classList.contains("active");
-box.classList.toggle("active");
-
-if(opening){
-const stock=stocks.find(x=>x.ticker===ticker);
-drawChart(stock);
-showRisk(stock);
-}
+function percent(v,digits=2){
+  if(v == null || !Number.isFinite(v)) return "—";
+  const sign = v > 0 ? "+" : "";
+  return sign + v.toFixed(digits) + "%";
 }
 
-function seededSeries(stock){
-let seed=0;
-for(const c of stock.ticker) seed+=c.charCodeAt(0);
-
-let price=stock.reference;
-const arr=[];
-
-for(let i=0;i<90;i++){
-const wave=Math.sin((i+seed)*.27)*.009;
-const wave2=Math.cos((i+seed)*.11)*.006;
-const drift=(stock.score-65)/12000;
-price=price*(1+drift+wave+wave2);
-arr.push(price);
-}
-return arr;
+function num(v,digits=2){
+  if(v == null || !Number.isFinite(v)) return "—";
+  return v.toFixed(digits);
 }
 
-function movingAverage(arr,n){
-return arr.map((_,i)=>{
-if(i<n-1)return null;
-let total=0;
-for(let j=i-n+1;j<=i;j++) total+=arr[j];
-return total/n;
-});
+function formatVolume(v){
+  if(!Number.isFinite(v)) return "—";
+  if(v >= 1e9) return (v/1e9).toFixed(2)+"B";
+  if(v >= 1e6) return (v/1e6).toFixed(2)+"M";
+  if(v >= 1e3) return (v/1e3).toFixed(1)+"K";
+  return Math.round(v).toString();
 }
 
-function drawLine(ctx,data,min,max,w,h,pad,color,width=2){
-ctx.beginPath();
-let started=false;
+/* -------------------------------
+   INDICATORS
+-------------------------------- */
 
-data.forEach((v,i)=>{
-if(v===null)return;
-const x=pad+i/(data.length-1)*(w-pad*2);
-const y=h-pad-(v-min)/(max-min)*(h-pad*2);
+function ema(values,period){
 
-if(!started){
-ctx.moveTo(x,y);
-started=true;
-}else ctx.lineTo(x,y);
-});
+  if(!values.length) return null;
 
-ctx.strokeStyle=color;
-ctx.lineWidth=width;
-ctx.stroke();
+  const k = 2/(period+1);
+  let result = values[0];
+
+  for(let i=1;i<values.length;i++){
+    result =
+      values[i]*k +
+      result*(1-k);
+  }
+
+  return result;
 }
 
-function drawChart(stock){
-const canvas=document.getElementById("chart-"+stock.ticker);
-if(!canvas)return;
+function rsi(values,period=14){
 
-const ctx=canvas.getContext("2d");
-const w=canvas.width;
-const h=canvas.height;
+  if(values.length < period+1)
+    return null;
 
-ctx.clearRect(0,0,w,h);
+  let gains=0;
+  let losses=0;
 
-const prices=seededSeries(stock);
-const ma20=movingAverage(prices,20);
-const ma50=movingAverage(prices,50);
+  const start =
+    values.length-period;
 
-const all=[...prices,...ma20.filter(Boolean),...ma50.filter(Boolean)];
-const min=Math.min(...all)*.98;
-const max=Math.max(...all)*1.02;
-const pad=25;
+  for(let i=start;i<values.length;i++){
 
-ctx.strokeStyle="#162235";
-ctx.lineWidth=1;
+    const change =
+      values[i]-values[i-1];
 
-for(let i=0;i<5;i++){
-const y=pad+i*(h-pad*2)/4;
-ctx.beginPath();
-ctx.moveTo(pad,y);
-ctx.lineTo(w-pad,y);
-ctx.stroke();
+    if(change > 0)
+      gains += change;
+    else
+      losses += Math.abs(change);
+  }
+
+  const avgGain=gains/period;
+  const avgLoss=losses/period;
+
+  if(avgLoss===0) return 100;
+
+  const rs=avgGain/avgLoss;
+
+  return 100-(100/(1+rs));
 }
 
-drawLine(ctx,prices,min,max,w,h,pad,"#55e6ad",3);
-drawLine(ctx,ma20,min,max,w,h,pad,"#69a7ff",2);
-drawLine(ctx,ma50,min,max,w,h,pad,"#ffd166",2);
+function atr(candles,period=14){
 
-ctx.fillStyle="#8290a6";
-ctx.font="12px -apple-system";
+  if(candles.length < 2)
+    return null;
 
-ctx.fillText("Price",30,18);
-ctx.fillStyle="#69a7ff";
-ctx.fillText("20 MA",80,18);
-ctx.fillStyle="#ffd166";
-ctx.fillText("50 MA",135,18);
+  const trs=[];
+
+  for(let i=1;i<candles.length;i++){
+
+    const c=candles[i];
+    const prev=candles[i-1];
+
+    const tr=Math.max(
+      c.high-c.low,
+      Math.abs(c.high-prev.close),
+      Math.abs(c.low-prev.close)
+    );
+
+    trs.push(tr);
+  }
+
+  const use=
+    trs.slice(-period);
+
+  return mean(use);
 }
 
-function showRisk(stock){
-const risk=riskBudget();
+function sessionVWAP(candles){
 
-const series=seededSeries(stock);
-const entry=series[series.length-1];
+  let pv=0;
+  let vol=0;
 
-// Simulation only: hypothetical invalidation 3% below simulated reference.
-const invalidation=entry*.97;
-const perShare=entry-invalidation;
-const shares=perShare>0 ? risk/perShare : 0;
-const position=shares*entry;
+  for(const c of candles){
 
-document.getElementById("risk-"+stock.ticker).innerHTML=`
-<b style="color:white">Paper Risk Example</b><br>
-Simulated reference: $${entry.toFixed(2)}<br>
-Example invalidation: $${invalidation.toFixed(2)}<br>
-Paper risk budget: $${risk.toFixed(2)}<br>
-Hypothetical shares: ${shares.toFixed(3)}<br>
-Hypothetical position: $${position.toFixed(2)}
-`;
+    const typical=
+      (c.high+c.low+c.close)/3;
+
+    pv += typical*c.volume;
+    vol += c.volume;
+  }
+
+  return vol ? pv/vol : null;
 }
 
-document.getElementById("account").addEventListener("input",render);
-document.getElementById("risk").addEventListener("input",render);
-document.getElementById("threshold").addEventListener("input",render);
+function relativeVolume(candles){
 
-render();
+  if(candles.length < 2)
+    return null;
+
+  const current =
+    candles[candles.length-1].volume;
+
+  const previous =
+    candles
+      .slice(Math.max(0,candles.length-21),-1)
+      .map(c=>c.volume);
+
+  const avg=mean(previous);
+
+  return avg ? current/avg : null;
+}
+
+function regression(values){
+
+  const n=values.length;
+
+  if(n<3)
+    return {slope:0,r2:0};
+
+  const xMean=(n-1)/2;
+  const yMean=mean(values);
+
+  let nume=0;
+  let den=0;
+
+  for(let i=0;i<n;i++){
+    nume +=
+      (i-xMean)*(values[i]-yMean);
+
+    den +=
+      (i-xMean)*(i-xMean);
+  }
+
+  const slope=
+    den ? nume/den : 0;
+
+  let ssRes=0;
+  let ssTot=0;
+
+  for(let i=0;i<n;i++){
+
+    const pred=
+      yMean+slope*(i-xMean);
+
+    ssRes +=
+      Math.pow(values[i]-pred,2);
+
+    ssTot +=
+      Math.pow(values[i]-yMean,2);
+  }
+
+  const r2 =
+    ssTot ? 1-(ssRes/ssTot) : 0;
+
+  return {
+    slope,
+    r2:clamp(r2,0,1)
+  };
+}
+
+function realizedVolatility(values){
+
+  if(values.length<3)
+    return null;
+
+  const returns=[];
+
+  for(let i=1;i<values.length;i++){
+    returns.push(
+      Math.log(values[i]/values[i-1])
+    );
+  }
+
+  const avg=mean(returns);
+
+  const variance=
+    mean(
+      returns.map(r =>
+        Math.pow(r-avg,2)
+      )
+    );
+
+  return Math.sqrt(variance)*100;
+}
+
+/* -------------------------------
+   SCORE ENGINE
+-------------------------------- */
+
+function scoreStock(symbol,candles){
+
+  const closes =
+    candles.map(c=>c.close);
+
+  const latest =
+    candles[candles.length-1];
+
+  if(!latest){
+    throw new Error("No candles");
+  }
+
+  const price=latest.close;
+
+  const ema9=ema(closes.slice(-80),9);
+  const ema20=ema(closes.slice(-100),20);
+  const ema50=ema(closes.slice(-150),50);
+
+  const rsi14=rsi(closes,14);
+  const atr14=atr(candles,14);
+
+  const atrPct=
+    atr14 && price
+      ? (atr14/price)*100
+      : null;
+
+  const vwap=sessionVWAP(candles);
+  const relVol=relativeVolume(candles);
+
+  const mom1 =
+    closes.length>1
+      ? pct(
+          closes.at(-1),
+          closes.at(-2)
+        )
+      : 0;
+
+  const mom3 =
+    closes.length>3
+      ? pct(
+          closes.at(-1),
+          closes.at(-4)
+        )
+      : 0;
+
+  const mom6 =
+    closes.length>6
+      ? pct(
+          closes.at(-1),
+          closes.at(-7)
+        )
+      : 0;
+
+  const mom12 =
+    closes.length>12
+      ? pct(
+          closes.at(-1),
+          closes.at(-13)
+        )
+      : 0;
+
+  const reg=
+    regression(
+      closes.slice(-20)
+    );
+
+  const regSlopePct =
+    price
+      ? (reg.slope/price)*100
+      : 0;
+
+  const realizedVol=
+    realizedVolatility(
+      closes.slice(-30)
+    );
+
+  const recent=
+    candles.slice(-20);
+
+  const recentHigh=
+    Math.max(...recent.map(c=>c.high));
+
+  const recentLow=
+    Math.min(...recent.map(c=>c.low));
+
+  const rangePosition=
+    recentHigh===recentLow
+      ? 50
+      :
+      ((price-recentLow)/
+      (recentHigh-recentLow))*100;
+
+  /* TREND */
+
+  let trendScore=50;
+
+  if(ema9 && price>ema9)
+    trendScore+=12;
+
+  if(ema20 && price>ema20)
+    trendScore+=12;
+
+  if(ema9 && ema20 && ema9>ema20)
+    trendScore+=12;
+
+  if(ema20 && ema50 && ema20>ema50)
+    trendScore+=8;
+
+  if(regSlopePct>0)
+    trendScore+=6;
+
+  trendScore=clamp(trendScore);
+
+  /* MOMENTUM */
+
+  let momentumScore=50;
+
+  momentumScore +=
+    clamp(mom3*8,-20,20);
+
+  momentumScore +=
+    clamp(mom12*3,-15,15);
+
+  if(rsi14 != null){
+
+    if(rsi14>=50 && rsi14<=70)
+      momentumScore+=12;
+
+    if(rsi14>75)
+      momentumScore-=10;
+
+    if(rsi14<40)
+      momentumScore-=12;
+  }
+
+  momentumScore=clamp(momentumScore);
+
+  /* VOLUME */
+
+  let volumeScore=50;
+
+  if(relVol != null){
+    volumeScore +=
+      clamp(
+        (relVol-1)*30,
+        -25,
+        35
+      );
+  }
+
+  volumeScore=clamp(volumeScore);
+
+  /* STRUCTURE */
+
+  let structureScore=
+    clamp(rangePosition);
+
+  if(vwap && price>vwap)
+    structureScore+=10;
+
+  if(reg.r2>.65)
+    structureScore+=10;
+
+  structureScore=
+    clamp(structureScore);
+
+  /* VOLATILITY QUALITY */
+
+  let volatilityScore=65;
+
+  if(atrPct != null){
+
+    if(atrPct>.25 && atrPct<2.5)
+      volatilityScore+=15;
+
+    if(atrPct>4)
+      volatilityScore-=25;
+  }
+
+  volatilityScore=
+    clamp(volatilityScore);
+
+  /* COMPOSITE */
+
+  const score=
+    Math.round(
+      trendScore*.30 +
+      momentumScore*.25 +
+      volumeScore*.15 +
+      structureScore*.20 +
+      volatilityScore*.10
+    );
+
+  /* PAPER INVALIDATION */
+
+  const structureLow=
+    Math.min(
+      ...candles
+        .slice(-8)
+        .map(c=>c.low)
+    );
+
+  const atrStop=
+    atr14
+      ? price-(atr14*1.5)
+      : structureLow;
+
+  const invalidation=
+    Math.max(
+      0,
+      Math.min(
+        structureLow,
+        atrStop
+      )
+    );
+
+  const riskPerShare=
+    price-invalidation;
+
+  return {
+
+    symbol,
+    candles,
+
+    price,
+    score,
+
+    ema9,
+    ema20,
+    ema50,
+
+    rsi:rsi14,
+
+    atr:atr14,
+    atrPct,
+
+    vwap,
+    relVol,
+
+    mom1,
+    mom3,
+    mom6,
+    mom12,
+
+    regressionSlope:regSlopePct,
+    r2:reg.r2,
+
+    realizedVol,
+    rangePosition,
+
+    trendScore,
+    momentumScore,
+    volumeScore,
+    structureScore,
+    volatilityScore,
+
+    invalidation,
+    riskPerShare,
+
+    lastBar:
+      latest.datetime
+  };
+}
+
+/* -------------------------------
+   SCORE COLORS
+-------------------------------- */
+
+function scoreColor(score){
+
+  if(score>=95)
+    return "#581c87";
+
+  if(score>=80)
+    return "#15803d";
+
+  if(score>=65)
+    return "#65a30d";
+
+  if(score>=50)
+    return "#ca8a04";
+
+  if(score>=30)
+    return "#ea580c";
+
+  return "#dc2626";
+}
+
+function scoreLabel(score){
+
+  if(score>=95)
+    return "EXTREME ALIGNMENT";
+
+  if(score>=80)
+    return "STRONG ALIGNMENT";
+
+  if(score>=65)
+    return "POSITIVE ALIGNMENT";
+
+  if(score>=50)
+    return "MIXED";
+
+  if(score>=30)
+    return "WEAK";
+
+  return "LOW ALIGNMENT";
+}
+
+/* -------------------------------
+   API
+-------------------------------- */
+
+async function fetchStock(symbol){
+
+  const endpoint =
+    `${API}/timeseries?symbol=${symbol}` +
+    `&interval=5min&outputsize=300`;
+
+  const response =
+    await fetch(endpoint,{
+      cache:"no-store"
+    });
+
+  if(!response.ok)
+    throw new Error(
+      `HTTP ${response.status}`
+    );
+
+  const data=
+    await response.json();
+
+  if(data.error)
+    throw new Error(
+      data.providerResponse?.error ||
+      data.providerResponse?.message ||
+      data.error
+    );
+
+  if(!Array.isArray(data.candles) ||
+     data.candles.length===0)
+    throw new Error("No market bars returned");
+
+  return data;
+}
+
+/* -------------------------------
+   TABLE
+-------------------------------- */
+
+function initialRows(){
+
+  const list=
+    document.getElementById("stockList");
+
+  list.innerHTML =
+    WATCHLIST.map(symbol=>`
+
+      <div
+        class="stock-row"
+        data-symbol="${symbol}"
+      >
+
+        <div class="symbol">
+          ${symbol}
+          <span class="sub">
+            waiting for scan
+          </span>
+        </div>
+
+        <div class="price">—</div>
+
+        <div>
+          <span
+            class="score-pill"
+            style="background:#9ca3af"
+          >
+            —
+          </span>
+        </div>
+
+        <div class="metric">—</div>
+
+        <div class="metric hide-mobile">
+          —
+        </div>
+
+        <div class="metric hide-mobile">
+          —
+        </div>
+
+      </div>
+
+    `).join("");
+}
+
+function sortedStocks(){
+
+  const query=
+    document
+      .getElementById("search")
+      .value
+      .trim()
+      .toUpperCase();
+
+  const mode=
+    document
+      .getElementById("sort")
+      .value;
+
+  let symbols=
+    WATCHLIST.filter(s=>
+      s.includes(query)
+    );
+
+  symbols.sort((a,b)=>{
+
+    const A=state[a];
+    const B=state[b];
+
+    if(mode==="symbol")
+      return a.localeCompare(b);
+
+    if(!A && !B)
+      return a.localeCompare(b);
+
+    if(!A) return 1;
+    if(!B) return -1;
+
+    if(mode==="momentum")
+      return B.mom12-A.mom12;
+
+    if(mode==="volume")
+      return (B.relVol||0)-(A.relVol||0);
+
+    return B.score-A.score;
+  });
+
+  return symbols;
+}
+
+function renderTable(){
+
+  const list=
+    document.getElementById("stockList");
+
+  const symbols=
+    sortedStocks();
+
+  list.innerHTML=
+    symbols.map(symbol=>{
+
+      const s=state[symbol];
+
+      if(!s){
+
+        return `
+          <div
+            class="stock-row"
+            data-symbol="${symbol}"
+          >
+            <div class="symbol">
+              ${symbol}
+              <span class="sub">
+                no scan data
+              </span>
+            </div>
+
+            <div class="price">—</div>
+
+            <div>
+              <span
+                class="score-pill"
+                style="background:#9ca3af"
+              >
+                —
+              </span>
+            </div>
+
+            <div class="metric">—</div>
+
+            <div class="metric hide-mobile">
+              —
+            </div>
+
+            <div class="metric hide-mobile">
+              —
+            </div>
+          </div>
+        `;
+      }
+
+      if(s.error){
+
+        return `
+          <div
+            class="stock-row"
+            data-symbol="${symbol}"
+          >
+            <div class="symbol">
+              ${symbol}
+              <span class="error-text">
+                data unavailable
+              </span>
+            </div>
+
+            <div>—</div>
+            <div>—</div>
+            <div>—</div>
+            <div class="hide-mobile">—</div>
+            <div class="hide-mobile">—</div>
+          </div>
+        `;
+      }
+
+      return `
+        <div
+          class="stock-row"
+          data-symbol="${symbol}"
+        >
+
+          <div class="symbol">
+            ${symbol}
+            <span class="sub">
+              ${s.candles.length} bars
+            </span>
+          </div>
+
+          <div class="price">
+            ${money(s.price)}
+          </div>
+
+          <div>
+            <span
+              class="score-pill"
+              style="
+                background:${scoreColor(s.score)}
+              "
+            >
+              ${s.score}
+            </span>
+          </div>
+
+          <div class="metric">
+            ${percent(s.mom12)}
+          </div>
+
+          <div class="metric hide-mobile">
+            ${num(s.rsi,1)}
+          </div>
+
+          <div class="metric hide-mobile">
+            ${s.relVol
+              ? s.relVol.toFixed(2)+"×"
+              : "—"}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  document
+    .querySelectorAll(".stock-row")
+    .forEach(row=>{
+
+      row.addEventListener(
+        "click",
+        ()=>{
+
+          const symbol=
+            row.dataset.symbol;
+
+          if(
+            state[symbol] &&
+            !state[symbol].error
+          ){
+            showDetail(symbol);
+          }
+        }
+      );
+
+    });
+}
+
+/* -------------------------------
+   DETAIL
+-------------------------------- */
+
+function metricCard(name,value,small=""){
+
+  return `
+    <div class="metric-card">
+      <div class="name">${name}</div>
+      <div class="num">${value}</div>
+      <div class="small">${small}</div>
+    </div>
+  `;
+}
+
+function riskCard(name,value){
+
+  return `
+    <div class="risk-card">
+      <div class="rlabel">${name}</div>
+      <div class="rnum">${value}</div>
+    </div>
+  `;
+}
+
+function showDetail(symbol){
+
+  const s=state[symbol];
+
+  if(!s || s.error)
+    return;
+
+  selectedSymbol=symbol;
+
+  document
+    .getElementById("detail")
+    .classList.add("show");
+
+  document.getElementById("detailName")
+    .textContent=symbol;
+
+  document.getElementById("chartSymbol")
+    .textContent=symbol;
+
+  document.getElementById("chartPrice")
+    .textContent=money(s.price);
+
+  document.getElementById("gaugeNumber")
+    .textContent=s.score;
+
+  document.getElementById("gaugeNumber")
+    .style.color=scoreColor(s.score);
+
+  document.getElementById("gaugeLabel")
+    .textContent=scoreLabel(s.score);
+
+  document.getElementById("chartTime")
+    .innerHTML=
+      `SOURCE: MASSIVE<br>`+
+      `5-MIN OHLCV<br>`+
+      `LAST BAR: ${s.lastBar}`;
+
+  const metrics=[
+    metricCard(
+      "EMA 9",
+      money(s.ema9),
+      s.price>s.ema9
+        ? "Price above"
+        : "Price below"
+    ),
+
+    metricCard(
+      "EMA 20",
+      money(s.ema20),
+      s.ema9>s.ema20
+        ? "9 EMA > 20 EMA"
+        : "9 EMA ≤ 20 EMA"
+    ),
+
+    metricCard(
+      "EMA 50",
+      money(s.ema50),
+      "Intraday trend reference"
+    ),
+
+    metricCard(
+      "VWAP",
+      money(s.vwap),
+      s.price>s.vwap
+        ? "Price above VWAP"
+        : "Price below VWAP"
+    ),
+
+    metricCard(
+      "RSI 14",
+      num(s.rsi,1),
+      "Momentum oscillator"
+    ),
+
+    metricCard(
+      "ATR 14",
+      money(s.atr),
+      s.atrPct
+        ? s.atrPct.toFixed(2)+"% of price"
+        : ""
+    ),
+
+    metricCard(
+      "Relative Volume",
+      s.relVol
+        ? s.relVol.toFixed(2)+"×"
+        : "—",
+      "Latest bar vs recent bars"
+    ),
+
+    metricCard(
+      "5m Momentum",
+      percent(s.mom1),
+      "1 bar"
+    ),
+
+    metricCard(
+      "15m Momentum",
+      percent(s.mom3),
+      "3 bars"
+    ),
+
+    metricCard(
+      "30m Momentum",
+      percent(s.mom6),
+      "6 bars"
+    ),
+
+    metricCard(
+      "60m Momentum",
+      percent(s.mom12),
+      "12 bars"
+    ),
+
+    metricCard(
+      "Regression R²",
+      num(s.r2,2),
+      "Trend consistency"
+    ),
+
+    metricCard(
+      "Regression Slope",
+      percent(s.regressionSlope,3),
+      "Per-bar normalized slope"
+    ),
+
+    metricCard(
+      "Range Position",
+      num(s.rangePosition,0)+"%",
+      "Position inside recent range"
+    ),
+
+    metricCard(
+      "Realized Vol",
+      s.realizedVol != null
+        ? s.realizedVol.toFixed(3)+"%"
+        : "—",
+      "Recent bar-return dispersion"
+    ),
+
+    metricCard(
+      "Bars Loaded",
+      s.candles.length,
+      "Current API sample"
+    )
+  ];
+
+  document.getElementById("metricsGrid")
+    .innerHTML=metrics.join("");
+
+  const breakdown=[
+    ["Trend",s.trendScore],
+    ["Momentum",s.momentumScore],
+    ["Volume",s.volumeScore],
+    ["Structure",s.structureScore],
+    ["Volatility",s.volatilityScore]
+  ];
+
+  document.getElementById("breakdown")
+    .innerHTML=
+      breakdown.map(([name,value])=>`
+
+        <div class="break-row">
+
+          <div class="break-name">
+            ${name}
+          </div>
+
+          <div class="bar">
+            <div
+              style="
+                width:${value}%;
+                background:${scoreColor(value)}
+              "
+            ></div>
+          </div>
+
+          <div class="break-score">
+            ${Math.round(value)}
+          </div>
+
+        </div>
+
+      `).join("");
+
+  const risk=s.riskPerShare;
+
+  const paperAccount=100;
+  const paperRiskBudget=1;
+
+  const shares=
+    risk>0
+      ? paperRiskBudget/risk
+      : 0;
+
+  const oneR=
+    s.price+risk;
+
+  const twoR=
+    s.price+(risk*2);
+
+  const threeR=
+    s.price+(risk*3);
+
+  document.getElementById("riskGrid")
+    .innerHTML=[
+
+      riskCard(
+        "Reference Price",
+        money(s.price)
+      ),
+
+      riskCard(
+        "ATR / Structure Invalidation",
+        money(s.invalidation)
+      ),
+
+      riskCard(
+        "Risk / Share",
+        money(risk)
+      ),
+
+      riskCard(
+        "Distance to Invalidation",
+        risk && s.price
+          ? ((risk/s.price)*100).toFixed(2)+"%"
+          : "—"
+      ),
+
+      riskCard(
+        "$100 Paper Account",
+        "$1.00 risk budget"
+      ),
+
+      riskCard(
+        "Paper Shares",
+        shares>0
+          ? shares.toFixed(3)
+          : "—"
+      ),
+
+      riskCard(
+        "1R Reference",
+        money(oneR)
+      ),
+
+      riskCard(
+        "2R / 3R",
+        `${money(twoR)} / ${money(threeR)}`
+      )
+
+    ].join("");
+
+  drawChart(s);
+
+  document.getElementById("detail")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+}
+
+/* -------------------------------
+   CANVAS CHART
+-------------------------------- */
+
+function drawChart(s){
+
+  const canvas=
+    document.getElementById("chart");
+
+  const rect=
+    canvas.getBoundingClientRect();
+
+  const dpr=
+    window.devicePixelRatio || 1;
+
+  canvas.width=
+    Math.max(300,rect.width*dpr);
+
+  canvas.height=
+    Math.max(220,rect.height*dpr);
+
+  const ctx=
+    canvas.getContext("2d");
+
+  ctx.scale(dpr,dpr);
+
+  const W=rect.width;
+  const H=rect.height;
+
+  ctx.clearRect(0,0,W,H);
+
+  const candles=
+    s.candles.slice(-80);
+
+  if(candles.length<2)
+    return;
+
+  const highs=
+    candles.map(c=>c.high);
+
+  const lows=
+    candles.map(c=>c.low);
+
+  let max=Math.max(...highs);
+  let min=Math.min(...lows);
+
+  const padding=
+    (max-min)*.08 || 1;
+
+  max+=padding;
+  min-=padding;
+
+  const left=10;
+  const right=10;
+  const top=12;
+  const bottom=24;
+
+  const chartW=
+    W-left-right;
+
+  const chartH=
+    H-top-bottom;
+
+  const x=i=>
+    left+
+    (i/(candles.length-1))*chartW;
+
+  const y=value=>
+    top+
+    ((max-value)/(max-min))*chartH;
+
+  /* grid */
+
+  ctx.strokeStyle="#e9ebf2";
+  ctx.lineWidth=1;
+
+  for(let i=0;i<5;i++){
+
+    const gy=
+      top+(chartH/4)*i;
+
+    ctx.beginPath();
+    ctx.moveTo(left,gy);
+    ctx.lineTo(W-right,gy);
+    ctx.stroke();
+  }
+
+  /* price line */
+
+  ctx.beginPath();
+
+  candles.forEach((c,i)=>{
+
+    const px=x(i);
+    const py=y(c.close);
+
+    if(i===0)
+      ctx.moveTo(px,py);
+    else
+      ctx.lineTo(px,py);
+  });
+
+  ctx.strokeStyle="#111827";
+  ctx.lineWidth=2;
+  ctx.stroke();
+
+  /* EMA 9 */
+
+  const ema9Series=
+    buildEMASeries(
+      candles.map(c=>c.close),
+      9
+    );
+
+  ctx.beginPath();
+
+  ema9Series.forEach((v,i)=>{
+
+    const px=x(i);
+    const py=y(v);
+
+    if(i===0)
+      ctx.moveTo(px,py);
+    else
+      ctx.lineTo(px,py);
+  });
+
+  ctx.strokeStyle="#6d28d9";
+  ctx.lineWidth=1.5;
+  ctx.stroke();
+
+  /* EMA 20 */
+
+  const ema20Series=
+    buildEMASeries(
+      candles.map(c=>c.close),
+      20
+    );
+
+  ctx.beginPath();
+
+  ema20Series.forEach((v,i)=>{
+
+    const px=x(i);
+    const py=y(v);
+
+    if(i===0)
+      ctx.moveTo(px,py);
+    else
+      ctx.lineTo(px,py);
+  });
+
+  ctx.strokeStyle="#2563eb";
+  ctx.lineWidth=1.5;
+  ctx.stroke();
+
+  /* latest */
+
+  const last=
+    candles[candles.length-1];
+
+  ctx.fillStyle="#111827";
+  ctx.beginPath();
+  ctx.arc(
+    x(candles.length-1),
+    y(last.close),
+    4,
+    0,
+    Math.PI*2
+  );
+  ctx.fill();
+
+  ctx.fillStyle="#6b7280";
+  ctx.font="10px -apple-system";
+
+  ctx.fillText(
+    "Price",
+    12,
+    H-7
+  );
+
+  ctx.fillStyle="#6d28d9";
+  ctx.fillText(
+    "EMA9",
+    48,
+    H-7
+  );
+
+  ctx.fillStyle="#2563eb";
+  ctx.fillText(
+    "EMA20",
+    88,
+    H-7
+  );
+}
+
+function buildEMASeries(values,period){
+
+  if(!values.length)
+    return [];
+
+  const k=
+    2/(period+1);
+
+  const result=[values[0]];
+
+  for(let i=1;i<values.length;i++){
+
+    result.push(
+      values[i]*k+
+      result[i-1]*(1-k)
+    );
+  }
+
+  return result;
+}
+
+/* -------------------------------
+   SCAN
+-------------------------------- */
+
+async function scan(){
+
+  const btn=
+    document.getElementById("scanBtn");
+
+  const wrap=
+    document.getElementById("progressWrap");
+
+  const text=
+    document.getElementById("progressText");
+
+  const bar=
+    document.getElementById("progressBar");
+
+  btn.disabled=true;
+  btn.textContent="SCANNING...";
+
+  wrap.style.display="block";
+
+  let completed=0;
+  let success=0;
+
+  /*
+    Sequential requests are intentional.
+    This is gentler on provider/API rate limits
+    than firing all 20 simultaneously.
+  */
+
+  for(const symbol of WATCHLIST){
+
+    text.textContent=
+      `Loading ${symbol} — ${completed}/${WATCHLIST.length}`;
+
+    try{
+
+      const data=
+        await fetchStock(symbol);
+
+      state[symbol]=
+        scoreStock(
+          symbol,
+          data.candles
+        );
+
+      success++;
+
+    }catch(err){
+
+      console.error(
+        symbol,
+        err
+      );
+
+      state[symbol]={
+        symbol,
+        error:String(err)
+      };
+
+    }
+
+    completed++;
+
+    bar.style.width=
+      ((completed/WATCHLIST.length)*100)+"%";
+
+    renderTable();
+  }
+
+  const now=
+    new Date();
+
+  document.getElementById("lastRefresh")
+    .textContent=
+      now.toLocaleTimeString(
+        [],
+        {
+          hour:"numeric",
+          minute:"2-digit"
+        }
+      );
+
+  const dot=
+    document.getElementById("liveDot");
+
+  const liveText=
+    document.getElementById("liveText");
+
+  if(success>0){
+
+    dot.className="dot good";
+
+    liveText.textContent=
+      `${success}/${WATCHLIST.length} LOADED`;
+
+  }else{
+
+    dot.className="dot bad";
+    liveText.textContent="DATA ERROR";
+  }
+
+  text.textContent=
+    `Scan complete — ${success}/${WATCHLIST.length} stocks loaded`;
+
+  btn.disabled=false;
+  btn.textContent="REFRESH DATA";
+
+  if(success>0){
+
+    const first=
+      sortedStocks()
+        .find(s=>
+          state[s] &&
+          !state[s].error
+        );
+
+    if(first)
+      showDetail(first);
+  }
+
+  setTimeout(()=>{
+    wrap.style.display="none";
+  },1800);
+}
+
+/* -------------------------------
+   EVENTS
+-------------------------------- */
+
+document
+  .getElementById("scanBtn")
+  .addEventListener(
+    "click",
+    scan
+  );
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
+    renderTable
+  );
+
+document
+  .getElementById("sort")
+  .addEventListener(
+    "change",
+    renderTable
+  );
+
+window.addEventListener(
+  "resize",
+  ()=>{
+
+    if(
+      selectedSymbol &&
+      state[selectedSymbol] &&
+      !state[selectedSymbol].error
+    ){
+      drawChart(
+        state[selectedSymbol]
+      );
+    }
+
+  }
+);
+
+initialRows();
 </script>
+
 </body>
 </html>
