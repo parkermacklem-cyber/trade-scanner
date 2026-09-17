@@ -2,2313 +2,702 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f7f8fc">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f7fb">
 <title>TradeScan V3</title>
 
 <style>
 :root{
-  --bg:#f5f7fb;
-  --card:#ffffff;
-  --card2:#f8f9fd;
-  --line:#e4e7ef;
-  --text:#111827;
-  --muted:#6b7280;
-  --purple:#6d28d9;
-  --blue:#2563eb;
-  --green:#15803d;
-  --red:#dc2626;
-  --orange:#ea580c;
-  --yellow:#ca8a04;
-  --shadow:0 10px 30px rgba(15,23,42,.07);
+  --bg:#f5f5fa;
+  --card:#fff;
+  --text:#11121a;
+  --muted:#737586;
+  --line:#e6e6ef;
+  --purple:#6d35d9;
+  --shadow:0 10px 35px rgba(30,20,60,.08);
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
-  background:
-    radial-gradient(circle at top right,#eee9ff 0,transparent 32%),
-    var(--bg);
+  background:linear-gradient(180deg,#faf9ff,#f2f3f8);
   color:var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
-
-button,input,select{font:inherit}
-
-.app{
-  width:min(1180px,100%);
-  margin:auto;
-  padding:18px 14px 90px;
+button,input{font:inherit}
+.app{max-width:1100px;margin:auto;padding:22px 16px 80px}
+header{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:18px}
+.brand h1{margin:0;font-size:30px;letter-spacing:-1.3px}
+.brand p{margin:4px 0 0;color:var(--muted)}
+.status{
+  padding:8px 12px;border-radius:999px;background:#eeeaf9;
+  color:#6131bd;font-size:12px;font-weight:800
 }
-
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  margin-bottom:16px;
-}
-
-.brand h1{
-  margin:0;
-  font-size:26px;
-  letter-spacing:-.8px;
-}
-
-.brand p{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.live-pill{
-  border:1px solid #d8dbea;
-  background:#fff;
-  padding:8px 11px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.dot{
-  display:inline-block;
-  width:8px;
-  height:8px;
-  background:#9ca3af;
-  border-radius:50%;
-  margin-right:6px;
-}
-
-.dot.good{background:#16a34a}
-.dot.bad{background:#dc2626}
-
 .hero{
-  display:grid;
-  grid-template-columns:1.25fr .75fr;
-  gap:14px;
-  margin-bottom:14px;
+  background:linear-gradient(135deg,#fff,#f4efff);
+  border:1px solid var(--line);border-radius:25px;padding:25px;
+  box-shadow:var(--shadow);margin-bottom:18px
 }
-
-.card{
-  background:rgba(255,255,255,.94);
-  border:1px solid var(--line);
-  border-radius:20px;
-  box-shadow:var(--shadow);
-}
-
-.hero-main{padding:20px}
-
-.eyebrow{
-  color:var(--purple);
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:1.3px;
-}
-
-.hero-main h2{
-  margin:7px 0 8px;
-  font-size:28px;
-  letter-spacing:-1px;
-}
-
-.hero-main p{
-  margin:0;
-  color:var(--muted);
-  line-height:1.5;
-  font-size:14px;
-}
-
-.hero-stats{
-  padding:18px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.mini{
-  background:var(--card2);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px;
-}
-
-.mini .label{
-  color:var(--muted);
-  font-size:10px;
-  font-weight:800;
-  text-transform:uppercase;
-}
-
-.mini .value{
-  margin-top:4px;
-  font-size:15px;
-  font-weight:900;
-}
-
-.controls{
-  display:flex;
-  gap:9px;
-  margin-bottom:14px;
-  flex-wrap:wrap;
-}
-
+.eyebrow{font-size:12px;font-weight:900;color:#7441d8;letter-spacing:1.2px}
+.hero h2{font-size:30px;max-width:750px;margin:8px 0}
+.hero p{color:var(--muted);max-width:800px;line-height:1.5}
+.toolbar{display:flex;gap:10px;margin:18px 0;flex-wrap:wrap}
 .search{
-  flex:1;
-  min-width:180px;
-  border:1px solid var(--line);
-  background:#fff;
-  padding:12px 14px;
-  border-radius:13px;
-  outline:none;
+  flex:1;min-width:190px;padding:13px 15px;border:1px solid var(--line);
+  border-radius:14px;background:white;outline:none
 }
-
-select{
-  border:1px solid var(--line);
-  background:#fff;
-  padding:11px;
-  border-radius:13px;
-  outline:none;
-}
-
 .scan{
-  border:0;
-  background:#111827;
-  color:white;
-  padding:12px 17px;
-  border-radius:13px;
-  font-weight:900;
-  cursor:pointer;
+  border:0;border-radius:14px;padding:13px 18px;background:#171820;
+  color:white;font-weight:800;cursor:pointer
 }
-
-.scan:disabled{
-  opacity:.55;
-  cursor:not-allowed;
+.scan:disabled{opacity:.5}
+.progress{font-size:12px;color:var(--muted);margin:0 0 12px}
+.tableCard{
+  background:white;border:1px solid var(--line);border-radius:22px;
+  overflow:hidden;box-shadow:var(--shadow)
 }
-
-.progress-wrap{
-  display:none;
-  margin:-3px 0 14px;
+.row{
+  display:grid;grid-template-columns:1.1fr .8fr .7fr .65fr;
+  align-items:center;padding:15px 18px;border-bottom:1px solid var(--line);
+  cursor:pointer;transition:.15s
 }
-
-.progress-text{
-  color:var(--muted);
-  font-size:12px;
-  margin-bottom:6px;
+.row:hover{background:#faf9ff}
+.row.head{font-size:11px;color:var(--muted);font-weight:900;cursor:default}
+.symbol{font-weight:900;font-size:17px}
+.small{font-size:11px;color:var(--muted);margin-top:3px}
+.price{font-weight:750}
+.scorePill{
+  display:inline-flex;justify-content:center;align-items:center;
+  min-width:48px;padding:7px 9px;border-radius:999px;color:white;font-weight:900
 }
+.change.up{color:#138a54}.change.down{color:#c83b42}
+.error{font-size:11px;color:#c43d44;margin-left:6px}
 
-.progress{
-  height:7px;
-  background:#e5e7eb;
-  border-radius:99px;
-  overflow:hidden;
+.detail{display:none;margin-top:18px}
+.detail.open{display:block}
+.detailTop{
+  display:grid;grid-template-columns:230px 1fr;gap:18px;
+  background:white;border:1px solid var(--line);border-radius:25px;
+  padding:20px;box-shadow:var(--shadow)
 }
-
-.progress div{
-  height:100%;
-  width:0%;
-  background:#6d28d9;
-  transition:width .2s;
-}
-
-.table-card{
-  overflow:hidden;
-}
-
-.table-head,
-.stock-row{
-  display:grid;
-  grid-template-columns:
-    1.1fr .7fr .7fr .8fr .8fr .8fr;
-  align-items:center;
-  gap:8px;
-}
-
-.table-head{
-  padding:11px 16px;
-  background:#fafbfe;
-  color:var(--muted);
-  border-bottom:1px solid var(--line);
-  font-size:10px;
-  text-transform:uppercase;
-  font-weight:900;
-}
-
-.stock-row{
-  padding:14px 16px;
-  border-bottom:1px solid var(--line);
-  cursor:pointer;
-  transition:.15s;
-}
-
-.stock-row:last-child{border-bottom:0}
-.stock-row:hover{background:#fafaff}
-
-.symbol{
-  font-weight:950;
-  font-size:16px;
-}
-
-.sub{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  font-weight:600;
-  margin-top:2px;
-}
-
-.price{
-  font-weight:850;
-}
-
-.metric{
-  font-size:13px;
-  font-weight:800;
-}
-
-.score-pill{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:46px;
-  padding:7px 8px;
-  color:white;
-  border-radius:10px;
-  font-weight:950;
-}
-
-.loading{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.error-text{
-  color:var(--red);
-  font-size:11px;
-  font-weight:700;
-}
-
-.detail{
-  margin-top:14px;
-  display:none;
-}
-
-.detail.show{display:block}
-
-.detail-grid{
-  display:grid;
-  grid-template-columns:330px 1fr;
-  gap:14px;
-}
-
-.score-card{
-  padding:20px;
-}
-
-.score-card h3{
-  margin:0;
-  font-size:20px;
-}
-
-.score-card .desc{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:3px;
-}
-
+.gaugeWrap{text-align:center}
 .gauge{
-  width:220px;
-  height:220px;
-  margin:17px auto;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  position:relative;
-  background:conic-gradient(
-    #dc2626 0deg 108deg,
-    #ea580c 108deg 180deg,
-    #eab308 180deg 234deg,
-    #65a30d 234deg 288deg,
-    #15803d 288deg 342deg,
-    #581c87 342deg 360deg
-  );
+  width:180px;height:180px;border-radius:50%;margin:auto;
+  display:grid;place-items:center;position:relative
 }
-
 .gauge:after{
-  content:"";
-  width:174px;
-  height:174px;
-  position:absolute;
-  background:white;
-  border-radius:50%;
+  content:"";position:absolute;width:138px;height:138px;border-radius:50%;background:white
 }
+.gaugeValue{z-index:2;font-size:42px;font-weight:950}
+.gaugeLabel{z-index:2;font-size:11px;color:var(--muted);position:absolute;margin-top:63px}
+.detailTitle h2{font-size:30px;margin:4px 0}
+.detailTitle p{color:var(--muted);margin:4px 0}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.badge{background:#f3f3f7;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:700}
 
-.gauge-center{
-  position:relative;
-  z-index:2;
-  text-align:center;
+.chartCard,.metricsCard,.riskCard{
+  background:white;border:1px solid var(--line);border-radius:22px;
+  padding:18px;margin-top:16px;box-shadow:var(--shadow)
 }
+.sectionTitle{font-weight:900;font-size:18px;margin-bottom:3px}
+.sectionSub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.chartWrap{width:100%;overflow:hidden}
+svg{width:100%;height:340px;display:block}
+.legend{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
 
-.gauge-number{
-  font-size:48px;
-  font-weight:950;
-  letter-spacing:-2px;
+.levelGrid,.metricGrid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px
 }
-
-.gauge-label{
-  color:var(--muted);
-  font-size:11px;
-  font-weight:800;
+.metric{
+  background:#f7f7fa;border-radius:14px;padding:13px;min-height:72px
 }
-
-.score-note{
-  color:var(--muted);
-  text-align:center;
-  font-size:11px;
-  line-height:1.5;
+.metric .k{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.metric .v{font-size:18px;font-weight:900;margin-top:5px}
+.metric .s{font-size:10px;color:var(--muted);margin-top:3px}
+.level{
+  border-radius:15px;padding:14px;border:1px solid var(--line)
 }
+.level .k{font-size:10px;color:var(--muted);font-weight:900}
+.level .v{font-size:20px;font-weight:950;margin-top:5px}
 
-.chart-card{
-  padding:18px;
+.scoreBars{display:grid;gap:10px;margin-top:10px}
+.barRow{display:grid;grid-template-columns:120px 1fr 40px;gap:10px;align-items:center;font-size:12px}
+.track{height:9px;background:#ececf2;border-radius:20px;overflow:hidden}
+.fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#f04444,#f3b536,#41ae72,#6d35d9)}
+
+.notice{
+  background:#f4f0ff;color:#5d36a6;padding:12px 14px;border-radius:13px;
+  font-size:11px;line-height:1.45;margin-top:14px
 }
-
-.chart-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.chart-symbol{
-  font-size:22px;
-  font-weight:950;
-}
-
-.chart-price{
-  font-size:25px;
-  font-weight:950;
-  margin-top:3px;
-}
-
-.timestamp{
-  color:var(--muted);
-  font-size:10px;
-  text-align:right;
-}
-
-.chart-wrap{
-  width:100%;
-  height:270px;
-  background:linear-gradient(#fafbff,#fff);
-  border:1px solid var(--line);
-  border-radius:15px;
-  overflow:hidden;
-}
-
-canvas{
-  width:100%;
-  height:100%;
-  display:block;
-}
-
-.section{
-  margin-top:14px;
-}
-
-.section-title{
-  font-size:16px;
-  font-weight:950;
-  margin:0 0 9px 2px;
-}
-
-.metrics-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-}
-
-.metric-card{
-  padding:13px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:14px;
-}
-
-.metric-card .name{
-  color:var(--muted);
-  text-transform:uppercase;
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.5px;
-}
-
-.metric-card .num{
-  font-size:17px;
-  font-weight:950;
-  margin-top:5px;
-}
-
-.metric-card .small{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
-}
-
-.breakdown{
-  padding:17px;
-}
-
-.break-row{
-  display:grid;
-  grid-template-columns:110px 1fr 45px;
-  gap:10px;
-  align-items:center;
-  margin:11px 0;
-}
-
-.break-name{
-  font-size:11px;
-  font-weight:850;
-}
-
-.bar{
-  height:8px;
-  background:#eceef4;
-  border-radius:99px;
-  overflow:hidden;
-}
-
-.bar > div{
-  height:100%;
-  border-radius:99px;
-  background:#6d28d9;
-}
-
-.break-score{
-  text-align:right;
-  font-size:11px;
-  font-weight:950;
-}
-
-.risk-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-}
-
-.risk-card{
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:white;
-}
-
-.risk-card .rlabel{
-  color:var(--muted);
-  font-size:9px;
-  font-weight:900;
-  text-transform:uppercase;
-}
-
-.risk-card .rnum{
-  font-size:17px;
-  font-weight:950;
-  margin-top:4px;
-}
-
-.warning{
-  margin-top:12px;
-  padding:12px;
-  background:#fff8e6;
-  border:1px solid #fde7a7;
-  border-radius:12px;
-  color:#7c5b09;
-  font-size:11px;
-  line-height:1.5;
-}
-
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(14px);
-  border-top:1px solid var(--line);
-  padding:9px 15px calc(9px + env(safe-area-inset-bottom));
-  z-index:20;
-}
-
-.bottom-inner{
-  width:min(600px,100%);
-  margin:auto;
-  display:flex;
-  justify-content:space-around;
-  color:var(--muted);
-  font-size:10px;
-  font-weight:850;
-}
-
-.bottom .active{color:var(--purple)}
-
-@media(max-width:800px){
-  .hero{grid-template-columns:1fr}
-  .detail-grid{grid-template-columns:1fr}
-  .metrics-grid{grid-template-columns:1fr 1fr}
-  .risk-grid{grid-template-columns:1fr 1fr}
-
-  .table-head,
-  .stock-row{
-    grid-template-columns:1fr .8fr .65fr .65fr;
-  }
-
-  .hide-mobile{display:none}
-}
-
-@media(max-width:430px){
-  .app{padding:12px 10px 85px}
-  .brand h1{font-size:22px}
-  .hero-main h2{font-size:24px}
-  .hero-main{padding:16px}
-
-  .table-head,
-  .stock-row{
-    padding-left:11px;
-    padding-right:11px;
-  }
-
-  .gauge{
-    width:200px;
-    height:200px;
-  }
-
-  .gauge:after{
-    width:158px;
-    height:158px;
-  }
+@media(max-width:700px){
+  .app{padding:16px 10px 70px}
+  header{align-items:flex-start}
+  .hero h2{font-size:25px}
+  .row{grid-template-columns:1fr .75fr .55fr}
+  .row .change,.row.head .change{display:none}
+  .detailTop{grid-template-columns:1fr}
+  .levelGrid,.metricGrid{grid-template-columns:repeat(2,1fr)}
+  .gauge{width:160px;height:160px}
+  svg{height:300px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
-  <div class="topbar">
-    <div class="brand">
-      <h1>TradeScan V3</h1>
-      <p>Quantitative market research dashboard</p>
-    </div>
-
-    <div class="live-pill">
-      <span id="liveDot" class="dot"></span>
-      <span id="liveText">NOT SCANNED</span>
-    </div>
+<header>
+  <div class="brand">
+    <h1>TradeScan V3</h1>
+    <p>Quantitative market research dashboard</p>
   </div>
+  <div class="status" id="status">CONNECTING</div>
+</header>
 
-  <div class="hero">
+<section class="hero">
+  <div class="eyebrow">REAL MARKET DATA</div>
+  <h2>20-stock quantitative scanner</h2>
+  <p>
+    Scores are calculated from OHLCV market data returned by the market-data Worker.
+    Momentum, trend, volatility, volume, pullback quality and price structure combine
+    into a transparent 0–100 research score.
+  </p>
+</section>
 
-    <div class="card hero-main">
-      <div class="eyebrow">REAL MARKET DATA</div>
+<div class="toolbar">
+  <input class="search" id="search" placeholder="Search symbol...">
+  <button class="scan" id="scanBtn">REFRESH MARKET DATA</button>
+</div>
+<div class="progress" id="progress">Loading market data…</div>
 
-      <h2>20-stock quantitative scanner.</h2>
-
-      <p>
-        Scores are calculated from OHLCV market data returned by your
-        Massive-powered Cloudflare API. The score summarizes trend,
-        momentum, volatility and volume conditions. It is not a prediction
-        or guarantee of future returns.
-      </p>
-    </div>
-
-    <div class="card hero-stats">
-
-      <div class="mini">
-        <div class="label">Provider</div>
-        <div class="value">Massive</div>
-      </div>
-
-      <div class="mini">
-        <div class="label">Primary interval</div>
-        <div class="value">5 MIN</div>
-      </div>
-
-      <div class="mini">
-        <div class="label">Universe</div>
-        <div class="value">20 STOCKS</div>
-      </div>
-
-      <div class="mini">
-        <div class="label">Last refresh</div>
-        <div class="value" id="lastRefresh">—</div>
-      </div>
-
-    </div>
+<div class="tableCard">
+  <div class="row head">
+    <div>STOCK</div><div>PRICE</div><div>SCORE</div><div class="change">CHANGE</div>
   </div>
-
-  <div class="controls">
-
-    <input
-      id="search"
-      class="search"
-      placeholder="Search symbol..."
-      autocomplete="off"
-    >
-
-    <select id="sort">
-      <option value="score">Highest score</option>
-      <option value="symbol">Symbol A–Z</option>
-      <option value="momentum">Momentum</option>
-      <option value="volume">Relative volume</option>
-    </select>
-
-    <button id="scanBtn" class="scan">
-      SCAN WATCHLIST
-    </button>
-
-  </div>
-
-  <div id="progressWrap" class="progress-wrap">
-    <div id="progressText" class="progress-text">
-      Preparing scan...
-    </div>
-
-    <div class="progress">
-      <div id="progressBar"></div>
-    </div>
-  </div>
-
-  <div class="card table-card">
-
-    <div class="table-head">
-      <div>Stock</div>
-      <div>Price</div>
-      <div>Score</div>
-      <div>Momentum</div>
-      <div class="hide-mobile">RSI</div>
-      <div class="hide-mobile">Rel Volume</div>
-    </div>
-
-    <div id="stockList"></div>
-
-  </div>
-
-  <div id="detail" class="detail">
-
-    <div class="detail-grid">
-
-      <div class="card score-card">
-
-        <h3 id="detailName">NVDA</h3>
-
-        <div class="desc">
-          Quant Signal Score
-        </div>
-
-        <div class="gauge">
-          <div class="gauge-center">
-            <div id="gaugeNumber" class="gauge-number">—</div>
-            <div id="gaugeLabel" class="gauge-label">NO DATA</div>
-          </div>
-        </div>
-
-        <div class="score-note">
-          0–100 mathematical condition score.
-          Higher scores mean more of the scanner's selected
-          trend/momentum/volume conditions are currently aligned.
-        </div>
-
-      </div>
-
-      <div class="card chart-card">
-
-        <div class="chart-top">
-
-          <div>
-            <div id="chartSymbol" class="chart-symbol">NVDA</div>
-            <div id="chartPrice" class="chart-price">—</div>
-          </div>
-
-          <div id="chartTime" class="timestamp">
-            —
-          </div>
-
-        </div>
-
-        <div class="chart-wrap">
-          <canvas id="chart"></canvas>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="section">
-
-      <div class="section-title">
-        Quant Metrics
-      </div>
-
-      <div id="metricsGrid" class="metrics-grid"></div>
-
-    </div>
-
-    <div class="section">
-
-      <div class="section-title">
-        Score Breakdown
-      </div>
-
-      <div class="card breakdown" id="breakdown"></div>
-
-    </div>
-
-    <div class="section">
-
-      <div class="section-title">
-        Paper Risk Framework
-      </div>
-
-      <div id="riskGrid" class="risk-grid"></div>
-
-      <div class="warning">
-        Research / paper-trading reference only. The invalidation level is
-        calculated from ATR and recent price structure. A real stop order is
-        not guaranteed to execute at the stop price during fast markets or gaps.
-      </div>
-
-    </div>
-
-  </div>
-
+  <div id="stockRows"></div>
 </div>
 
-<div class="bottom">
-  <div class="bottom-inner">
-    <div class="active">SCANNER</div>
-    <div>QUANT</div>
-    <div>RISK</div>
-    <div>DATA</div>
+<section class="detail" id="detail">
+  <div class="detailTop">
+    <div class="gaugeWrap">
+      <div class="gauge" id="gauge">
+        <div class="gaugeValue" id="gaugeValue">—</div>
+        <div class="gaugeLabel">QUANT SCORE</div>
+      </div>
+    </div>
+    <div class="detailTitle">
+      <div class="eyebrow">QUANTITATIVE PROFILE</div>
+      <h2 id="detailSymbol">—</h2>
+      <p id="detailPrice">—</p>
+      <div class="badges" id="badges"></div>
+    </div>
   </div>
+
+  <div class="chartCard">
+    <div class="sectionTitle">Market structure</div>
+    <div class="sectionSub">5-minute price chart with model reference levels</div>
+    <div class="chartWrap"><svg id="chart" viewBox="0 0 1000 340"></svg></div>
+    <div class="legend">
+      <span><i class="dot" style="background:#171820"></i>Price</span>
+      <span><i class="dot" style="background:#6d35d9"></i>EMA 9</span>
+      <span><i class="dot" style="background:#3887dd"></i>EMA 20</span>
+      <span><i class="dot" style="background:#e14b55"></i>Invalidation</span>
+      <span><i class="dot" style="background:#2d9c68"></i>Targets</span>
+    </div>
+  </div>
+
+  <div class="riskCard">
+    <div class="sectionTitle">Model levels</div>
+    <div class="sectionSub">ATR/price-structure reference levels for research and paper testing</div>
+    <div class="levelGrid" id="levels"></div>
+    <div class="notice">
+      These levels are mathematical research references, not predictions or trade instructions.
+      Stops are not guaranteed execution prices, and live prices can move through a level.
+    </div>
+  </div>
+
+  <div class="metricsCard">
+    <div class="sectionTitle">Quant metrics</div>
+    <div class="sectionSub">Calculated directly from the returned candle history</div>
+    <div class="metricGrid" id="metrics"></div>
+  </div>
+
+  <div class="metricsCard">
+    <div class="sectionTitle">Score breakdown</div>
+    <div class="sectionSub">See exactly where the 0–100 score comes from</div>
+    <div class="scoreBars" id="scoreBars"></div>
+  </div>
+</section>
+
 </div>
 
 <script>
-const API =
-  "https://trade-scanner-api.parkermacklem.workers.dev";
+const API = "https://trade-scanner-api.parkermacklem.workers.dev";
 
 const WATCHLIST = [
-  "AAPL","MSFT","NVDA","AMZN","GOOGL",
-  "META","AVGO","TSLA","JPM","V",
-  "MA","WMT","COST","NFLX","AMD",
-  "ORCL","CRM","BAC","XOM","LLY"
+"AAPL","MSFT","NVDA","AMZN","GOOGL",
+"META","AVGO","TSLA","JPM","V",
+"MA","WMT","COST","NFLX","AMD",
+"ORCL","CRM","BAC","XOM","LLY"
 ];
 
 const state = {};
-let selectedSymbol = null;
+let selected = null;
 
-/* -------------------------------
-   BASIC HELPERS
--------------------------------- */
+const $ = id => document.getElementById(id);
+const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
+const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
+const last = a => a[a.length-1];
+const money = n => Number.isFinite(n) ? "$"+n.toFixed(2) : "—";
+const pct = n => Number.isFinite(n) ? (n>=0?"+":"")+n.toFixed(2)+"%" : "—";
 
-function clamp(v,min=0,max=100){
-  return Math.min(max,Math.max(min,v));
+function scoreColor(s){
+  if(s>=95) return "#5924a8";
+  if(s>=80) return "#167447";
+  if(s>=65) return "#54ad70";
+  if(s>=50) return "#d1a91f";
+  if(s>=30) return "#df792e";
+  return "#d74343";
 }
-
-function mean(arr){
-  if(!arr.length) return 0;
-  return arr.reduce((a,b)=>a+b,0)/arr.length;
-}
-
-function pct(a,b){
-  if(!b) return 0;
-  return ((a/b)-1)*100;
-}
-
-function money(v){
-  if(v == null || !Number.isFinite(v)) return "—";
-  return "$" + v.toFixed(2);
-}
-
-function percent(v,digits=2){
-  if(v == null || !Number.isFinite(v)) return "—";
-  const sign = v > 0 ? "+" : "";
-  return sign + v.toFixed(digits) + "%";
-}
-
-function num(v,digits=2){
-  if(v == null || !Number.isFinite(v)) return "—";
-  return v.toFixed(digits);
-}
-
-function formatVolume(v){
-  if(!Number.isFinite(v)) return "—";
-  if(v >= 1e9) return (v/1e9).toFixed(2)+"B";
-  if(v >= 1e6) return (v/1e6).toFixed(2)+"M";
-  if(v >= 1e3) return (v/1e3).toFixed(1)+"K";
-  return Math.round(v).toString();
-}
-
-/* -------------------------------
-   INDICATORS
--------------------------------- */
 
 function ema(values,period){
-
-  if(!values.length) return null;
-
-  const k = 2/(period+1);
-  let result = values[0];
-
-  for(let i=1;i<values.length;i++){
-    result =
-      values[i]*k +
-      result*(1-k);
-  }
-
-  return result;
+  if(!values.length) return [];
+  const k=2/(period+1);
+  let e=values[0];
+  return values.map((v,i)=>{
+    e=i===0?v:v*k+e*(1-k);
+    return e;
+  });
 }
 
-function rsi(values,period=14){
-
-  if(values.length < period+1)
-    return null;
-
-  let gains=0;
-  let losses=0;
-
-  const start =
-    values.length-period;
-
-  for(let i=start;i<values.length;i++){
-
-    const change =
-      values[i]-values[i-1];
-
-    if(change > 0)
-      gains += change;
-    else
-      losses += Math.abs(change);
+function rsi(values,p=14){
+  if(values.length<p+1) return 50;
+  let gains=0,losses=0;
+  for(let i=values.length-p;i<values.length;i++){
+    const d=values[i]-values[i-1];
+    if(d>0) gains+=d; else losses-=d;
   }
-
-  const avgGain=gains/period;
-  const avgLoss=losses/period;
-
-  if(avgLoss===0) return 100;
-
-  const rs=avgGain/avgLoss;
-
+  if(losses===0) return 100;
+  const rs=(gains/p)/(losses/p);
   return 100-(100/(1+rs));
 }
 
-function atr(candles,period=14){
-
-  if(candles.length < 2)
-    return null;
-
-  const trs=[];
-
-  for(let i=1;i<candles.length;i++){
-
-    const c=candles[i];
-    const prev=candles[i-1];
-
-    const tr=Math.max(
-      c.high-c.low,
-      Math.abs(c.high-prev.close),
-      Math.abs(c.low-prev.close)
-    );
-
-    trs.push(tr);
+function atr(c,p=14){
+  if(c.length<2) return 0;
+  const tr=[];
+  for(let i=1;i<c.length;i++){
+    tr.push(Math.max(
+      c[i].high-c[i].low,
+      Math.abs(c[i].high-c[i-1].close),
+      Math.abs(c[i].low-c[i-1].close)
+    ));
   }
-
-  const use=
-    trs.slice(-period);
-
-  return mean(use);
+  return avg(tr.slice(-p));
 }
 
-function sessionVWAP(candles){
-
-  let pv=0;
-  let vol=0;
-
-  for(const c of candles){
-
-    const typical=
-      (c.high+c.low+c.close)/3;
-
-    pv += typical*c.volume;
-    vol += c.volume;
-  }
-
-  return vol ? pv/vol : null;
+function stdev(a){
+  if(a.length<2) return 0;
+  const m=avg(a);
+  return Math.sqrt(avg(a.map(x=>(x-m)**2)));
 }
 
-function relativeVolume(candles){
-
-  if(candles.length < 2)
-    return null;
-
-  const current =
-    candles[candles.length-1].volume;
-
-  const previous =
-    candles
-      .slice(Math.max(0,candles.length-21),-1)
-      .map(c=>c.volume);
-
-  const avg=mean(previous);
-
-  return avg ? current/avg : null;
+function momentum(values,bars){
+  if(values.length<=bars) return 0;
+  const a=values[values.length-1-bars];
+  return (last(values)/a-1)*100;
 }
 
 function regression(values){
-
   const n=values.length;
-
-  if(n<3)
-    return {slope:0,r2:0};
-
-  const xMean=(n-1)/2;
-  const yMean=mean(values);
-
-  let nume=0;
-  let den=0;
-
+  if(n<3) return {slope:0,r2:0};
+  const mx=(n-1)/2,my=avg(values);
+  let num=0,den=0,ssTot=0,ssRes=0;
   for(let i=0;i<n;i++){
-    nume +=
-      (i-xMean)*(values[i]-yMean);
-
-    den +=
-      (i-xMean)*(i-xMean);
+    num+=(i-mx)*(values[i]-my);
+    den+=(i-mx)**2;
   }
-
-  const slope=
-    den ? nume/den : 0;
-
-  let ssRes=0;
-  let ssTot=0;
-
+  const slope=num/den;
+  const intercept=my-slope*mx;
   for(let i=0;i<n;i++){
-
-    const pred=
-      yMean+slope*(i-xMean);
-
-    ssRes +=
-      Math.pow(values[i]-pred,2);
-
-    ssTot +=
-      Math.pow(values[i]-yMean,2);
+    const pred=intercept+slope*i;
+    ssTot+=(values[i]-my)**2;
+    ssRes+=(values[i]-pred)**2;
   }
-
-  const r2 =
-    ssTot ? 1-(ssRes/ssTot) : 0;
-
-  return {
-    slope,
-    r2:clamp(r2,0,1)
-  };
+  return {slope,r2:ssTot?1-ssRes/ssTot:0};
 }
 
-function realizedVolatility(values){
+function calculate(symbol,candles,meta){
+  const c=candles.filter(x=>Number.isFinite(x.close));
+  if(c.length<4) throw new Error("Not enough candles");
 
-  if(values.length<3)
-    return null;
+  const closes=c.map(x=>x.close);
+  const volumes=c.map(x=>x.volume||0);
+
+  const e9=ema(closes,9);
+  const e20=ema(closes,20);
+  const e50=ema(closes,50);
+
+  const price=last(closes);
+  const previous=closes[closes.length-2];
+  const change=(price/previous-1)*100;
+
+  const A=atr(c,14);
+  const atrPct=price?A/price*100:0;
+  const R=rsi(closes,14);
+
+  const m15=momentum(closes,3);
+  const m30=momentum(closes,6);
+  const m60=momentum(closes,12);
+
+  const recentVol=avg(volumes.slice(-3));
+  const baseVol=avg(volumes.slice(-15,-3)) || avg(volumes);
+  const relVol=baseVol ? recentVol/baseVol : 1;
+
+  const reg=regression(closes.slice(-Math.min(20,closes.length)));
+  const slopePct=price ? reg.slope/price*100 : 0;
+
+  const recentHigh=Math.max(...c.slice(-Math.min(20,c.length)).map(x=>x.high));
+  const recentLow=Math.min(...c.slice(-Math.min(20,c.length)).map(x=>x.low));
+  const rangePos=recentHigh===recentLow ? 50 :
+    (price-recentLow)/(recentHigh-recentLow)*100;
+
+  const pullback=(recentHigh-price)/recentHigh*100;
 
   const returns=[];
-
-  for(let i=1;i<values.length;i++){
-    returns.push(
-      Math.log(values[i]/values[i-1])
-    );
-  }
-
-  const avg=mean(returns);
-
-  const variance=
-    mean(
-      returns.map(r =>
-        Math.pow(r-avg,2)
-      )
-    );
-
-  return Math.sqrt(variance)*100;
-}
-
-/* -------------------------------
-   SCORE ENGINE
--------------------------------- */
-
-function scoreStock(symbol,candles){
-
-  const closes =
-    candles.map(c=>c.close);
-
-  const latest =
-    candles[candles.length-1];
-
-  if(!latest){
-    throw new Error("No candles");
-  }
-
-  const price=latest.close;
-
-  const ema9=ema(closes.slice(-80),9);
-  const ema20=ema(closes.slice(-100),20);
-  const ema50=ema(closes.slice(-150),50);
-
-  const rsi14=rsi(closes,14);
-  const atr14=atr(candles,14);
-
-  const atrPct=
-    atr14 && price
-      ? (atr14/price)*100
-      : null;
-
-  const vwap=sessionVWAP(candles);
-  const relVol=relativeVolume(candles);
-
-  const mom1 =
-    closes.length>1
-      ? pct(
-          closes.at(-1),
-          closes.at(-2)
-        )
-      : 0;
-
-  const mom3 =
-    closes.length>3
-      ? pct(
-          closes.at(-1),
-          closes.at(-4)
-        )
-      : 0;
-
-  const mom6 =
-    closes.length>6
-      ? pct(
-          closes.at(-1),
-          closes.at(-7)
-        )
-      : 0;
-
-  const mom12 =
-    closes.length>12
-      ? pct(
-          closes.at(-1),
-          closes.at(-13)
-        )
-      : 0;
-
-  const reg=
-    regression(
-      closes.slice(-20)
-    );
-
-  const regSlopePct =
-    price
-      ? (reg.slope/price)*100
-      : 0;
-
-  const realizedVol=
-    realizedVolatility(
-      closes.slice(-30)
-    );
-
-  const recent=
-    candles.slice(-20);
-
-  const recentHigh=
-    Math.max(...recent.map(c=>c.high));
-
-  const recentLow=
-    Math.min(...recent.map(c=>c.low));
-
-  const rangePosition=
-    recentHigh===recentLow
-      ? 50
-      :
-      ((price-recentLow)/
-      (recentHigh-recentLow))*100;
-
-  /* TREND */
-
-  let trendScore=50;
-
-  if(ema9 && price>ema9)
-    trendScore+=12;
-
-  if(ema20 && price>ema20)
-    trendScore+=12;
-
-  if(ema9 && ema20 && ema9>ema20)
-    trendScore+=12;
-
-  if(ema20 && ema50 && ema20>ema50)
-    trendScore+=8;
-
-  if(regSlopePct>0)
-    trendScore+=6;
-
-  trendScore=clamp(trendScore);
-
-  /* MOMENTUM */
-
-  let momentumScore=50;
-
-  momentumScore +=
-    clamp(mom3*8,-20,20);
-
-  momentumScore +=
-    clamp(mom12*3,-15,15);
-
-  if(rsi14 != null){
-
-    if(rsi14>=50 && rsi14<=70)
-      momentumScore+=12;
-
-    if(rsi14>75)
-      momentumScore-=10;
-
-    if(rsi14<40)
-      momentumScore-=12;
-  }
-
-  momentumScore=clamp(momentumScore);
-
-  /* VOLUME */
-
-  let volumeScore=50;
-
-  if(relVol != null){
-    volumeScore +=
-      clamp(
-        (relVol-1)*30,
-        -25,
-        35
-      );
-  }
-
-  volumeScore=clamp(volumeScore);
-
-  /* STRUCTURE */
-
-  let structureScore=
-    clamp(rangePosition);
-
-  if(vwap && price>vwap)
-    structureScore+=10;
-
-  if(reg.r2>.65)
-    structureScore+=10;
-
-  structureScore=
-    clamp(structureScore);
-
-  /* VOLATILITY QUALITY */
-
-  let volatilityScore=65;
-
-  if(atrPct != null){
-
-    if(atrPct>.25 && atrPct<2.5)
-      volatilityScore+=15;
-
-    if(atrPct>4)
-      volatilityScore-=25;
-  }
-
-  volatilityScore=
-    clamp(volatilityScore);
-
-  /* COMPOSITE */
-
-  const score=
-    Math.round(
-      trendScore*.30 +
-      momentumScore*.25 +
-      volumeScore*.15 +
-      structureScore*.20 +
-      volatilityScore*.10
-    );
-
-  /* PAPER INVALIDATION */
-
-  const structureLow=
-    Math.min(
-      ...candles
-        .slice(-8)
-        .map(c=>c.low)
-    );
-
-  const atrStop=
-    atr14
-      ? price-(atr14*1.5)
-      : structureLow;
-
-  const invalidation=
-    Math.max(
-      0,
-      Math.min(
-        structureLow,
-        atrStop
-      )
-    );
-
-  const riskPerShare=
-    price-invalidation;
+  for(let i=1;i<closes.length;i++)
+    returns.push((closes[i]/closes[i-1]-1)*100);
+  const volatility=stdev(returns.slice(-20));
+
+  const trendRaw =
+    (price>last(e9)?25:5)+
+    (last(e9)>last(e20)?25:5)+
+    (last(e20)>last(e50)?25:8)+
+    clamp(reg.r2*25,0,25);
+
+  const momentumRaw=clamp(
+    50 + m15*8 + m30*4 + m60*2,0,100
+  );
+
+  const volumeRaw=clamp(45+(relVol-1)*40,0,100);
+
+  const structureRaw=clamp(
+    rangePos*.55 + reg.r2*35 +
+    (slopePct>0?10:0),0,100
+  );
+
+  const rsiQuality=clamp(100-Math.abs(R-57)*2.2,0,100);
+
+  const volatilityQuality=clamp(
+    90-Math.max(0,atrPct-1.2)*25,20,100
+  );
+
+  const score=Math.round(clamp(
+    trendRaw*.30+
+    momentumRaw*.22+
+    structureRaw*.18+
+    volumeRaw*.12+
+    rsiQuality*.10+
+    volatilityQuality*.08
+  ,0,100));
+
+  const swingLow=Math.min(...c.slice(-Math.min(8,c.length)).map(x=>x.low));
+
+  const entry=price;
+  const atrStop=entry-A*1.35;
+  const structureStop=swingLow-A*.25;
+  let invalidation=Math.min(entry-A*.65,Math.max(atrStop,structureStop));
+
+  if(!Number.isFinite(invalidation)||invalidation>=entry)
+    invalidation=entry-A;
+
+  const risk=Math.max(entry-invalidation,A*.5);
+  const t1=entry+risk;
+  const t2=entry+risk*2;
+  const t3=entry+risk*3;
 
   return {
-
-    symbol,
-    candles,
-
-    price,
-    score,
-
-    ema9,
-    ema20,
-    ema50,
-
-    rsi:rsi14,
-
-    atr:atr14,
-    atrPct,
-
-    vwap,
-    relVol,
-
-    mom1,
-    mom3,
-    mom6,
-    mom12,
-
-    regressionSlope:regSlopePct,
-    r2:reg.r2,
-
-    realizedVol,
-    rangePosition,
-
-    trendScore,
-    momentumScore,
-    volumeScore,
-    structureScore,
-    volatilityScore,
-
-    invalidation,
-    riskPerShare,
-
-    lastBar:
-      latest.datetime
+    symbol,c,closes,e9,e20,e50,
+    price,change,score,
+    rsi:R,atr:A,atrPct,
+    m15,m30,m60,relVol,
+    slopePct,r2:reg.r2,
+    rangePos,pullback,volatility,
+    entry,invalidation,risk,t1,t2,t3,
+    fetchedAt:meta?.fetchedAt,
+    source:meta?.source || "Massive",
+    parts:{
+      "Trend":Math.round(trendRaw),
+      "Momentum":Math.round(momentumRaw),
+      "Structure":Math.round(structureRaw),
+      "Volume":Math.round(volumeRaw),
+      "RSI quality":Math.round(rsiQuality),
+      "Volatility":Math.round(volatilityQuality)
+    }
   };
 }
 
-/* -------------------------------
-   SCORE COLORS
--------------------------------- */
-
-function scoreColor(score){
-
-  if(score>=95)
-    return "#581c87";
-
-  if(score>=80)
-    return "#15803d";
-
-  if(score>=65)
-    return "#65a30d";
-
-  if(score>=50)
-    return "#ca8a04";
-
-  if(score>=30)
-    return "#ea580c";
-
-  return "#dc2626";
-}
-
-function scoreLabel(score){
-
-  if(score>=95)
-    return "EXTREME ALIGNMENT";
-
-  if(score>=80)
-    return "STRONG ALIGNMENT";
-
-  if(score>=65)
-    return "POSITIVE ALIGNMENT";
-
-  if(score>=50)
-    return "MIXED";
-
-  if(score>=30)
-    return "WEAK";
-
-  return "LOW ALIGNMENT";
-}
-
-/* -------------------------------
-   API
--------------------------------- */
-
 async function fetchStock(symbol){
+  /*
+    Ask for substantially more than 20 candles so EMA/RSI/ATR calculations
+    have useful history. The Worker/provider may return fewer depending on
+    the data plan/session.
+  */
+  const url=
+    `${API}/timeseries?symbol=${encodeURIComponent(symbol)}`+
+    `&interval=5min&outputsize=120`;
 
-  const endpoint =
-    `${API}/timeseries?symbol=${symbol}` +
-    `&interval=5min&outputsize=300`;
+  const res=await fetch(url,{cache:"no-store"});
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
 
-  const response =
-    await fetch(endpoint,{
-      cache:"no-store"
-    });
+  const data=await res.json();
 
-  if(!response.ok)
-    throw new Error(
-      `HTTP ${response.status}`
-    );
+  if(data.error) throw new Error(data.details||data.error);
+  if(!Array.isArray(data.candles)||!data.candles.length)
+    throw new Error("No candles");
 
-  const data=
-    await response.json();
-
-  if(data.error)
-    throw new Error(
-      data.providerResponse?.error ||
-      data.providerResponse?.message ||
-      data.error
-    );
-
-  if(!Array.isArray(data.candles) ||
-     data.candles.length===0)
-    throw new Error("No market bars returned");
-
-  return data;
+  return calculate(symbol,data.candles,data);
 }
 
-/* -------------------------------
-   TABLE
--------------------------------- */
+function renderRows(){
+  const q=$("search").value.trim().toUpperCase();
+  const rows=WATCHLIST.filter(s=>s.includes(q)).map(symbol=>{
+    const d=state[symbol];
 
-function initialRows(){
-
-  const list=
-    document.getElementById("stockList");
-
-  list.innerHTML =
-    WATCHLIST.map(symbol=>`
-
-      <div
-        class="stock-row"
-        data-symbol="${symbol}"
-      >
-
-        <div class="symbol">
-          ${symbol}
-          <span class="sub">
-            waiting for scan
-          </span>
-        </div>
-
-        <div class="price">—</div>
-
-        <div>
-          <span
-            class="score-pill"
-            style="background:#9ca3af"
-          >
-            —
-          </span>
-        </div>
-
-        <div class="metric">—</div>
-
-        <div class="metric hide-mobile">
-          —
-        </div>
-
-        <div class="metric hide-mobile">
-          —
-        </div>
-
-      </div>
-
-    `).join("");
-}
-
-function sortedStocks(){
-
-  const query=
-    document
-      .getElementById("search")
-      .value
-      .trim()
-      .toUpperCase();
-
-  const mode=
-    document
-      .getElementById("sort")
-      .value;
-
-  let symbols=
-    WATCHLIST.filter(s=>
-      s.includes(query)
-    );
-
-  symbols.sort((a,b)=>{
-
-    const A=state[a];
-    const B=state[b];
-
-    if(mode==="symbol")
-      return a.localeCompare(b);
-
-    if(!A && !B)
-      return a.localeCompare(b);
-
-    if(!A) return 1;
-    if(!B) return -1;
-
-    if(mode==="momentum")
-      return B.mom12-A.mom12;
-
-    if(mode==="volume")
-      return (B.relVol||0)-(A.relVol||0);
-
-    return B.score-A.score;
-  });
-
-  return symbols;
-}
-
-function renderTable(){
-
-  const list=
-    document.getElementById("stockList");
-
-  const symbols=
-    sortedStocks();
-
-  list.innerHTML=
-    symbols.map(symbol=>{
-
-      const s=state[symbol];
-
-      if(!s){
-
-        return `
-          <div
-            class="stock-row"
-            data-symbol="${symbol}"
-          >
-            <div class="symbol">
-              ${symbol}
-              <span class="sub">
-                no scan data
-              </span>
-            </div>
-
-            <div class="price">—</div>
-
-            <div>
-              <span
-                class="score-pill"
-                style="background:#9ca3af"
-              >
-                —
-              </span>
-            </div>
-
-            <div class="metric">—</div>
-
-            <div class="metric hide-mobile">
-              —
-            </div>
-
-            <div class="metric hide-mobile">
-              —
-            </div>
-          </div>
-        `;
-      }
-
-      if(s.error){
-
-        return `
-          <div
-            class="stock-row"
-            data-symbol="${symbol}"
-          >
-            <div class="symbol">
-              ${symbol}
-              <span class="error-text">
-                data unavailable
-              </span>
-            </div>
-
-            <div>—</div>
-            <div>—</div>
-            <div>—</div>
-            <div class="hide-mobile">—</div>
-            <div class="hide-mobile">—</div>
-          </div>
-        `;
-      }
-
+    if(!d){
       return `
-        <div
-          class="stock-row"
-          data-symbol="${symbol}"
-        >
+      <div class="row">
+        <div><span class="symbol">${symbol}</span><span class="error">loading…</span></div>
+        <div class="price">—</div>
+        <div>—</div>
+        <div class="change">—</div>
+      </div>`;
+    }
 
-          <div class="symbol">
-            ${symbol}
-            <span class="sub">
-              ${s.candles.length} bars
-            </span>
-          </div>
+    if(d.error){
+      return `
+      <div class="row">
+        <div><span class="symbol">${symbol}</span><span class="error">data unavailable</span></div>
+        <div>—</div><div>—</div><div class="change">—</div>
+      </div>`;
+    }
 
-          <div class="price">
-            ${money(s.price)}
-          </div>
-
-          <div>
-            <span
-              class="score-pill"
-              style="
-                background:${scoreColor(s.score)}
-              "
-            >
-              ${s.score}
-            </span>
-          </div>
-
-          <div class="metric">
-            ${percent(s.mom12)}
-          </div>
-
-          <div class="metric hide-mobile">
-            ${num(s.rsi,1)}
-          </div>
-
-          <div class="metric hide-mobile">
-            ${s.relVol
-              ? s.relVol.toFixed(2)+"×"
-              : "—"}
-          </div>
-
+    const x=d.data;
+    return `
+      <div class="row" onclick="openStock('${symbol}')">
+        <div>
+          <div class="symbol">${symbol}</div>
+          <div class="small">5-minute OHLCV</div>
         </div>
-      `;
+        <div class="price">${money(x.price)}</div>
+        <div><span class="scorePill" style="background:${scoreColor(x.score)}">${x.score}</span></div>
+        <div class="change ${x.change>=0?"up":"down"}">${pct(x.change)}</div>
+      </div>`;
+  }).join("");
 
-    }).join("");
-
-  document
-    .querySelectorAll(".stock-row")
-    .forEach(row=>{
-
-      row.addEventListener(
-        "click",
-        ()=>{
-
-          const symbol=
-            row.dataset.symbol;
-
-          if(
-            state[symbol] &&
-            !state[symbol].error
-          ){
-            showDetail(symbol);
-          }
-        }
-      );
-
-    });
+  $("stockRows").innerHTML=rows;
 }
-
-/* -------------------------------
-   DETAIL
--------------------------------- */
-
-function metricCard(name,value,small=""){
-
-  return `
-    <div class="metric-card">
-      <div class="name">${name}</div>
-      <div class="num">${value}</div>
-      <div class="small">${small}</div>
-    </div>
-  `;
-}
-
-function riskCard(name,value){
-
-  return `
-    <div class="risk-card">
-      <div class="rlabel">${name}</div>
-      <div class="rnum">${value}</div>
-    </div>
-  `;
-}
-
-function showDetail(symbol){
-
-  const s=state[symbol];
-
-  if(!s || s.error)
-    return;
-
-  selectedSymbol=symbol;
-
-  document
-    .getElementById("detail")
-    .classList.add("show");
-
-  document.getElementById("detailName")
-    .textContent=symbol;
-
-  document.getElementById("chartSymbol")
-    .textContent=symbol;
-
-  document.getElementById("chartPrice")
-    .textContent=money(s.price);
-
-  document.getElementById("gaugeNumber")
-    .textContent=s.score;
-
-  document.getElementById("gaugeNumber")
-    .style.color=scoreColor(s.score);
-
-  document.getElementById("gaugeLabel")
-    .textContent=scoreLabel(s.score);
-
-  document.getElementById("chartTime")
-    .innerHTML=
-      `SOURCE: MASSIVE<br>`+
-      `5-MIN OHLCV<br>`+
-      `LAST BAR: ${s.lastBar}`;
-
-  const metrics=[
-    metricCard(
-      "EMA 9",
-      money(s.ema9),
-      s.price>s.ema9
-        ? "Price above"
-        : "Price below"
-    ),
-
-    metricCard(
-      "EMA 20",
-      money(s.ema20),
-      s.ema9>s.ema20
-        ? "9 EMA > 20 EMA"
-        : "9 EMA ≤ 20 EMA"
-    ),
-
-    metricCard(
-      "EMA 50",
-      money(s.ema50),
-      "Intraday trend reference"
-    ),
-
-    metricCard(
-      "VWAP",
-      money(s.vwap),
-      s.price>s.vwap
-        ? "Price above VWAP"
-        : "Price below VWAP"
-    ),
-
-    metricCard(
-      "RSI 14",
-      num(s.rsi,1),
-      "Momentum oscillator"
-    ),
-
-    metricCard(
-      "ATR 14",
-      money(s.atr),
-      s.atrPct
-        ? s.atrPct.toFixed(2)+"% of price"
-        : ""
-    ),
-
-    metricCard(
-      "Relative Volume",
-      s.relVol
-        ? s.relVol.toFixed(2)+"×"
-        : "—",
-      "Latest bar vs recent bars"
-    ),
-
-    metricCard(
-      "5m Momentum",
-      percent(s.mom1),
-      "1 bar"
-    ),
-
-    metricCard(
-      "15m Momentum",
-      percent(s.mom3),
-      "3 bars"
-    ),
-
-    metricCard(
-      "30m Momentum",
-      percent(s.mom6),
-      "6 bars"
-    ),
-
-    metricCard(
-      "60m Momentum",
-      percent(s.mom12),
-      "12 bars"
-    ),
-
-    metricCard(
-      "Regression R²",
-      num(s.r2,2),
-      "Trend consistency"
-    ),
-
-    metricCard(
-      "Regression Slope",
-      percent(s.regressionSlope,3),
-      "Per-bar normalized slope"
-    ),
-
-    metricCard(
-      "Range Position",
-      num(s.rangePosition,0)+"%",
-      "Position inside recent range"
-    ),
-
-    metricCard(
-      "Realized Vol",
-      s.realizedVol != null
-        ? s.realizedVol.toFixed(3)+"%"
-        : "—",
-      "Recent bar-return dispersion"
-    ),
-
-    metricCard(
-      "Bars Loaded",
-      s.candles.length,
-      "Current API sample"
-    )
-  ];
-
-  document.getElementById("metricsGrid")
-    .innerHTML=metrics.join("");
-
-  const breakdown=[
-    ["Trend",s.trendScore],
-    ["Momentum",s.momentumScore],
-    ["Volume",s.volumeScore],
-    ["Structure",s.structureScore],
-    ["Volatility",s.volatilityScore]
-  ];
-
-  document.getElementById("breakdown")
-    .innerHTML=
-      breakdown.map(([name,value])=>`
-
-        <div class="break-row">
-
-          <div class="break-name">
-            ${name}
-          </div>
-
-          <div class="bar">
-            <div
-              style="
-                width:${value}%;
-                background:${scoreColor(value)}
-              "
-            ></div>
-          </div>
-
-          <div class="break-score">
-            ${Math.round(value)}
-          </div>
-
-        </div>
-
-      `).join("");
-
-  const risk=s.riskPerShare;
-
-  const paperAccount=100;
-  const paperRiskBudget=1;
-
-  const shares=
-    risk>0
-      ? paperRiskBudget/risk
-      : 0;
-
-  const oneR=
-    s.price+risk;
-
-  const twoR=
-    s.price+(risk*2);
-
-  const threeR=
-    s.price+(risk*3);
-
-  document.getElementById("riskGrid")
-    .innerHTML=[
-
-      riskCard(
-        "Reference Price",
-        money(s.price)
-      ),
-
-      riskCard(
-        "ATR / Structure Invalidation",
-        money(s.invalidation)
-      ),
-
-      riskCard(
-        "Risk / Share",
-        money(risk)
-      ),
-
-      riskCard(
-        "Distance to Invalidation",
-        risk && s.price
-          ? ((risk/s.price)*100).toFixed(2)+"%"
-          : "—"
-      ),
-
-      riskCard(
-        "$100 Paper Account",
-        "$1.00 risk budget"
-      ),
-
-      riskCard(
-        "Paper Shares",
-        shares>0
-          ? shares.toFixed(3)
-          : "—"
-      ),
-
-      riskCard(
-        "1R Reference",
-        money(oneR)
-      ),
-
-      riskCard(
-        "2R / 3R",
-        `${money(twoR)} / ${money(threeR)}`
-      )
-
-    ].join("");
-
-  drawChart(s);
-
-  document.getElementById("detail")
-    .scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
-}
-
-/* -------------------------------
-   CANVAS CHART
--------------------------------- */
-
-function drawChart(s){
-
-  const canvas=
-    document.getElementById("chart");
-
-  const rect=
-    canvas.getBoundingClientRect();
-
-  const dpr=
-    window.devicePixelRatio || 1;
-
-  canvas.width=
-    Math.max(300,rect.width*dpr);
-
-  canvas.height=
-    Math.max(220,rect.height*dpr);
-
-  const ctx=
-    canvas.getContext("2d");
-
-  ctx.scale(dpr,dpr);
-
-  const W=rect.width;
-  const H=rect.height;
-
-  ctx.clearRect(0,0,W,H);
-
-  const candles=
-    s.candles.slice(-80);
-
-  if(candles.length<2)
-    return;
-
-  const highs=
-    candles.map(c=>c.high);
-
-  const lows=
-    candles.map(c=>c.low);
-
-  let max=Math.max(...highs);
-  let min=Math.min(...lows);
-
-  const padding=
-    (max-min)*.08 || 1;
-
-  max+=padding;
-  min-=padding;
-
-  const left=10;
-  const right=10;
-  const top=12;
-  const bottom=24;
-
-  const chartW=
-    W-left-right;
-
-  const chartH=
-    H-top-bottom;
-
-  const x=i=>
-    left+
-    (i/(candles.length-1))*chartW;
-
-  const y=value=>
-    top+
-    ((max-value)/(max-min))*chartH;
-
-  /* grid */
-
-  ctx.strokeStyle="#e9ebf2";
-  ctx.lineWidth=1;
-
-  for(let i=0;i<5;i++){
-
-    const gy=
-      top+(chartH/4)*i;
-
-    ctx.beginPath();
-    ctx.moveTo(left,gy);
-    ctx.lineTo(W-right,gy);
-    ctx.stroke();
-  }
-
-  /* price line */
-
-  ctx.beginPath();
-
-  candles.forEach((c,i)=>{
-
-    const px=x(i);
-    const py=y(c.close);
-
-    if(i===0)
-      ctx.moveTo(px,py);
-    else
-      ctx.lineTo(px,py);
-  });
-
-  ctx.strokeStyle="#111827";
-  ctx.lineWidth=2;
-  ctx.stroke();
-
-  /* EMA 9 */
-
-  const ema9Series=
-    buildEMASeries(
-      candles.map(c=>c.close),
-      9
-    );
-
-  ctx.beginPath();
-
-  ema9Series.forEach((v,i)=>{
-
-    const px=x(i);
-    const py=y(v);
-
-    if(i===0)
-      ctx.moveTo(px,py);
-    else
-      ctx.lineTo(px,py);
-  });
-
-  ctx.strokeStyle="#6d28d9";
-  ctx.lineWidth=1.5;
-  ctx.stroke();
-
-  /* EMA 20 */
-
-  const ema20Series=
-    buildEMASeries(
-      candles.map(c=>c.close),
-      20
-    );
-
-  ctx.beginPath();
-
-  ema20Series.forEach((v,i)=>{
-
-    const px=x(i);
-    const py=y(v);
-
-    if(i===0)
-      ctx.moveTo(px,py);
-    else
-      ctx.lineTo(px,py);
-  });
-
-  ctx.strokeStyle="#2563eb";
-  ctx.lineWidth=1.5;
-  ctx.stroke();
-
-  /* latest */
-
-  const last=
-    candles[candles.length-1];
-
-  ctx.fillStyle="#111827";
-  ctx.beginPath();
-  ctx.arc(
-    x(candles.length-1),
-    y(last.close),
-    4,
-    0,
-    Math.PI*2
-  );
-  ctx.fill();
-
-  ctx.fillStyle="#6b7280";
-  ctx.font="10px -apple-system";
-
-  ctx.fillText(
-    "Price",
-    12,
-    H-7
-  );
-
-  ctx.fillStyle="#6d28d9";
-  ctx.fillText(
-    "EMA9",
-    48,
-    H-7
-  );
-
-  ctx.fillStyle="#2563eb";
-  ctx.fillText(
-    "EMA20",
-    88,
-    H-7
-  );
-}
-
-function buildEMASeries(values,period){
-
-  if(!values.length)
-    return [];
-
-  const k=
-    2/(period+1);
-
-  const result=[values[0]];
-
-  for(let i=1;i<values.length;i++){
-
-    result.push(
-      values[i]*k+
-      result[i-1]*(1-k)
-    );
-  }
-
-  return result;
-}
-
-/* -------------------------------
-   SCAN
--------------------------------- */
 
 async function scan(){
+  $("scanBtn").disabled=true;
+  $("status").textContent="UPDATING";
+  $("progress").textContent="Connecting to market-data Worker…";
 
-  const btn=
-    document.getElementById("scanBtn");
+  WATCHLIST.forEach(s=>state[s]=null);
+  renderRows();
 
-  const wrap=
-    document.getElementById("progressWrap");
-
-  const text=
-    document.getElementById("progressText");
-
-  const bar=
-    document.getElementById("progressBar");
-
-  btn.disabled=true;
-  btn.textContent="SCANNING...";
-
-  wrap.style.display="block";
-
-  let completed=0;
   let success=0;
 
-  /*
-    Sequential requests are intentional.
-    This is gentler on provider/API rate limits
-    than firing all 20 simultaneously.
-  */
-
-  for(const symbol of WATCHLIST){
-
-    text.textContent=
-      `Loading ${symbol} — ${completed}/${WATCHLIST.length}`;
+  for(let i=0;i<WATCHLIST.length;i++){
+    const symbol=WATCHLIST[i];
+    $("progress").textContent=`Loading ${symbol} • ${i+1} of ${WATCHLIST.length}`;
 
     try{
-
-      const data=
-        await fetchStock(symbol);
-
-      state[symbol]=
-        scoreStock(
-          symbol,
-          data.candles
-        );
-
+      const data=await fetchStock(symbol);
+      state[symbol]={data};
       success++;
-
     }catch(err){
-
-      console.error(
-        symbol,
-        err
-      );
-
-      state[symbol]={
-        symbol,
-        error:String(err)
-      };
-
+      console.error(symbol,err);
+      state[symbol]={error:String(err)};
     }
 
-    completed++;
+    renderRows();
 
-    bar.style.width=
-      ((completed/WATCHLIST.length)*100)+"%";
-
-    renderTable();
+    /*
+      Small pause keeps requests from all firing at the provider simultaneously.
+    */
+    await new Promise(r=>setTimeout(r,120));
   }
 
-  const now=
-    new Date();
+  $("scanBtn").disabled=false;
+  $("status").textContent=success ? "MARKET DATA LIVE" : "DATA ERROR";
+  $("progress").textContent=
+    `${success}/${WATCHLIST.length} symbols loaded • ${new Date().toLocaleTimeString()}`;
 
-  document.getElementById("lastRefresh")
-    .textContent=
-      now.toLocaleTimeString(
-        [],
-        {
-          hour:"numeric",
-          minute:"2-digit"
-        }
-      );
-
-  const dot=
-    document.getElementById("liveDot");
-
-  const liveText=
-    document.getElementById("liveText");
-
-  if(success>0){
-
-    dot.className="dot good";
-
-    liveText.textContent=
-      `${success}/${WATCHLIST.length} LOADED`;
-
-  }else{
-
-    dot.className="dot bad";
-    liveText.textContent="DATA ERROR";
-  }
-
-  text.textContent=
-    `Scan complete — ${success}/${WATCHLIST.length} stocks loaded`;
-
-  btn.disabled=false;
-  btn.textContent="REFRESH DATA";
-
-  if(success>0){
-
-    const first=
-      sortedStocks()
-        .find(s=>
-          state[s] &&
-          !state[s].error
-        );
-
-    if(first)
-      showDetail(first);
-  }
-
-  setTimeout(()=>{
-    wrap.style.display="none";
-  },1800);
+  if(selected && state[selected]?.data) openStock(selected);
 }
 
-/* -------------------------------
-   EVENTS
--------------------------------- */
+function openStock(symbol){
+  const d=state[symbol]?.data;
+  if(!d) return;
 
-document
-  .getElementById("scanBtn")
-  .addEventListener(
-    "click",
-    scan
-  );
+  selected=symbol;
+  $("detail").classList.add("open");
+  $("detailSymbol").textContent=symbol;
+  $("detailPrice").textContent=
+    `${money(d.price)}  •  ${pct(d.change)} latest-bar change`;
 
-document
-  .getElementById("search")
-  .addEventListener(
-    "input",
-    renderTable
-  );
+  $("gaugeValue").textContent=d.score;
 
-document
-  .getElementById("sort")
-  .addEventListener(
-    "change",
-    renderTable
-  );
+  const col=scoreColor(d.score);
+  $("gauge").style.background=
+    `conic-gradient(${col} 0 ${d.score*3.6}deg,#ececf2 ${d.score*3.6}deg 360deg)`;
 
-window.addEventListener(
-  "resize",
-  ()=>{
+  const candleTime=d.c.length ? last(d.c).datetime : "—";
 
-    if(
-      selectedSymbol &&
-      state[selectedSymbol] &&
-      !state[selectedSymbol].error
-    ){
-      drawChart(
-        state[selectedSymbol]
-      );
-    }
+  $("badges").innerHTML=`
+    <div class="badge">Source: ${d.source}</div>
+    <div class="badge">Interval: 5 min</div>
+    <div class="badge">Last candle: ${candleTime}</div>
+    <div class="badge">Candles: ${d.c.length}</div>
+  `;
 
+  $("levels").innerHTML=[
+    ["REFERENCE",money(d.entry)],
+    ["INVALIDATION",money(d.invalidation)],
+    ["1R",money(d.t1)],
+    ["2R",money(d.t2)],
+    ["3R",money(d.t3)],
+    ["RISK / SHARE",money(d.risk)],
+    ["STOP DIST.",(d.risk/d.entry*100).toFixed(2)+"%"],
+    ["ATR",money(d.atr)]
+  ].map(x=>`
+    <div class="level">
+      <div class="k">${x[0]}</div>
+      <div class="v">${x[1]}</div>
+    </div>`).join("");
+
+  const trend =
+    d.price>last(d.e9) && last(d.e9)>last(d.e20) ? "Aligned ↑" :
+    d.price<last(d.e9) && last(d.e9)<last(d.e20) ? "Aligned ↓" :
+    "Mixed";
+
+  $("metrics").innerHTML=[
+    ["RSI (14)",d.rsi.toFixed(1),"Momentum oscillator"],
+    ["ATR %",d.atrPct.toFixed(2)+"%","Range / price"],
+    ["Relative volume",d.relVol.toFixed(2)+"×","Recent vs baseline"],
+    ["15m momentum",pct(d.m15),"3 × 5m bars"],
+    ["30m momentum",pct(d.m30),"6 × 5m bars"],
+    ["60m momentum",pct(d.m60),"12 × 5m bars"],
+    ["Trend R²",(d.r2*100).toFixed(1)+"%","Regression consistency"],
+    ["Slope",d.slopePct.toFixed(3)+"%/bar","Regression slope"],
+    ["Range position",d.rangePos.toFixed(1)+"%","Recent low → high"],
+    ["Pullback",d.pullback.toFixed(2)+"%","Below recent high"],
+    ["Realized vol.",d.volatility.toFixed(3)+"%","5m return deviation"],
+    ["EMA structure",trend,"9 / 20 relationship"]
+  ].map(x=>`
+    <div class="metric">
+      <div class="k">${x[0]}</div>
+      <div class="v">${x[1]}</div>
+      <div class="s">${x[2]}</div>
+    </div>`).join("");
+
+  $("scoreBars").innerHTML=Object.entries(d.parts).map(([k,v])=>`
+    <div class="barRow">
+      <div>${k}</div>
+      <div class="track"><div class="fill" style="width:${v}%"></div></div>
+      <strong>${v}</strong>
+    </div>`).join("");
+
+  drawChart(d);
+  $("detail").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function drawChart(d){
+  const svg=$("chart");
+  const c=d.c.slice(-Math.min(60,d.c.length));
+  if(c.length<2){svg.innerHTML="";return}
+
+  const start=d.c.length-c.length;
+  const e9=d.e9.slice(start);
+  const e20=d.e20.slice(start);
+
+  const vals=[
+    ...c.map(x=>x.high),
+    ...c.map(x=>x.low),
+    d.invalidation,d.t1,d.t2,d.t3
+  ].filter(Number.isFinite);
+
+  let min=Math.min(...vals),max=Math.max(...vals);
+  const pad=(max-min)*.08 || 1;
+  min-=pad;max+=pad;
+
+  const W=1000,H=340,L=55,R=20,T=20,B=35;
+  const x=i=>L+i*(W-L-R)/(c.length-1);
+  const y=v=>T+(max-v)*(H-T-B)/(max-min);
+
+  let html="";
+
+  for(let i=0;i<5;i++){
+    const yy=T+i*(H-T-B)/4;
+    const val=max-i*(max-min)/4;
+    html+=`
+      <line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}"
+       stroke="#ececf2" stroke-width="1"/>
+      <text x="3" y="${yy+4}" font-size="11" fill="#858797">$${val.toFixed(2)}</text>`;
   }
-);
 
-initialRows();
+  function horizontal(v,color,label,dash="6 6"){
+    const yy=y(v);
+    html+=`
+      <line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}"
+       stroke="${color}" stroke-width="1.5" stroke-dasharray="${dash}"/>
+      <text x="${W-R-4}" y="${yy-5}" text-anchor="end"
+       font-size="10" font-weight="700" fill="${color}">${label} $${v.toFixed(2)}</text>`;
+  }
+
+  horizontal(d.invalidation,"#e14b55","INVALIDATION");
+  horizontal(d.entry,"#171820","REFERENCE","3 4");
+  horizontal(d.t1,"#2d9c68","1R");
+  horizontal(d.t2,"#2d9c68","2R");
+  horizontal(d.t3,"#6d35d9","3R");
+
+  const candleWidth=Math.max(2,Math.min(10,(W-L-R)/c.length*.55));
+
+  c.forEach((bar,i)=>{
+    const xx=x(i);
+    const up=bar.close>=bar.open;
+    const color=up?"#249667":"#d95359";
+    const yo=y(bar.open),yc=y(bar.close),yh=y(bar.high),yl=y(bar.low);
+
+    html+=`
+      <line x1="${xx}" y1="${yh}" x2="${xx}" y2="${yl}"
+       stroke="${color}" stroke-width="1"/>
+      <rect x="${xx-candleWidth/2}" y="${Math.min(yo,yc)}"
+       width="${candleWidth}" height="${Math.max(1,Math.abs(yc-yo))}"
+       rx="1" fill="${color}" opacity=".72"/>`;
+  });
+
+  function path(series,color,width){
+    const pts=series.map((v,i)=>`${x(i)},${y(v)}`).join(" ");
+    html+=`<polyline points="${pts}" fill="none" stroke="${color}"
+      stroke-width="${width}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }
+
+  path(e20,"#3887dd",2);
+  path(e9,"#6d35d9",2.5);
+
+  html+=`
+    <text x="${L}" y="${H-8}" font-size="10" fill="#858797">${c[0].datetime||""}</text>
+    <text x="${W-R}" y="${H-8}" text-anchor="end" font-size="10" fill="#858797">${last(c).datetime||""}</text>`;
+
+  svg.innerHTML=html;
+}
+
+$("search").addEventListener("input",renderRows);
+$("scanBtn").addEventListener("click",scan);
+
+renderRows();
+scan();
 </script>
-
 </body>
 </html>
