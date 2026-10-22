@@ -1,1483 +1,786 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>TradeScan</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f8f9">
+<title>SWELL 5.0 — Ocean Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+:root{--bg:#f7f8f9;--card:#fff;--text:#141719;--muted:#7c858d;--border:#e6eaed;--soft:#f1f3f5;--blue:#258ee4;--purple:#8d6ce0;--orange:#f29a4a}
 *{box-sizing:border-box}
-
-:root{
---bg:#f6f7fb;
---card:#fff;
---text:#11131a;
---muted:#777d8d;
---line:#e9eaf0;
---purple:#7047eb;
---purple2:#9b7cff;
---green:#15965e;
---red:#e5484d;
---orange:#ef8c36;
---yellow:#d7b438;
-}
-
-body{
-margin:0;
-background:
-radial-gradient(circle at 80% 0%,rgba(112,71,235,.08),transparent 25%),
-var(--bg);
-color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-}
-
-.app{
-max-width:1200px;
-margin:auto;
-padding:22px;
-}
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
-
-.logo{
-font-size:28px;
-font-weight:950;
-letter-spacing:-1.2px;
-}
-
-.logo span{color:var(--purple)}
-
-.sub{
-color:var(--muted);
-font-size:12px;
-margin-top:4px;
-}
-
-.live{
-background:#eeeaff;
-color:var(--purple);
-padding:8px 12px;
-border-radius:100px;
-font-size:10px;
-font-weight:900;
-}
-
-.toolbar{
-display:flex;
-gap:10px;
-background:var(--card);
-border:1px solid var(--line);
-padding:12px;
-border-radius:17px;
-box-shadow:0 8px 30px rgba(30,30,50,.04);
-}
-
-input{
-flex:1;
-border:0;
-outline:none;
-background:#f5f6fa;
-border-radius:11px;
-padding:13px;
-font-size:14px;
-}
-
-button{
-border:0;
-background:var(--purple);
-color:#fff;
-border-radius:11px;
-padding:12px 18px;
-font-weight:850;
-cursor:pointer;
-}
-
-.status{
-margin:10px 2px 17px;
-font-size:11px;
-color:var(--muted);
-}
-
-.scanner{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:10px;
-}
-
-.stock{
-background:var(--card);
-border:1px solid var(--line);
-border-radius:15px;
-padding:13px;
-cursor:pointer;
-transition:.15s;
-}
-
-.stock:hover{transform:translateY(-2px)}
-
-.stock.selected{
-border-color:rgba(112,71,235,.55);
-box-shadow:0 0 0 3px rgba(112,71,235,.07);
-}
-
-.stocktop{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.symbol{
-font-size:16px;
-font-weight:950;
-}
-
-.price{
-color:var(--muted);
-font-size:11px;
-margin-top:4px;
-}
-
-.score{
-color:#fff;
-font-size:13px;
-font-weight:950;
-min-width:40px;
-text-align:center;
-padding:7px;
-border-radius:9px;
-}
-
-.stockbottom{
-margin-top:9px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:5px;
-}
-
-.badge{
-font-size:9px;
-font-weight:900;
-padding:5px 7px;
-border-radius:7px;
-}
-
-.reasonmini{
-color:var(--muted);
-font-size:9px;
-}
-
-.main{
-display:grid;
-grid-template-columns:1.75fr .75fr;
-gap:14px;
-margin-top:15px;
-}
-
-.card{
-background:var(--card);
-border:1px solid var(--line);
-border-radius:20px;
-box-shadow:0 10px 35px rgba(30,30,50,.04);
-}
-
-.chartcard{
-padding:18px;
-}
-
-.charthead{
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-margin-bottom:10px;
-}
-
-.charthead h2{
-margin:0;
-font-size:21px;
-}
-
-.chartmeta{
-color:var(--muted);
-font-size:11px;
-margin-top:4px;
-}
-
-.chartwrap{
-width:100%;
-height:430px;
-position:relative;
-}
-
-canvas{
-width:100%;
-height:100%;
-}
-
-.tradeSummary{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:8px;
-margin-top:12px;
-}
-
-.stat{
-background:#f7f7fa;
-padding:11px;
-border-radius:11px;
-}
-
-.stat span{
-display:block;
-color:var(--muted);
-font-size:9px;
-margin-bottom:4px;
-}
-
-.stat strong{
-font-size:12px;
-}
-
-.side{
-padding:18px;
-}
-
-.sideTitle{
-font-size:11px;
-color:var(--muted);
-font-weight:800;
-}
-
-.gauge{
-width:175px;
-height:175px;
-border-radius:50%;
-margin:18px auto;
-display:grid;
-place-items:center;
-position:relative;
-background:conic-gradient(
-#e5484d 0deg 108deg,
-#ef8c36 108deg 180deg,
-#d7b438 180deg 234deg,
-#76c88a 234deg 288deg,
-#15965e 288deg 342deg,
-#7047eb 342deg 360deg
-);
-}
-
-.gauge:before{
-content:"";
-position:absolute;
-width:134px;
-height:134px;
-background:white;
-border-radius:50%;
-}
-
-.gaugeinside{
-z-index:2;
-text-align:center;
-}
-
-.bigscore{
-font-size:42px;
-font-weight:950;
-line-height:1;
-}
-
-.scoreword{
-color:var(--muted);
-font-size:9px;
-font-weight:900;
-margin-top:6px;
-}
-
-.setup{
-background:linear-gradient(145deg,#171821,#25213c);
-color:#fff;
-padding:15px;
-border-radius:15px;
-}
-
-.setupTop{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:12px;
-}
-
-.setupName{
-font-size:16px;
-font-weight:900;
-}
-
-.direction{
-padding:5px 8px;
-border-radius:7px;
-font-size:9px;
-font-weight:900;
-}
-
-.tradegrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:7px;
-}
-
-.tradelevel{
-background:rgba(255,255,255,.07);
-border-radius:9px;
-padding:9px;
-}
-
-.tradelevel span{
-color:#aaa8b7;
-display:block;
-font-size:8px;
-margin-bottom:4px;
-}
-
-.tradelevel strong{
-font-size:12px;
-}
-
-.why{
-margin-top:15px;
-}
-
-.why h3{
-font-size:12px;
-margin:0 0 10px;
-}
-
-.reason{
-padding:9px 0;
-border-bottom:1px solid var(--line);
-display:flex;
-gap:8px;
-font-size:11px;
-line-height:1.35;
-}
-
-.dot{
-width:7px;
-height:7px;
-border-radius:50%;
-background:var(--purple);
-margin-top:4px;
-flex:none;
-}
-
-.disclaimer{
-text-align:center;
-color:var(--muted);
-font-size:9px;
-margin:18px;
-}
-
-@media(max-width:900px){
-.scanner{grid-template-columns:repeat(4,1fr)}
-.main{grid-template-columns:1fr}
-}
-
-@media(max-width:600px){
-.app{padding:13px}
-.scanner{grid-template-columns:repeat(2,1fr)}
-.toolbar{flex-direction:column}
-.chartwrap{height:370px}
-.tradeSummary{grid-template-columns:repeat(2,1fr)}
-.logo{font-size:24px}
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+h1,h2,h3,.brand,.value{font-family:"Space Grotesk",sans-serif;letter-spacing:-.045em}
+h1{font-size:clamp(35px,5vw,62px);margin:8px 0}
+h2{font-size:26px;margin:0}
+h3{font-size:19px;margin:0}
+p{line-height:1.6}
+.container{max-width:1400px;margin:auto;padding:0 24px}
+header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px solid var(--border)}
+.header{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-size:29px;font-weight:800}
+.brand span{color:var(--blue)}
+nav{display:flex;gap:5px;overflow:auto}
+nav button{border:0;background:transparent;padding:11px 14px;border-radius:10px;color:var(--muted);font-weight:700;font-size:13px;white-space:nowrap}
+nav button.active,nav button:hover{background:var(--soft);color:var(--text)}
+.btn{border:1px solid var(--text);background:var(--text);color:#fff;padding:12px 16px;border-radius:11px;font-weight:800;font-size:13px}
+.btn.secondary{background:#fff;color:var(--text);border-color:var(--border)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.page{display:none;padding:34px 0 75px}
+.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:19px}
+.pad{padding:23px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.7px;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.tiny{font-size:12px;color:var(--muted)}
+.grid{display:grid;gap:15px}
+.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.section{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:36px 0 17px;flex-wrap:wrap}
+.hero{background:#15191d;color:#fff;border-radius:23px;padding:55px;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(42px,6vw,77px);max-width:790px}
+.hero p{max-width:580px;color:#b5c0c8}
+.hero .btn{background:#fff;color:#15191d;border-color:#fff}
+.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #ffffff30;border-radius:50%;right:-70px;top:-100px;box-shadow:0 0 0 42px #ffffff08,0 0 0 84px #ffffff08;pointer-events:none}
+.metric{padding:22px;min-width:0;overflow:hidden}
+.metricTop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.metricIcon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:21px;background:#eaf5ff;color:var(--blue)}
+.value{font-size:clamp(25px,3vw,39px);font-weight:800;margin:15px 0 6px;white-space:nowrap}
+.gauge{height:9px;border-radius:9px;background:linear-gradient(90deg,#3775f7,#42c9ee,#f4c05c,#ed6565);margin:15px 0 8px;position:relative}
+.gauge i{position:absolute;top:-5px;width:18px;height:18px;border:3px solid #15191d;background:#fff;border-radius:50%;transform:translateX(-50%)}
+.gaugeLabels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.compass{width:84px;height:84px;flex-shrink:0}
+.compass circle{fill:none;stroke:#dce3e8;stroke-width:1.5}
+.compass text{font-size:9px;fill:#7d8790}
+.compass path{fill:var(--blue)}
+.spark{width:100%;height:43px;margin-top:12px}
+.spark path{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linecap:round}
+.spotCard{padding:21px;display:flex;flex-direction:column;gap:15px}
+.spotCard strong{font-size:20px;font-family:"Space Grotesk"}
+.spotActions{display:flex;justify-content:space-between;gap:8px}
+.search{width:100%;padding:15px;border:1px solid var(--border);border-radius:12px;background:#fff}
+#map{height:400px;border-radius:14px}
+.mapWrap{padding:8px}
+.chartCard{padding:23px;overflow:hidden}
+.chartHeader{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.chartScroll{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin:18px 0 12px;touch-action:pan-x}
+.chartScroll::-webkit-scrollbar{height:8px}
+.chartScroll::-webkit-scrollbar-thumb{background:#aab3bb;border-radius:10px}
+canvas{display:block;height:230px;cursor:crosshair}
+.chartInfo{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.chartInfo strong{font-size:23px;font-family:"Space Grotesk"}
+input[type=range]{width:100%;accent-color:#15191d;margin-top:14px}
+.status{font-size:12px;color:var(--muted);margin:17px 0}
+.tableScroll{overflow:auto}
+table{border-collapse:collapse;width:100%;white-space:nowrap}
+th,td{padding:14px 16px;border-bottom:1px solid var(--border);text-align:left;font-size:12px}
+th{background:var(--soft);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.aiHero{background:#15191d;color:#fff;padding:50px;border-radius:23px}
+.aiHero h1{max-width:850px}
+.aiHero p{max-width:640px;color:#b6c1c9}
+.coming{display:inline-block;padding:8px 12px;background:#283341;border:1px solid #4a5a68;color:#9fd8ff;border-radius:30px;font-size:11px;font-weight:800;letter-spacing:1px}
+.aiStep{padding:25px}
+.aiStep .number{font-size:12px;color:var(--blue);font-weight:800}
+.aiStep h3{margin:15px 0 8px}
+.uploadPreview{padding:55px 20px;border:2px dashed var(--border);border-radius:18px;text-align:center;background:#fafbfc}
+.savedItem{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--border);gap:12px}
+footer{border-top:1px solid var(--border);padding:25px 0;font-size:12px;color:var(--muted)}
+@media(max-width:1050px){.four{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.container{padding:0 15px}.header{flex-wrap:wrap;padding:12px 0}nav{order:3;width:100%}.hero{padding:30px}.two,.three{grid-template-columns:1fr}.metric{padding:16px}.value{font-size:28px}.aiHero{padding:30px}.chartCard{padding:15px}#map{height:300px}}
 </style>
 </head>
-
 <body>
-<div class="app">
 
 <header>
-<div>
-<div class="logo">Trade<span>Scan</span></div>
-<div class="sub">Intraday setup scanner · 5-minute market data</div>
+<div class="container header">
+  <div class="brand">SWELL<span>.</span></div>
+  <nav>
+    <button data-page="home" class="active">Home</button>
+    <button data-page="forecast">Forecast</button>
+    <button data-page="explore">Explore</button>
+    <button data-page="favorites">Favorites</button>
+    <button data-page="ai">AI Wave Learning</button>
+  </nav>
+  <button class="btn secondary" id="unitsButton">°F / ft</button>
 </div>
-<div class="live">LIVE DATA</div>
 </header>
 
-<div class="toolbar">
-<input id="search" placeholder="Search ticker...">
-<button onclick="scanAll()">Refresh Scan</button>
-</div>
+<main class="container">
 
-<div class="status" id="status">Starting scanner...</div>
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="eyebrow" style="color:#91a7b8">SWELL / Ocean Intelligence</div>
+    <h1>Know the water.<br>Own the moment.</h1>
+    <p>Beautiful, detailed ocean forecasts. Interactive wave charts, real marine data, and the future of AI-powered surf analysis.</p>
+    <button class="btn" data-page="forecast">Explore forecast ↗</button>
+  </div>
 
-<div class="scanner" id="scanner"></div>
+  <div class="section">
+    <div>
+      <div class="eyebrow">Live model conditions</div>
+      <h2 id="homeSpot">Manhattan Beach</h2>
+    </div>
+    <button class="btn secondary" data-page="explore">Change spot →</button>
+  </div>
+  <div class="grid four" id="homeMetrics"></div>
 
-<div class="main">
+  <div class="section">
+    <div>
+      <div class="eyebrow">Coming soon</div>
+      <h2>AI Video Wave Learning</h2>
+    </div>
+  </div>
+  <div class="card pad" style="display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap">
+    <div>
+      <h3>Understand waves like never before.</h3>
+      <p class="muted">Future video analysis for wave shapes, timing, and surf education.</p>
+    </div>
+    <button class="btn" data-page="ai">Preview feature →</button>
+  </div>
 
-<div class="card chartcard">
+  <div class="section"><h2>Popular breaks</h2></div>
+  <div class="grid three" id="featured"></div>
+</section>
 
-<div class="charthead">
-<div>
-<h2 id="chartTitle">Loading...</h2>
-<div class="chartmeta" id="chartMeta">
-Entry · Stop · Take-profit projections
-</div>
-</div>
+<section id="forecast" class="page">
+  <div class="eyebrow">Detailed surf forecast</div>
+  <h1 id="forecastSpot">Manhattan Beach</h1>
+  <p class="muted" id="forecastRegion">Southern California</p>
 
-<div class="chartmeta" id="updated">—</div>
-</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:20px 0">
+    <button class="btn" id="refresh">↻ Refresh data</button>
+    <button class="btn secondary" id="favorite">☆ Favorite</button>
+    <button class="btn secondary" data-page="explore">Change spot</button>
+  </div>
 
-<div class="chartwrap">
-<canvas id="chart"></canvas>
-</div>
+  <div class="status" id="status">Loading live forecast...</div>
+  <div class="grid four" id="mainMetrics"></div>
 
-<div class="tradeSummary" id="summary"></div>
+  <div class="section">
+    <div>
+      <div class="eyebrow">Marine intelligence</div>
+      <h2>Ocean details</h2>
+    </div>
+  </div>
+  <div class="grid four" id="details"></div>
 
-</div>
+  <div class="section">
+    <div>
+      <div class="eyebrow">Interactive timeline</div>
+      <h2>Forecast charts</h2>
+      <p class="tiny">Scroll sideways, hover over a point, or drag the slider to explore.</p>
+    </div>
+  </div>
 
-<div class="card side">
+  <div class="grid" style="gap:17px">
+    <div class="card chartCard">
+      <div class="chartHeader"><h3>Wave height</h3><span class="tiny">Significant wave height</span></div>
+      <div class="chartScroll" id="waveScroll"><canvas id="waveChart"></canvas></div>
+      <div class="chartInfo" id="waveInfo"></div>
+      <input type="range" id="waveRange" value="0">
+    </div>
 
-<div class="sideTitle">SETUP QUALITY</div>
+    <div class="card chartCard">
+      <div class="chartHeader"><h3>Sea-level trend</h3><span class="tiny">Modeled level, not official tide predictions</span></div>
+      <div class="chartScroll" id="tideScroll"><canvas id="tideChart"></canvas></div>
+      <div class="chartInfo" id="tideInfo"></div>
+      <input type="range" id="tideRange" value="0">
+    </div>
 
-<div class="gauge">
-<div class="gaugeinside">
-<div class="bigscore" id="bigScore">—</div>
-<div class="scoreword" id="scoreWord">SCANNING</div>
-</div>
-</div>
+    <div class="card chartCard">
+      <div class="chartHeader"><h3>Wind speed</h3><span class="tiny">10-meter wind</span></div>
+      <div class="chartScroll" id="windScroll"><canvas id="windChart"></canvas></div>
+      <div class="chartInfo" id="windInfo"></div>
+      <input type="range" id="windRange" value="0">
+    </div>
 
-<div class="setup">
+    <div class="card chartCard">
+      <div class="chartHeader"><h3>Water temperature</h3><span class="tiny">Sea-surface temperature</span></div>
+      <div class="chartScroll" id="waterScroll"><canvas id="waterChart"></canvas></div>
+      <div class="chartInfo" id="waterInfo"></div>
+      <input type="range" id="waterRange" value="0">
+    </div>
+  </div>
 
-<div class="setupTop">
-<div class="setupName" id="setupName">—</div>
-<div class="direction" id="direction">—</div>
-</div>
+  <div class="section"><h2>Hourly forecast</h2></div>
+  <div class="card tableScroll">
+    <table>
+      <thead><tr><th>Time</th><th>Wave</th><th>Period</th><th>Swell</th><th>Water</th><th>Wind</th><th>Gusts</th></tr></thead>
+      <tbody id="hourly"></tbody>
+    </table>
+  </div>
 
-<div class="tradegrid" id="tradeGrid"></div>
+  <p class="tiny" style="margin-top:20px">Forecasts are modeled estimates. Wave height is significant wave height, not exact breaking-wave height. Sea-level data is not an official tide prediction.</p>
+</section>
 
-</div>
+<section id="explore" class="page">
+  <div class="eyebrow">Explore the coastline</div>
+  <h1>Find your break.</h1>
+  <p class="muted">Search for a surf spot and explore its forecast.</p>
+  <input class="search" id="search" placeholder="Search surf spots..." style="margin:20px 0">
+  <div class="card mapWrap"><div id="map"></div></div>
+  <div class="section"><h2>Surf spots</h2><span class="tiny" id="spotCount"></span></div>
+  <div class="grid three" id="spots"></div>
+</section>
 
-<div class="why">
-<h3>Why this setup?</h3>
-<div id="reasons"></div>
-</div>
+<section id="favorites" class="page">
+  <div class="eyebrow">Your coastline</div>
+  <h1>Favorites.</h1>
+  <p class="muted">Saved breaks are stored in this browser.</p>
+  <div class="card pad" id="saved"></div>
+</section>
 
-</div>
-</div>
+<section id="ai" class="page">
+  <div class="aiHero">
+    <span class="coming">✦ COMING SOON</span>
+    <h1>AI Video<br>Wave Learning.</h1>
+    <p>Imagine uploading a video of the ocean and learning how to read wave sets, understand breaking patterns, and recognize different wave shapes.</p>
+    <button class="btn" disabled>Video analysis coming soon</button>
+  </div>
 
-<div class="disclaimer">
-Paper-trading / research tool. Entry, stop and target levels are model-derived reference levels, not predictions or guarantees.
-</div>
+  <div class="section">
+    <div>
+      <div class="eyebrow">The vision</div>
+      <h2>See waves differently.</h2>
+    </div>
+  </div>
 
-</div>
+  <div class="grid three">
+    <div class="card aiStep">
+      <div class="number">01 / UPLOAD</div>
+      <h3>Share a wave video</h3>
+      <p class="muted">A future feature for uploading surf footage to analyze.</p>
+    </div>
+    <div class="card aiStep">
+      <div class="number">02 / UNDERSTAND</div>
+      <h3>Explore wave behavior</h3>
+      <p class="muted">Learn about wave direction, shape, sets, and breaking patterns.</p>
+    </div>
+    <div class="card aiStep">
+      <div class="number">03 / LEARN</div>
+      <h3>Improve ocean knowledge</h3>
+      <p class="muted">Educational explanations designed to help users better understand conditions.</p>
+    </div>
+  </div>
+
+  <div class="section"><h2>Future video workspace</h2></div>
+  <div class="uploadPreview">
+    <div style="font-size:44px">▣</div>
+    <h3>Video wave analysis</h3>
+    <p class="muted">Upload and AI processing are not available yet.</p>
+    <span class="coming">IN DEVELOPMENT</span>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">SWELL 5.0 · Ocean Intelligence · Forecast data from Open-Meteo · Map data © OpenStreetMap contributors</div>
+</footer>
 
 <script>
+"use strict";
 
-/* CORRECT CLOUDFLARE WORKER — ONE N IN SCANER */
-const API="https://trade-scaner-api.parkermacklem.workers.dev";
+const $=id=>document.getElementById(id);
 
-const SYMBOLS=[
-"AAPL","MSFT","NVDA","AMZN","GOOGL",
-"META","AVGO","TSLA","JPM","V",
-"MA","WMT","COST","NFLX","AMD",
-"ORCL","CRM","BAC","XOM","LLY"
+const RAW=[
+["Manhattan Beach",33.8847,-118.4109],
+["El Porto",33.9000,-118.4220],
+["Hermosa Beach",33.8622,-118.3995],
+["Redondo Beach",33.8492,-118.3884],
+["Torrance Beach",33.8135,-118.3910],
+["Venice Beach",33.985,-118.472],
+["Santa Monica",34.0085,-118.498],
+["Malibu",34.0337,-118.677],
+["Zuma Beach",34.0215,-118.831],
+["County Line",34.052,-118.965],
+["Rincon",34.373,-119.476],
+["Huntington Beach",33.655,-118.002],
+["Newport Beach",33.607,-117.930],
+["The Wedge",33.593,-117.882],
+["Salt Creek",33.476,-117.722],
+["Trestles",33.384,-117.593],
+["San Onofre",33.371,-117.568],
+["Oceanside",33.196,-117.380],
+["Swamis",33.035,-117.293],
+["Cardiff Reef",33.020,-117.285],
+["Blacks Beach",32.890,-117.253],
+["La Jolla Shores",32.855,-117.257],
+["Windansea",32.831,-117.281],
+["Pacific Beach",32.797,-117.257],
+["Ocean Beach SD",32.749,-117.253],
+["Steamer Lane",36.951,-122.026],
+["Pleasure Point",36.952,-121.970],
+["Morro Bay",35.370,-120.867],
+["Pismo Beach",35.138,-120.643],
+["Ocean Beach SF",37.759,-122.511],
+["Mavericks",37.494,-122.500],
+["Pacifica",37.612,-122.496],
+["Pipeline",21.665,-158.053],
+["Waimea Bay",21.641,-158.065],
+["Sunset Beach",21.679,-158.040],
+["Haleiwa",21.595,-158.105],
+["Honolua Bay",21.013,-156.639],
+["Hookipa",20.934,-156.357],
+["Cocoa Beach",28.320,-80.607],
+["New Smyrna Beach",29.026,-80.918],
+["Sebastian Inlet",27.860,-80.448],
+["Outer Banks",35.573,-75.466],
+["Montauk",41.035,-71.955],
+["Rockaway Beach",40.583,-73.817]
 ];
 
-let stocks={};
-let errors={};
-let selected=null;
-let scanning=false;
+const spots=RAW.map((r,id)=>({
+  id,name:r[0],lat:r[1],lon:r[2]
+}));
 
-
-/* ---------- UTILITIES ---------- */
-
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-
-function avg(a){
-return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+function readStorage(key,fallback){
+  try{
+    const v=JSON.parse(localStorage.getItem(key));
+    return v===null?fallback:v;
+  }catch{return fallback;}
 }
 
-function clamp(v,a=0,b=100){
-return Math.max(a,Math.min(b,v));
+let selected=spots[readStorage("swell5spot",0)]||spots[0];
+let favorites=readStorage("swell5favorites",[]);
+if(!Array.isArray(favorites))favorites=[];
+let metricUnits=readStorage("swell5metric",false);
+let data=null;
+let active="home";
+let map=null;
+let markers=[];
+let request=0;
+
+const valid=v=>typeof v==="number"&&Number.isFinite(v);
+
+function wave(v){
+  return valid(v)?(metricUnits?v.toFixed(1)+" m":(v*3.28084).toFixed(1)+" ft"):"—";
+}
+function temp(v){
+  return valid(v)?(metricUnits?Math.round(v)+"°C":Math.round(v*9/5+32)+"°F"):"—";
+}
+function wind(v){
+  return valid(v)?(metricUnits?Math.round(v)+" km/h":Math.round(v/1.609344)+" mph"):"—";
+}
+function period(v){
+  return valid(v)?v.toFixed(1)+" sec":"—";
+}
+function direction(v){
+  return valid(v)?Math.round(v)+"°":"—";
+}
+function compass(v){
+  return valid(v)?["N","NE","E","SE","S","SW","W","NW"][Math.round(v/45)%8]:"—";
+}
+function time(t){
+  if(!t)return "—";
+  return new Date(t).toLocaleString("en-US",{weekday:"short",hour:"numeric"});
+}
+function at(hourly,key,t){
+  const i=hourly?.time?.indexOf(t)??-1;
+  return i<0?null:hourly[key]?.[i]??null;
 }
 
-function fmt(v){
-return Number.isFinite(v)?"$"+v.toFixed(2):"—";
+function metricCard(label,value,note,icon="◌",color="#258ee4",extra=""){
+  return `<div class="card metric">
+    <div class="metricTop">
+      <div class="eyebrow">${label}</div>
+      <div class="metricIcon" style="color:${color}">${icon}</div>
+    </div>
+    <div class="value">${value}</div>
+    <div class="tiny">${note}</div>
+    ${extra}
+  </div>`;
 }
 
-function pct(a,b){
-return b?((a-b)/b)*100:0;
+function waterGauge(c){
+  if(!valid(c))return "";
+  const position=Math.max(0,Math.min(100,(c-5)/30*100));
+  return `<div class="gauge"><i style="left:${position}%"></i></div>
+    <div class="gaugeLabels"><span>Cold</span><span>Warm</span></div>`;
 }
 
-
-/* ---------- INDICATORS USED BEHIND THE SCENES ---------- */
-
-function ema(values,length){
-
-if(!values.length)return[];
-
-const k=2/(length+1);
-const out=[values[0]];
-
-for(let i=1;i<values.length;i++)
-out.push(values[i]*k+out[i-1]*(1-k));
-
-return out;
+function windCompass(deg){
+  const rotation=valid(deg)?deg:0;
+  return `<svg class="compass" viewBox="0 0 90 90">
+    <circle cx="45" cy="45" r="34"/>
+    <circle cx="45" cy="45" r="23" stroke-dasharray="2 5"/>
+    <text x="45" y="8" text-anchor="middle">N</text>
+    <text x="45" y="87" text-anchor="middle">S</text>
+    <text x="84" y="48" text-anchor="middle">E</text>
+    <text x="5" y="48" text-anchor="middle">W</text>
+    <g transform="rotate(${rotation} 45 45)">
+      <path d="M45 15 L52 55 L45 47 L38 55 Z"/>
+    </g>
+    <circle cx="45" cy="45" r="4" fill="#15191d"/>
+  </svg>`;
 }
 
-function rsi(values,length=14){
-
-if(values.length<length+1)return 50;
-
-let gain=0,loss=0;
-
-for(let i=values.length-length;i<values.length;i++){
-const d=values[i]-values[i-1];
-if(d>0)gain+=d;
-else loss-=d;
+function spark(color="#258ee4"){
+  return `<svg class="spark" viewBox="0 0 170 43" preserveAspectRatio="none">
+    <path stroke="${color}" d="M0 28 Q12 4 24 28 T48 28 T72 28 T96 28 T120 28 T144 28 T168 28"/>
+  </svg>`;
 }
 
-if(!loss)return 100;
-
-const rs=(gain/length)/(loss/length);
-
-return 100-(100/(1+rs));
+function navigate(page){
+  active=page;
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===page));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+  window.scrollTo(0,0);
+  if(page==="explore")setTimeout(initMap,80);
+  if(page==="forecast")drawAllCharts();
+  if(page==="favorites")renderFavorites();
 }
 
-function atr(c,length=14){
-
-if(c.length<2)return 0;
-
-const tr=[];
-
-for(let i=1;i<c.length;i++){
-
-tr.push(Math.max(
-c[i].high-c[i].low,
-Math.abs(c[i].high-c[i-1].close),
-Math.abs(c[i].low-c[i-1].close)
-));
+function selectSpot(id){
+  selected=spots[id]||selected;
+  localStorage.setItem("swell5spot",JSON.stringify(selected.id));
+  data=null;
+  request++;
+  render();
+  navigate("forecast");
+  load();
 }
 
-return avg(tr.slice(-length));
+function toggleFavorite(id){
+  if(favorites.includes(id))favorites=favorites.filter(x=>x!==id);
+  else favorites.push(id);
+  localStorage.setItem("swell5favorites",JSON.stringify(favorites));
+  renderFavorites();
+  renderSpots();
+  render();
 }
 
-
-/* ---------- ANALYSIS ---------- */
-
-function analyze(symbol,candles,data){
-
-candles=candles
-.filter(c=>
-Number.isFinite(+c.open)&&
-Number.isFinite(+c.high)&&
-Number.isFinite(+c.low)&&
-Number.isFinite(+c.close)
-)
-.map(c=>({
-...c,
-open:+c.open,
-high:+c.high,
-low:+c.low,
-close:+c.close,
-volume:+c.volume||0
-}))
-.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
-
-if(candles.length<20)
-throw new Error("Not enough candle history");
-
-const closes=candles.map(c=>c.close);
-const volumes=candles.map(c=>c.volume);
-
-const price=closes.at(-1);
-
-const E9=ema(closes,9);
-const E20=ema(closes,20);
-const E50=ema(closes,50);
-
-const ema9=E9.at(-1);
-const ema20=E20.at(-1);
-const ema50=E50.at(-1);
-
-const RSI=rsi(closes);
-const ATR=atr(candles);
-
-const mom5=
-closes.length>5?pct(price,closes.at(-6)):0;
-
-const mom15=
-closes.length>15?pct(price,closes.at(-16)):0;
-
-const recentVol=avg(volumes.slice(-8));
-const baseVol=avg(volumes.slice(-28,-8));
-
-const relVol=baseVol?recentVol/baseVol:1;
-
-const recent=candles.slice(-25);
-
-const high=Math.max(...recent.map(c=>c.high));
-const low=Math.min(...recent.map(c=>c.low));
-
-const rangePos=
-high!==low?(price-low)/(high-low):.5;
-
-const bullish=
-price>ema20 &&
-ema9>ema20;
-
-const bearish=
-price<ema20 &&
-ema9<ema20;
-
-let direction="NEUTRAL";
-if(bullish)direction="LONG BIAS";
-if(bearish)direction="SHORT BIAS";
-
-let setup="No Clear Setup";
-
-if(bullish && mom5>0 && rangePos>.65)
-setup="Trend Continuation";
-
-else if(bullish && price<=ema9+ATR*.35)
-setup="Pullback Setup";
-
-else if(bullish && price>=high-ATR*.35)
-setup="Breakout Setup";
-
-else if(bearish && mom5<0)
-setup="Bearish Momentum";
-
-else if(price>ema20)
-setup="Developing Trend";
-
-let trendScore=50;
-
-trendScore+=price>ema20?18:-18;
-trendScore+=ema9>ema20?16:-16;
-
-if(closes.length>=50)
-trendScore+=ema20>ema50?12:-12;
-
-trendScore=clamp(trendScore);
-
-const momentumScore=clamp(
-50+mom5*12+mom15*5
-);
-
-const volumeScore=clamp(
-45+(relVol-1)*35
-);
-
-let rsiScore=50;
-
-if(RSI>=50&&RSI<=70)
-rsiScore=70+(RSI-50);
-
-else if(RSI<50)
-rsiScore=RSI;
-
-else
-rsiScore=90-(RSI-70)*2;
-
-rsiScore=clamp(rsiScore);
-
-const structureScore=clamp(rangePos*100);
-
-const score=Math.round(clamp(
-trendScore*.35+
-momentumScore*.25+
-structureScore*.20+
-volumeScore*.12+
-rsiScore*.08
-));
-
-/*
-MODEL-DERIVED PAPER-TRADE MAP
---------------------------------
-This does NOT predict where price will go.
-
-For bullish setups:
-entry = current reference price
-stop = recent structure / ATR reference
-targets = multiples of defined risk
-*/
-
-let entry=price;
-let stop,tp1,tp2,tp3;
-
-if(direction==="SHORT BIAS"){
-
-const recentHigh=Math.max(
-...candles.slice(-12).map(c=>c.high)
-);
-
-stop=Math.min(
-recentHigh,
-entry+ATR*1.6
-);
-
-if(stop<=entry)
-stop=entry+ATR*1.25;
-
-const risk=Math.max(stop-entry,ATR*.5);
-
-tp1=entry-risk;
-tp2=entry-risk*2;
-tp3=entry-risk*3;
-
-}else{
-
-const recentLow=Math.min(
-...candles.slice(-12).map(c=>c.low)
-);
-
-stop=Math.max(
-recentLow,
-entry-ATR*1.6
-);
-
-if(stop>=entry)
-stop=entry-ATR*1.25;
-
-const risk=Math.max(entry-stop,ATR*.5);
-
-tp1=entry+risk;
-tp2=entry+risk*2;
-tp3=entry+risk*3;
+function spotCard(s){
+  return `<div class="card spotCard">
+    <div><div class="eyebrow">Surf spot</div><strong>${s.name}</strong>
+    <div class="tiny">${s.lat.toFixed(3)}°, ${s.lon.toFixed(3)}°</div></div>
+    <div class="spotActions">
+      <button class="btn" data-select="${s.id}">Forecast ↗</button>
+      <button class="btn secondary" data-fav="${s.id}">${favorites.includes(s.id)?"★":"☆"}</button>
+    </div>
+  </div>`;
 }
 
-const risk=Math.abs(entry-stop);
-
-const rr2=risk?
-Math.abs(tp2-entry)/risk:
-0;
-
-let hold="30–120 min";
-
-if(score>=85)hold="45 min–3 hrs";
-else if(score>=70)hold="30–2 hrs";
-else if(score<55)hold="Wait / weak setup";
-
-const reasons=[];
-
-if(bullish)
-reasons.push("Price structure is above the short-term trend.");
-
-if(bearish)
-reasons.push("Price structure is below the short-term trend.");
-
-if(mom5>.15)
-reasons.push("Short-term momentum is accelerating upward.");
-
-else if(mom5<-.15)
-reasons.push("Short-term momentum is negative.");
-
-if(relVol>1.15)
-reasons.push("Recent volume is elevated versus its short baseline.");
-
-if(rangePos>.75)
-reasons.push("Price is trading near the upper part of its recent range.");
-
-if(RSI>=50&&RSI<=70)
-reasons.push("Momentum is positive without the RSI filter being extremely extended.");
-
-if(!reasons.length)
-reasons.push("Current conditions do not show strong confirmation yet.");
-
-return{
-symbol,
-candles,
-price,
-score,
-setup,
-direction,
-hold,
-ema20,
-RSI,
-ATR,
-mom5,
-relVol,
-reasons:reasons.slice(0,3),
-fetchedAt:data.fetchedAt,
-trade:{
-entry,
-stop,
-tp1,
-tp2,
-tp3,
-risk,
-rr2
-}
-};
+function renderSpots(){
+  const q=$("search").value.toLowerCase().trim();
+  const list=spots.filter(s=>s.name.toLowerCase().includes(q));
+  $("spots").innerHTML=list.map(spotCard).join("");
+  $("spotCount").textContent=list.length+" spots";
+  if(map)updateMarkers(list);
 }
 
+function renderFavorites(){
+  const list=spots.filter(s=>favorites.includes(s.id));
+  $("saved").innerHTML=list.length?list.map(s=>`
+    <div class="savedItem">
+      <div><strong>${s.name}</strong><div class="tiny">Saved surf spot</div></div>
+      <button class="btn" data-select="${s.id}">Forecast →</button>
+    </div>`).join(""):"No favorites yet. Explore and tap ☆ to save a spot.";
+}
 
-/* ---------- FETCH WITH RETRIES ---------- */
+function initMap(){
+  if(map){map.invalidateSize();return;}
+  if(typeof L==="undefined"){
+    $("map").textContent="Map library unavailable.";
+    return;
+  }
+  map=L.map("map",{scrollWheelZoom:false}).setView([34,-119],6);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:18,attribution:"© OpenStreetMap contributors"
+  }).addTo(map);
+  updateMarkers(spots);
+}
 
-async function fetchStock(symbol){
+function updateMarkers(list){
+  markers.forEach(m=>map.removeLayer(m));
+  markers=[];
+  list.forEach(s=>{
+    const marker=L.circleMarker([s.lat,s.lon],{
+      radius:7,color:"#fff",weight:2,fillColor:"#15191d",fillOpacity:1
+    }).addTo(map);
+    const el=document.createElement("div");
+    const strong=document.createElement("strong");
+    strong.textContent=s.name;
+    const btn=document.createElement("button");
+    btn.textContent="View forecast →";
+    btn.style.cssText="display:block;margin-top:9px;padding:8px;background:#15191d;color:#fff;border:0;border-radius:7px";
+    btn.onclick=()=>selectSpot(s.id);
+    el.append(strong,btn);
+    marker.bindPopup(el);
+    markers.push(marker);
+  });
+}
 
-const url=
-`${API}/timeseries?symbol=${encodeURIComponent(symbol)}`
-+`&interval=5min&outputsize=500`;
+function api(base,params){
+  const u=new URL(base);
+  u.searchParams.set("latitude",selected.lat);
+  u.searchParams.set("longitude",selected.lon);
+  u.searchParams.set("timezone","auto");
+  u.searchParams.set("forecast_days","7");
+  Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
+  return u.toString();
+}
 
-let lastError;
+async function getJSON(url){
+  const response=await fetch(url);
+  if(!response.ok)throw Error("API "+response.status);
+  const result=await response.json();
+  if(result.error)throw Error(result.reason||"API error");
+  return result;
+}
 
-for(let attempt=1;attempt<=3;attempt++){
+async function load(){
+  const id=++request;
+  $("status").textContent="Loading marine and atmospheric data...";
+  $("refresh").disabled=true;
 
-try{
+  const marine=api("https://marine-api.open-meteo.com/v1/marine",{
+    current:"wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction,sea_surface_temperature",
+    hourly:"wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction,secondary_swell_wave_height,secondary_swell_wave_period,secondary_swell_wave_direction,sea_surface_temperature,sea_level_height_msl"
+  });
 
-const response=await fetch(url,{
-cache:"no-store"
+  const weather=api("https://api.open-meteo.com/v1/forecast",{
+    current:"temperature_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,wind_gusts_10m,relative_humidity_2m,surface_pressure,cloud_cover",
+    hourly:"wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m",
+    daily:"sunrise,sunset",
+    wind_speed_unit:"kmh"
+  });
+
+  const results=await Promise.allSettled([getJSON(marine),getJSON(weather)]);
+  if(id!==request)return;
+
+  data={
+    marine:results[0].status==="fulfilled"?results[0].value:null,
+    weather:results[1].status==="fulfilled"?results[1].value:null
+  };
+
+  $("refresh").disabled=false;
+  $("status").textContent="Marine: "+(data.marine?"available":"unavailable")+
+    " · Weather: "+(data.weather?"available":"unavailable")+
+    " · Missing values appear as —";
+
+  render();
+}
+
+function render(){
+  const m=data?.marine?.current||{};
+  const w=data?.weather?.current||{};
+  const mh=data?.marine?.hourly||{};
+  const d=data?.weather?.daily||{};
+  const first=mh.time?.[0];
+
+  $("homeSpot").textContent=selected.name;
+  $("forecastSpot").textContent=selected.name;
+  $("forecastRegion").textContent="Coordinates "+selected.lat.toFixed(3)+"°, "+selected.lon.toFixed(3)+"°";
+  $("favorite").textContent=favorites.includes(selected.id)?"★ Saved":"☆ Favorite";
+  $("unitsButton").textContent=metricUnits?"°C / m":"°F / ft";
+
+  const cards=[
+    metricCard("Water temperature",temp(m.sea_surface_temperature),"Sea-surface temperature","♨","#258ee4",waterGauge(m.sea_surface_temperature)),
+    metricCard("Wave height",wave(m.wave_height),"Significant wave height","≋","#258ee4",spark()),
+    metricCard("Wind speed",wind(w.wind_speed_10m),compass(w.wind_direction_10m)+" · "+direction(w.wind_direction_10m),"➤","#f29a4a",
+      `<div style="display:flex;justify-content:center;margin-top:8px">${windCompass(w.wind_direction_10m)}</div>`),
+    metricCard("Swell period",period(m.swell_wave_period),"Primary swell period","◒","#8d6ce0",spark("#8d6ce0"))
+  ].join("");
+
+  $("homeMetrics").innerHTML=cards;
+  $("mainMetrics").innerHTML=cards;
+
+  $("details").innerHTML=[
+    metricCard("Primary swell",wave(m.swell_wave_height),"Height","≋","#8d6ce0"),
+    metricCard("Swell direction",direction(m.swell_wave_direction),compass(m.swell_wave_direction),"➤","#8d6ce0"),
+    metricCard("Secondary swell",wave(at(mh,"secondary_swell_wave_height",first)),"Height","≋","#8d6ce0"),
+    metricCard("Secondary period",period(at(mh,"secondary_swell_wave_period",first)),"Seconds","◒","#8d6ce0"),
+    metricCard("Air temperature",temp(w.temperature_2m),"2-meter air temperature","☀","#f29a4a"),
+    metricCard("Feels like",temp(w.apparent_temperature),"Apparent temperature","◉","#f29a4a"),
+    metricCard("Wind gusts",wind(w.wind_gusts_10m),"10-meter gusts","➤","#f29a4a"),
+    metricCard("Humidity",valid(w.relative_humidity_2m)?Math.round(w.relative_humidity_2m)+"%":"—","Relative humidity","◌","#258ee4"),
+    metricCard("Pressure",valid(w.surface_pressure)?Math.round(w.surface_pressure)+" hPa":"—","Surface pressure","◎"),
+    metricCard("Cloud cover",valid(w.cloud_cover)?Math.round(w.cloud_cover)+"%":"—","Sky coverage","☁"),
+    metricCard("Sunrise",time(d.sunrise?.[0]),"Local time","☀","#f29a4a"),
+    metricCard("Sunset",time(d.sunset?.[0]),"Local time","◐","#f29a4a")
+  ].join("");
+
+  $("featured").innerHTML=[0,1,7,11,25,32].map(i=>spotCard(spots[i])).join("");
+  renderHourly();
+  if(active==="forecast")drawAllCharts();
+}
+
+function renderHourly(){
+  const m=data?.marine?.hourly;
+  const w=data?.weather?.hourly;
+  const times=m?.time||w?.time||[];
+  const start=Math.max(0,times.findIndex(t=>new Date(t).getTime()>=Date.now()-3600000));
+
+  $("hourly").innerHTML=times.slice(start,start+72).map(t=>`
+    <tr>
+      <td>${time(t)}</td>
+      <td>${wave(at(m,"wave_height",t))}</td>
+      <td>${period(at(m,"wave_period",t))}</td>
+      <td>${wave(at(m,"swell_wave_height",t))}</td>
+      <td>${temp(at(m,"sea_surface_temperature",t))}</td>
+      <td>${wind(at(w,"wind_speed_10m",t))}</td>
+      <td>${wind(at(w,"wind_gusts_10m",t))}</td>
+    </tr>`).join("")||'<tr><td colspan="7">Hourly data unavailable.</td></tr>';
+}
+
+function chartSeries(kind){
+  const m=data?.marine?.hourly||{};
+  const w=data?.weather?.hourly||{};
+
+  if(kind==="wave")return {times:m.time||[],values:m.wave_height||[],format:wave,convert:v=>metricUnits?v:v*3.28084,color:"#258ee4"};
+  if(kind==="tide")return {times:m.time||[],values:m.sea_level_height_msl||[],format:v=>valid(v)?v.toFixed(2)+" m":"—",convert:v=>v,color:"#8d6ce0"};
+  if(kind==="wind")return {times:w.time||[],values:w.wind_speed_10m||[],format:wind,convert:v=>metricUnits?v:v/1.609344,color:"#f29a4a"};
+  return {times:m.time||[],values:m.sea_surface_temperature||[],format:temp,convert:v=>metricUnits?v:v*9/5+32,color:"#258ee4"};
+}
+
+function drawAllCharts(){
+  ["wave","tide","wind","water"].forEach(drawChart);
+}
+
+function drawChart(kind){
+  const s=chartSeries(kind);
+  const canvas=$(kind+"Chart");
+  const viewport=$(kind+"Scroll");
+  const slider=$(kind+"Range");
+  const info=$(kind+"Info");
+
+  const n=s.times.length;
+  const left=52,step=32,top=20,bottom=42,height=230;
+  const width=Math.max(viewport.clientWidth-2,left+30+Math.max(1,n-1)*step);
+  const dpr=window.devicePixelRatio||1;
+
+  canvas.style.width=width+"px";
+  canvas.style.height=height+"px";
+  canvas.width=Math.round(width*dpr);
+  canvas.height=Math.round(height*dpr);
+
+  const ctx=canvas.getContext("2d");
+  ctx.scale(dpr,dpr);
+  ctx.font="11px DM Sans";
+  ctx.textBaseline="middle";
+
+  slider.max=Math.max(0,n-1);
+  const available=s.values.filter(valid).map(s.convert);
+
+  if(!available.length){
+    ctx.fillStyle="#7c858d";
+    ctx.fillText("Forecast unavailable for this chart.",20,110);
+    info.textContent="No data available";
+    return;
+  }
+
+  let min=Math.min(...available),max=Math.max(...available);
+  const padding=(max-min||1)*.2;
+  min-=padding;max+=padding;
+
+  const x=i=>left+i*step;
+  const y=v=>top+(max-v)/(max-min)*(height-top-bottom);
+
+  for(let k=0;k<=4;k++){
+    const v=min+(max-min)*k/4;
+    const yy=y(v);
+    ctx.strokeStyle="#e6eaed";
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(width-15,yy);ctx.stroke();
+    ctx.fillStyle="#7c858d";
+    ctx.textAlign="right";
+    ctx.fillText(v.toFixed(1),left-8,yy);
+  }
+
+  ctx.textAlign="center";
+  for(let i=0;i<n;i+=5){
+    ctx.fillStyle="#7c858d";
+    ctx.fillText(time(s.times[i]),x(i),height-16);
+  }
+
+  ctx.beginPath();
+  let started=false;
+  s.values.forEach((raw,i)=>{
+    if(!valid(raw)){started=false;return;}
+    if(!started)ctx.moveTo(x(i),y(s.convert(raw)));
+    else ctx.lineTo(x(i),y(s.convert(raw)));
+    started=true;
+  });
+  ctx.strokeStyle=s.color;
+  ctx.lineWidth=3;
+  ctx.lineJoin="round";
+  ctx.stroke();
+
+  const index=Math.max(0,Math.min(n-1,Number(slider.value)||0));
+  const raw=s.values[index];
+
+  ctx.setLineDash([5,5]);
+  ctx.strokeStyle="#9aa4ac";
+  ctx.beginPath();
+  ctx.moveTo(x(index),top);
+  ctx.lineTo(x(index),height-bottom);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  if(valid(raw)){
+    ctx.fillStyle=s.color;
+    ctx.beginPath();
+    ctx.arc(x(index),y(s.convert(raw)),5,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  info.innerHTML=`<span class="tiny">${time(s.times[index])}</span><strong>${s.format(raw)}</strong>`;
+
+  canvas.onpointermove=e=>{
+    if(e.pointerType!=="mouse"&&!e.buttons)return;
+    const r=canvas.getBoundingClientRect();
+    slider.value=Math.max(0,Math.min(n-1,Math.round((e.clientX-r.left-left)/step)));
+    drawChart(kind);
+  };
+
+  canvas.onclick=e=>{
+    const r=canvas.getBoundingClientRect();
+    slider.value=Math.max(0,Math.min(n-1,Math.round((e.clientX-r.left-left)/step)));
+    drawChart(kind);
+  };
+
+  slider.oninput=()=>{
+    drawChart(kind);
+    viewport.scrollLeft=x(Number(slider.value))-viewport.clientWidth/2;
+  };
+}
+
+document.addEventListener("click",e=>{
+  const page=e.target.closest("[data-page]");
+  if(page)navigate(page.dataset.page);
+
+  const spot=e.target.closest("[data-select]");
+  if(spot)selectSpot(Number(spot.dataset.select));
+
+  const fav=e.target.closest("[data-fav]");
+  if(fav)toggleFavorite(Number(fav.dataset.fav));
 });
 
-if(!response.ok)
-throw new Error(`HTTP ${response.status}`);
+$("search").addEventListener("input",renderSpots);
+$("refresh").addEventListener("click",load);
+$("favorite").addEventListener("click",()=>toggleFavorite(selected.id));
 
-const data=await response.json();
-
-if(data.error)
-throw new Error(data.details||data.error);
-
-if(!Array.isArray(data.candles)||!data.candles.length)
-throw new Error("No candle data");
-
-return analyze(symbol,data.candles,data);
-
-}catch(e){
-
-lastError=e;
-
-/*
-Increasing delay before retry:
-1.5 sec -> 3 sec -> 4.5 sec
-*/
-
-if(attempt<3)
-await sleep(1500*attempt);
-}
-}
-
-throw lastError;
-}
-
-
-/* ---------- COLORS ---------- */
-
-function scoreColor(n){
-if(n>=95)return"#7047eb";
-if(n>=80)return"#15965e";
-if(n>=65)return"#75c989";
-if(n>=50)return"#d7b438";
-if(n>=30)return"#ef8c36";
-return"#e5484d";
-}
-
-function scoreWord(n){
-if(n>=95)return"EXTREME MATCH";
-if(n>=80)return"STRONG MATCH";
-if(n>=65)return"POSITIVE";
-if(n>=50)return"MIXED";
-if(n>=30)return"WEAK";
-return"LOW";
-}
-
-function directionStyle(direction){
-
-if(direction==="LONG BIAS")
-return{
-bg:"rgba(21,150,94,.18)",
-color:"#62d69d"
-};
-
-if(direction==="SHORT BIAS")
-return{
-bg:"rgba(229,72,77,.18)",
-color:"#ff8589"
-};
-
-return{
-bg:"rgba(255,255,255,.1)",
-color:"#ddd"
-};
-}
-
-
-/* ---------- STOCK GRID ---------- */
-
-function renderScanner(){
-
-const el=document.getElementById("scanner");
-
-const q=document
-.getElementById("search")
-.value
-.trim()
-.toUpperCase();
-
-el.innerHTML="";
-
-const ordered=[...SYMBOLS]
-.filter(s=>s.includes(q))
-.sort((a,b)=>
-(stocks[b]?.score??-1)-
-(stocks[a]?.score??-1)
-);
-
-ordered.forEach(symbol=>{
-
-const s=stocks[symbol];
-
-const div=document.createElement("div");
-
-div.className=
-"stock"+
-(selected===symbol?" selected":"");
-
-if(s){
-
-const ds=directionStyle(s.direction);
-
-div.innerHTML=`
-<div class="stocktop">
-<div>
-<div class="symbol">${symbol}</div>
-<div class="price">${fmt(s.price)}</div>
-</div>
-
-<div
-class="score"
-style="background:${scoreColor(s.score)}">
-${s.score}
-</div>
-</div>
-
-<div class="stockbottom">
-
-<div
-class="badge"
-style="
-background:${ds.bg};
-color:${s.direction==="LONG BIAS"?"#14895a":
-s.direction==="SHORT BIAS"?"#d9474c":"#777"};
-">
-${s.direction}
-</div>
-
-<div class="reasonmini">
-${s.setup}
-</div>
-
-</div>
-`;
-
-div.onclick=()=>{
-selected=symbol;
-renderScanner();
-renderDetail(s);
-};
-
-}else{
-
-const failed=errors[symbol];
-
-div.innerHTML=`
-<div class="stocktop">
-<div>
-<div class="symbol">${symbol}</div>
-<div class="price">—</div>
-</div>
-
-<div class="score" style="background:#c8cad2">
-—
-</div>
-</div>
-
-<div class="stockbottom">
-<div class="reasonmini">
-${failed?"Retry later":"Waiting..."}
-</div>
-</div>
-`;
-}
-
-el.appendChild(div);
+$("unitsButton").addEventListener("click",()=>{
+  metricUnits=!metricUnits;
+  localStorage.setItem("swell5metric",JSON.stringify(metricUnits));
+  render();
 });
-}
-
-
-/* ---------- DETAIL ---------- */
-
-function renderDetail(s){
-
-document.getElementById("chartTitle").textContent=
-`${s.symbol} · ${fmt(s.price)}`;
-
-document.getElementById("chartMeta").textContent=
-`${s.setup} · 5-minute chart`;
-
-document.getElementById("updated").textContent=
-s.fetchedAt
-? "Updated "+new Date(s.fetchedAt).toLocaleTimeString()
-: "";
-
-document.getElementById("bigScore").textContent=s.score;
-document.getElementById("scoreWord").textContent=scoreWord(s.score);
-
-document.getElementById("setupName").textContent=s.setup;
-
-const direction=document.getElementById("direction");
-const ds=directionStyle(s.direction);
-
-direction.textContent=s.direction;
-direction.style.background=ds.bg;
-direction.style.color=ds.color;
-
-const t=s.trade;
-
-document.getElementById("tradeGrid").innerHTML=`
-<div class="tradelevel">
-<span>ENTRY</span>
-<strong>${fmt(t.entry)}</strong>
-</div>
-
-<div class="tradelevel">
-<span>STOP</span>
-<strong>${fmt(t.stop)}</strong>
-</div>
-
-<div class="tradelevel">
-<span>TP1 · 1R</span>
-<strong>${fmt(t.tp1)}</strong>
-</div>
-
-<div class="tradelevel">
-<span>TP2 · 2R</span>
-<strong>${fmt(t.tp2)}</strong>
-</div>
-
-<div class="tradelevel">
-<span>TP3 · 3R</span>
-<strong>${fmt(t.tp3)}</strong>
-</div>
-
-<div class="tradelevel">
-<span>WINDOW</span>
-<strong>${s.hold}</strong>
-</div>
-`;
-
-document.getElementById("summary").innerHTML=`
-<div class="stat">
-<span>SETUP</span>
-<strong>${s.setup}</strong>
-</div>
-
-<div class="stat">
-<span>ENTRY</span>
-<strong>${fmt(t.entry)}</strong>
-</div>
-
-<div class="stat">
-<span>STOP</span>
-<strong>${fmt(t.stop)}</strong>
-</div>
-
-<div class="stat">
-<span>TP2</span>
-<strong>${fmt(t.tp2)}</strong>
-</div>
-
-<div class="stat">
-<span>RISK / REWARD</span>
-<strong>1 : ${t.rr2.toFixed(1)}</strong>
-</div>
-`;
-
-document.getElementById("reasons").innerHTML=
-s.reasons.map(r=>`
-<div class="reason">
-<div class="dot"></div>
-<div>${r}</div>
-</div>
-`).join("");
-
-drawChart(s);
-}
-
-
-/* ---------- CHART ---------- */
-
-function drawChart(s){
-
-const canvas=document.getElementById("chart");
-const rect=canvas.getBoundingClientRect();
-const dpr=window.devicePixelRatio||1;
-
-canvas.width=rect.width*dpr;
-canvas.height=rect.height*dpr;
-
-const ctx=canvas.getContext("2d");
-ctx.scale(dpr,dpr);
-
-const W=rect.width;
-const H=rect.height;
-
-ctx.clearRect(0,0,W,H);
-
-const candles=s.candles.slice(-65);
-
-const t=s.trade;
-
-const values=[
-...candles.map(c=>c.high),
-...candles.map(c=>c.low),
-t.entry,t.stop,t.tp1,t.tp2,t.tp3
-];
-
-let min=Math.min(...values);
-let max=Math.max(...values);
-
-const pad=(max-min)*.08||1;
-
-min-=pad;
-max+=pad;
-
-const LEFT=12;
-const RIGHT=72;
-const TOP=15;
-const BOTTOM=25;
-
-const width=W-LEFT-RIGHT;
-const height=H-TOP-BOTTOM;
-
-const Y=v=>
-TOP+(max-v)/(max-min)*height;
-
-const X=i=>
-LEFT+
-(i+.5)*(width/candles.length);
-
-/* horizontal grid */
-
-ctx.lineWidth=1;
-
-for(let i=0;i<5;i++){
-
-const yy=TOP+(height/4)*i;
-
-ctx.strokeStyle="#ececf2";
-
-ctx.beginPath();
-ctx.moveTo(LEFT,yy);
-ctx.lineTo(W-RIGHT,yy);
-ctx.stroke();
-
-const val=max-(max-min)*(i/4);
-
-ctx.fillStyle="#8b8f9e";
-ctx.font="10px -apple-system";
-
-ctx.fillText(
-val.toFixed(2),
-W-RIGHT+8,
-yy+3
-);
-}
-
-/* candles */
-
-const slot=width/candles.length;
-const body=Math.max(2,slot*.58);
-
-candles.forEach((c,i)=>{
-
-const x=X(i);
-const up=c.close>=c.open;
-const color=up?"#15965e":"#e5484d";
-
-ctx.strokeStyle=color;
-ctx.fillStyle=color;
-
-ctx.beginPath();
-ctx.moveTo(x,Y(c.high));
-ctx.lineTo(x,Y(c.low));
-ctx.stroke();
-
-const a=Y(c.open);
-const b=Y(c.close);
-
-ctx.fillRect(
-x-body/2,
-Math.min(a,b),
-body,
-Math.max(1,Math.abs(a-b))
-);
-});
-
-/* subtle EMA20 only */
-
-const closes=candles.map(c=>c.close);
-const e20=ema(closes,20);
-
-ctx.strokeStyle="#a4a6b0";
-ctx.lineWidth=1.3;
-ctx.globalAlpha=.65;
-ctx.beginPath();
-
-e20.forEach((v,i)=>{
-if(i===0)ctx.moveTo(X(i),Y(v));
-else ctx.lineTo(X(i),Y(v));
-});
-
-ctx.stroke();
-ctx.globalAlpha=1;
-
-/*
-LEVEL LINES + LABEL ARROWS
-*/
-
-const levels=[
-{
-name:"STOP",
-value:t.stop,
-color:"#e5484d"
-},
-{
-name:"ENTRY",
-value:t.entry,
-color:"#7047eb"
-},
-{
-name:"TP1",
-value:t.tp1,
-color:"#6aaf82"
-},
-{
-name:"TP2",
-value:t.tp2,
-color:"#15965e"
-},
-{
-name:"TP3",
-value:t.tp3,
-color:"#7047eb"
-}
-];
-
-levels.forEach(level=>{
-
-const yy=Y(level.value);
-
-ctx.save();
-
-ctx.strokeStyle=level.color;
-ctx.lineWidth=
-level.name==="ENTRY"||level.name==="STOP"
-?1.7:1.2;
-
-ctx.globalAlpha=.75;
-ctx.setLineDash([6,5]);
-
-ctx.beginPath();
-ctx.moveTo(LEFT,yy);
-ctx.lineTo(W-RIGHT,yy);
-ctx.stroke();
-
-ctx.restore();
-
-/*
-label pill
-*/
-
-const label=
-`${level.name} ${level.value.toFixed(2)}`;
-
-ctx.font="bold 9px -apple-system";
-
-const tw=ctx.measureText(label).width;
-
-const boxW=tw+13;
-const boxH=18;
-
-const bx=W-RIGHT-boxW;
-const by=yy-boxH/2;
-
-ctx.fillStyle=level.color;
-
-ctx.beginPath();
-
-if(ctx.roundRect)
-ctx.roundRect(bx,by,boxW,boxH,5);
-else
-ctx.rect(bx,by,boxW,boxH);
-
-ctx.fill();
-
-ctx.fillStyle="#fff";
-
-ctx.fillText(
-label,
-bx+6,
-yy+3
-);
-
-/*
-small arrow pointing into chart
-*/
-
-ctx.fillStyle=level.color;
-
-ctx.beginPath();
-ctx.moveTo(bx-7,yy);
-ctx.lineTo(bx,yy-5);
-ctx.lineTo(bx,yy+5);
-ctx.closePath();
-ctx.fill();
-});
-}
-
-
-/* ---------- SCAN ---------- */
-
-async function scanAll(){
-
-if(scanning)return;
-
-scanning=true;
-
-stocks={};
-errors={};
-selected=null;
-
-renderScanner();
-
-const status=document.getElementById("status");
-
-let loaded=0;
-
-for(let i=0;i<SYMBOLS.length;i++){
-
-const symbol=SYMBOLS[i];
-
-status.textContent=
-`Scanning ${symbol} · ${i+1}/${SYMBOLS.length} · ${loaded} loaded`;
-
-try{
-
-const result=await fetchStock(symbol);
-
-stocks[symbol]=result;
-loaded++;
-
-if(!selected){
-selected=symbol;
-renderDetail(result);
-}
-
-}catch(e){
-
-errors[symbol]=e.message;
-
-console.error(
-"Failed:",
-symbol,
-e
-);
-}
-
-renderScanner();
-
-/*
-Important:
-wait between symbols so we don't fire
-all 20 provider requests at once.
-*/
-
-if(i<SYMBOLS.length-1)
-await sleep(1400);
-}
-
-/*
-ONE RETRY PASS FOR FAILED SYMBOLS
-*/
-
-const failed=SYMBOLS.filter(s=>!stocks[s]);
-
-if(failed.length){
-
-status.textContent=
-`Retrying ${failed.length} unavailable stocks...`;
-
-await sleep(3000);
-
-for(const symbol of failed){
-
-try{
-
-const result=await fetchStock(symbol);
-
-stocks[symbol]=result;
-delete errors[symbol];
-loaded++;
-
-}catch(e){
-errors[symbol]=e.message;
-}
-
-renderScanner();
-
-await sleep(1800);
-}
-}
-
-const ranked=
-Object.values(stocks)
-.sort((a,b)=>b.score-a.score);
-
-if(ranked.length){
-
-selected=ranked[0].symbol;
-
-renderScanner();
-renderDetail(ranked[0]);
-}
-
-const remaining=
-SYMBOLS.length-loaded;
-
-status.textContent=
-`Scan complete · ${loaded}/${SYMBOLS.length} loaded`
-+(remaining
-?` · ${remaining} temporarily unavailable`
-:" · all stocks loaded");
-
-scanning=false;
-}
-
-
-/* ---------- EVENTS ---------- */
-
-document
-.getElementById("search")
-.addEventListener("input",renderScanner);
 
 window.addEventListener("resize",()=>{
-if(selected&&stocks[selected])
-drawChart(stocks[selected]);
+  if(active==="forecast")drawAllCharts();
 });
 
-
-/* GO */
-
-renderScanner();
-scanAll();
-
+renderSpots();
+renderFavorites();
+render();
+load();
 </script>
 </body>
 </html>
