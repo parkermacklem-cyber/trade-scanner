@@ -4,301 +4,303 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111820">
 <title>SWELL — Surf Forecast</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-:root{--bg:#f7f8fa;--card:#fff;--ink:#121820;--muted:#78828c;--line:#e3e8ec;--soft:#eff2f5;--blue:#167ac6}
+:root{
+ --bg:#f6f8fa;--white:#fff;--ink:#15202b;
+ --muted:#788592;--line:#e4e9ee;--soft:#f0f3f6;
+ --blue:#197cc8;--green:#16845b;--amber:#b98023;
+ --red:#bc504a
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px Arial,sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #78b9ed;outline-offset:2px}
 h1,h2,h3,p{margin-top:0}
-h1{font-size:clamp(28px,4vw,44px);letter-spacing:-1.5px}
+h1{font-size:clamp(28px,4vw,43px);letter-spacing:-1.4px;margin-bottom:8px}
 h2{font-size:21px;letter-spacing:-.5px}
 h3{font-size:16px}
 p{line-height:1.5}
-.wrap{max-width:1250px;margin:auto;padding:0 20px}
-header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1000}
-.head{min-height:70px;display:flex;align-items:center;gap:25px}
-.logo{font-size:29px;font-weight:900;letter-spacing:-2px}
+.wrap{max-width:1320px;margin:auto;padding:0 20px}
+header{position:sticky;top:0;background:var(--white);border-bottom:1px solid var(--line);z-index:1000}
+.head{display:flex;align-items:center;gap:26px;min-height:72px}
+.logo{font-size:29px;font-weight:900;letter-spacing:-2px;white-space:nowrap}
 .logo span{color:var(--blue)}
-nav{display:flex;gap:5px;flex:1;overflow:auto}
-nav button{border:0;background:none;padding:12px 15px;color:var(--muted);font-weight:700;border-radius:9px;white-space:nowrap}
+nav{display:flex;flex:1;gap:5px;overflow-x:auto}
+nav button{border:0;background:transparent;padding:12px 15px;border-radius:9px;color:var(--muted);font-weight:700;white-space:nowrap}
 nav button.active,nav button:hover{background:var(--soft);color:var(--ink)}
-.btn{border:1px solid var(--ink);background:var(--ink);color:#fff;padding:11px 15px;border-radius:9px;font-weight:700}
-.btn.alt{background:white;color:var(--ink);border-color:var(--line)}
+.btn{background:var(--ink);border:1px solid var(--ink);color:#fff;border-radius:9px;padding:11px 15px;font-weight:700}
+.btn.alt{background:#fff;border-color:var(--line);color:var(--ink)}
 .btn:disabled{opacity:.5}
-.page{display:none;padding:30px 0 65px}
+.page{display:none;padding:28px 0 70px}
 .page.active{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:13px;min-width:0}
 .pad{padding:20px}
 .muted{color:var(--muted)}
 .small{font-size:12px;color:var(--muted)}
-.label{font-size:10px;letter-spacing:1.2px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.label{font-size:10px;color:var(--muted);letter-spacing:1.3px;font-weight:800;text-transform:uppercase}
 .grid{display:grid;gap:12px}
 .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .section{margin:28px 0 14px}
-.big{font-size:32px;font-weight:800;letter-spacing:-1px;margin:10px 0}
-.hero{background:#141b23;color:white;border-radius:18px;padding:30px;margin-bottom:20px}
-.hero .muted{color:#b7c3cf}
-.hero h1{margin:10px 0}
-.hero .btn{background:#fff;color:#111;border-color:#fff}
-.hero .label{color:#9eb5c9}
-.metric{padding:18px;min-width:0}
-.metric .big{font-size:clamp(23px,3vw,33px)}
-.tag{display:inline-block;border-radius:20px;background:var(--soft);padding:6px 10px;font-size:11px;font-weight:700}
-.good{background:#e1f4e9;color:#16734d}
-.fair{background:#fff1d4;color:#936514}
-.poor{background:#ffe5e2;color:#aa453d}
+.big{font-size:32px;letter-spacing:-1px;font-weight:800;margin:10px 0}
+.spot-head{padding:24px;background:#151e28;color:#fff;border-radius:15px;margin-bottom:17px}
+.spot-head .label{color:#9bb0c3}
+.spot-head .muted{color:#b7c5d2}
+.spot-head h1{margin:9px 0}
+.metric{padding:18px}
+.metric .big{font-size:clamp(23px,3vw,34px)}
+.tag{display:inline-block;border-radius:20px;padding:6px 10px;background:var(--soft);font-size:11px;font-weight:800}
+.good{background:#e1f5ea;color:#116e48}
+.fair{background:#fff1d6;color:#966514}
+.poor{background:#ffe6e3;color:#a8433b}
+.personal{border-left:4px solid var(--blue)}
+.condition-row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:12px 0;font-size:13px}
+.condition-row:last-child{border:0}
 .toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}
-.search,select{padding:12px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink)}
-.search{flex:1;min-width:190px}
-.spot{padding:17px}
-.spot h3{margin:9px 0}
-.spot .row{margin-top:15px}
-.forecast-table{overflow:auto}
+.search,select{padding:12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+.search{flex:1;min-width:180px}
+.day-card{padding:16px;cursor:pointer;transition:border-color .15s}
+.day-card:hover,.day-card.selected{border-color:var(--blue)}
+.day-card .big{font-size:25px}
+.day-card .small{line-height:1.8}
+.mini-bar{height:6px;background:var(--soft);border-radius:9px;margin-top:14px;overflow:hidden}
+.mini-bar i{display:block;height:100%;background:var(--blue)}
+.table-scroll{overflow:auto}
 table{width:100%;border-collapse:collapse;white-space:nowrap}
-th,td{padding:13px 15px;text-align:left;border-bottom:1px solid var(--line);font-size:12px}
-th{background:var(--soft);font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
-tr:last-child td{border-bottom:0}
-.day{padding:16px}
-.day .big{font-size:25px}
-.day .small{line-height:1.8}
-.chartbox{padding:19px}
-.chartscroll{overflow:auto;border:1px solid var(--line);border-radius:10px;margin:15px 0}
-canvas{display:block;height:215px;cursor:crosshair}
+th,td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:12px}
+th{background:var(--soft);font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);position:sticky;top:0}
+tr:last-child td{border:0}
+tr:nth-child(even) td{background:#fbfcfd}
+.chart-card{padding:19px}
+.chart-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:14px 0}
+canvas{display:block;height:220px;cursor:crosshair}
 input[type=range]{width:100%;accent-color:var(--blue)}
-#map{height:380px;border-radius:12px}
-.mapcard{padding:8px}
-.modal-bg{position:fixed;inset:0;background:#0008;z-index:2000;display:none;align-items:center;justify-content:center;padding:15px}
+.spot-card{padding:17px}
+.spot-card h3{margin:10px 0}
+.spot-card .row{margin-top:17px}
+#map{height:390px;border-radius:11px}
+.map-card{padding:8px}
+.saved{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}
+.modal-bg{position:fixed;inset:0;background:#0009;z-index:2000;display:none;align-items:center;justify-content:center;padding:15px}
 .modal-bg.show{display:flex}
-.modal{width:min(100%,520px);background:#fff;border-radius:18px;padding:25px;max-height:90vh;overflow:auto}
-.field{margin:20px 0}
-.field label{display:block;font-weight:700;margin-bottom:9px}
+.modal{background:#fff;border-radius:17px;padding:25px;width:min(100%,520px);max-height:90vh;overflow:auto}
+.field{margin:19px 0}
+.field label{display:block;font-weight:700;margin-bottom:8px}
 .field select{width:100%}
-.saved{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line);gap:12px}
-footer{padding:25px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
-@media(max-width:900px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:650px){.wrap{padding:0 12px}.head{flex-wrap:wrap;padding:12px 0;gap:10px}nav{order:3;width:100%}.g2,.g3{grid-template-columns:1fr}.hero{padding:22px}.metric{padding:14px}.page{padding-top:20px}#map{height:290px}}
+.note{background:var(--soft);padding:14px;border-radius:10px;font-size:12px;color:var(--muted);line-height:1.6}
+footer{border-top:1px solid var(--line);padding:25px 0;font-size:12px;color:var(--muted)}
+@media(max-width:950px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.wrap{padding:0 12px}.head{flex-wrap:wrap;gap:10px;padding:12px 0}nav{order:3;width:100%}.g2,.g3{grid-template-columns:1fr}.page{padding-top:19px}.spot-head{padding:20px}.metric{padding:14px}#map{height:300px}}
 </style>
 </head>
 <body>
 
 <header>
 <div class="wrap head">
-  <div class="logo">SWELL<span>.</span></div>
-  <nav>
-    <button data-page="home" class="active">Home</button>
-    <button data-page="forecast">Forecast</button>
-    <button data-page="explore">Explore</button>
-    <button data-page="favorites">Favorites</button>
-  </nav>
-  <button class="btn alt" id="personalizeBtn">⚙ Personalize</button>
+ <div class="logo">SWELL<span>.</span></div>
+ <nav>
+  <button data-page="forecast" class="active">Forecast</button>
+  <button data-page="explore">Explore</button>
+  <button data-page="favorites">Favorites</button>
+ </nav>
+ <button class="btn alt" id="personalizeButton">⚙ Personalize</button>
 </div>
 </header>
 
 <main class="wrap">
 
-<section id="home" class="page active">
-  <div class="hero">
-    <div class="label">SWELL / SURF INTELLIGENCE</div>
-    <h1 id="heroName">Manhattan Beach</h1>
-    <p class="muted" id="heroStatus">Loading ocean forecast...</p>
-    <div class="row" style="justify-content:flex-start">
-      <button class="btn" data-page="forecast">Full forecast →</button>
-      <button class="btn alt" data-page="explore">Change spot</button>
-    </div>
-  </div>
-
-  <div class="grid g4" id="homeMetrics"></div>
-
-  <div class="row section">
-    <h2>Today's conditions</h2>
-    <span class="small">Marine and weather model estimates</span>
-  </div>
-  <div class="grid g2">
-    <div class="card pad" id="conditions"></div>
-    <div class="card pad" id="personalRating"></div>
-  </div>
-
-  <div class="row section">
-    <h2>14-day wave outlook</h2>
-    <button class="btn alt" data-page="forecast">Hourly details →</button>
-  </div>
-  <div class="grid g4" id="homeDays"></div>
-
-  <div class="row section">
-    <h2>Nearby surf spots</h2>
-    <button class="btn alt" data-page="explore">View all 50 →</button>
-  </div>
-  <div class="grid g3" id="nearby"></div>
-</section>
-
-<section id="forecast" class="page">
-  <div class="label">DETAILED SURF FORECAST</div>
-  <h1 id="forecastName">Manhattan Beach</h1>
-  <p class="muted" id="forecastRegion">South Bay, California</p>
+<section id="forecast" class="page active">
+ <div class="spot-head">
+  <div class="label">CALIFORNIA / SURF FORECAST</div>
+  <h1 id="spotTitle">Manhattan Beach Pier</h1>
+  <p class="muted" id="spotRegion">South Bay · California</p>
   <div class="toolbar">
-    <button class="btn" id="refresh">↻ Refresh</button>
-    <button class="btn alt" id="favBtn">☆ Favorite</button>
-    <button class="btn alt" data-page="explore">Change spot</button>
+   <button class="btn alt" data-page="explore">Change spot</button>
+   <button class="btn alt" id="favoriteButton">☆ Favorite</button>
+   <button class="btn alt" id="refreshButton">↻ Refresh</button>
   </div>
-  <p class="small" id="dataStatus">Loading...</p>
+ </div>
 
-  <div class="grid g4" id="forecastMetrics"></div>
+ <p class="small" id="status">Loading forecast...</p>
 
-  <div class="row section">
-    <h2>14-day forecast</h2>
-    <span class="small">Longer-range forecasts are less certain</span>
+ <div class="grid g4" id="mainMetrics"></div>
+
+ <div class="row section">
+  <h2>Conditions at a glance</h2>
+  <span class="small">Latest model conditions</span>
+ </div>
+ <div class="grid g2">
+  <div class="card pad" id="conditionDetails"></div>
+  <div class="card pad personal" id="personalCard"></div>
+ </div>
+
+ <div class="row section">
+  <h2>14-day surf forecast</h2>
+  <span class="small">Select a day to view hourly details</span>
+ </div>
+ <div class="grid g4" id="dayCards"></div>
+
+ <div class="row section">
+  <h2 id="hourlyTitle">Hourly forecast</h2>
+  <button class="btn alt" id="showAllHours">Show all hours</button>
+ </div>
+ <div class="card table-scroll">
+  <table>
+   <thead>
+    <tr>
+     <th>Time</th>
+     <th>Estimated surf</th>
+     <th>Offshore waves</th>
+     <th>Primary swell</th>
+     <th>Secondary swell</th>
+     <th>Wind</th>
+     <th>Wind dir.</th>
+     <th>Water</th>
+    </tr>
+   </thead>
+   <tbody id="hourlyRows"></tbody>
+  </table>
+ </div>
+
+ <div class="row section"><h2>Interactive forecast charts</h2></div>
+
+ <div class="grid">
+  <div class="card chart-card">
+   <h3>Wave height</h3>
+   <p class="small">Significant offshore wave height</p>
+   <div class="chart-scroll" id="waveScroll"><canvas id="waveChart"></canvas></div>
+   <div class="row" id="waveInfo"></div>
+   <input type="range" id="waveSlider" value="0">
   </div>
-  <div class="grid g4" id="forecastDays"></div>
 
-  <div class="row section"><h2>Hourly forecast</h2></div>
-  <div class="card forecast-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Time</th>
-          <th>Surf estimate</th>
-          <th>Offshore waves</th>
-          <th>Swell period</th>
-          <th>Swell direction</th>
-          <th>Wind</th>
-          <th>Wind direction</th>
-          <th>Water</th>
-        </tr>
-      </thead>
-      <tbody id="hourlyRows"></tbody>
-    </table>
+  <div class="card chart-card">
+   <h3>Wind speed</h3>
+   <div class="chart-scroll" id="windScroll"><canvas id="windChart"></canvas></div>
+   <div class="row" id="windInfo"></div>
+   <input type="range" id="windSlider" value="0">
   </div>
 
-  <div class="row section"><h2>Forecast graphs</h2></div>
-  <div class="grid">
-    <div class="card chartbox">
-      <h3>Offshore wave height</h3>
-      <p class="small">Significant wave height</p>
-      <div class="chartscroll" id="waveScroll"><canvas id="waveChart"></canvas></div>
-      <div class="row" id="waveInfo"></div>
-      <input type="range" id="waveSlider" value="0">
-    </div>
-    <div class="card chartbox">
-      <h3>Wind speed</h3>
-      <div class="chartscroll" id="windScroll"><canvas id="windChart"></canvas></div>
-      <div class="row" id="windInfo"></div>
-      <input type="range" id="windSlider" value="0">
-    </div>
-    <div class="card chartbox">
-      <h3>Sea-level trend</h3>
-      <p class="small">Modeled sea level, not official tide predictions</p>
-      <div class="chartscroll" id="tideScroll"><canvas id="tideChart"></canvas></div>
-      <div class="row" id="tideInfo"></div>
-      <input type="range" id="tideSlider" value="0">
-    </div>
+  <div class="card chart-card">
+   <h3>Sea-level trend</h3>
+   <p class="small">Modeled sea level, not official tide predictions</p>
+   <div class="chart-scroll" id="tideScroll"><canvas id="tideChart"></canvas></div>
+   <div class="row" id="tideInfo"></div>
+   <input type="range" id="tideSlider" value="0">
   </div>
+ </div>
 
-  <div class="row section"><h2>Additional details</h2></div>
-  <div class="grid g4" id="extraMetrics"></div>
-  <p class="small" style="margin-top:20px">
-    Surf ranges are experimental estimates, not measured breaking-wave heights.
-    Model data should not be used alone to make ocean safety decisions.
-  </p>
+ <div class="row section"><h2>More ocean information</h2></div>
+ <div class="grid g4" id="extraMetrics"></div>
+
+ <div class="note" style="margin-top:22px">
+  SWELL uses numerical marine and weather models. The estimated surf range is experimental and is not a verified breaking-wave forecast. Local bathymetry, swell exposure, tide, and observations can substantially change actual surf conditions. Personalization is a preference score, not a safety rating.
+ </div>
 </section>
 
 <section id="explore" class="page">
-  <div class="label">50 SOUTHERN CALIFORNIA LOCATIONS</div>
-  <h1>Explore surf spots.</h1>
-  <p class="muted">Search the South Bay, Palos Verdes, Los Angeles, and Malibu.</p>
-  <div class="toolbar">
-    <input class="search" id="search" placeholder="Search spots...">
-    <select id="region">
-      <option value="all">All areas</option>
-      <option value="South Bay">South Bay</option>
-      <option value="Palos Verdes">Palos Verdes</option>
-      <option value="Los Angeles">Los Angeles</option>
-      <option value="Malibu">Malibu</option>
-    </select>
-  </div>
-  <div class="card mapcard"><div id="map"></div></div>
-  <div class="row section">
-    <h2>Surf spots</h2>
-    <span class="small" id="spotCount"></span>
-  </div>
-  <div class="grid g3" id="spotCards"></div>
+ <div class="label">DISCOVER THE COAST</div>
+ <h1>Explore surf spots.</h1>
+ <p class="muted">50 surf locations from the South Bay to Malibu.</p>
+ <div class="toolbar">
+  <input class="search" id="search" placeholder="Search a surf spot...">
+  <select id="regionFilter">
+   <option value="all">All regions</option>
+   <option value="South Bay">South Bay</option>
+   <option value="Palos Verdes">Palos Verdes</option>
+   <option value="Los Angeles">Los Angeles</option>
+   <option value="Malibu">Malibu</option>
+  </select>
+ </div>
+ <div class="card map-card"><div id="map"></div></div>
+ <div class="row section">
+  <h2>All spots</h2>
+  <span class="small" id="spotCount"></span>
+ </div>
+ <div class="grid g3" id="spotCards"></div>
 </section>
 
 <section id="favorites" class="page">
-  <div class="label">YOUR COASTLINE</div>
-  <h1>Favorites.</h1>
-  <p class="muted">Quick access to the spots you save.</p>
-  <div class="card pad" id="saved"></div>
+ <div class="label">YOUR COASTLINE</div>
+ <h1>Favorites.</h1>
+ <p class="muted">Your saved surf spots, stored in this browser.</p>
+ <div class="card pad" id="savedSpots"></div>
 </section>
 
 </main>
 
 <div class="modal-bg" id="personalizeModal">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="personalizeTitle">
-    <div class="row">
-      <div>
-        <div class="label">OPTIONAL SETTINGS</div>
-        <h2 id="personalizeTitle" style="margin-top:8px">Personalize SWELL</h2>
-      </div>
-      <button class="btn alt" id="closeModal">✕</button>
-    </div>
-    <p class="small">
-      These settings change your personal surf rating,
-      not the actual forecast.
-    </p>
-
-    <div class="field">
-      <label for="skill">Surfing experience</label>
-      <select id="skill">
-        <option value="beginner">Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="advanced">Advanced</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="heightPref">Preferred wave height</label>
-      <select id="heightPref">
-        <option value="auto">Based on my skill</option>
-        <option value="1">1–2 ft</option>
-        <option value="2">2–3 ft</option>
-        <option value="3">3–5 ft</option>
-        <option value="5">5–7 ft</option>
-        <option value="7">7+ ft</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="windPref">Favorite wind conditions</label>
-      <select id="windPref">
-        <option value="light">Light wind / glassy</option>
-        <option value="offshore">Offshore wind</option>
-        <option value="any">No preference</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="boardLength">Usual board length</label>
-      <select id="boardLength">
-        <option value="short">Under 6'6" — shortboard</option>
-        <option value="mid">6'6"–8'0" — mid-length</option>
-        <option value="long">Over 8'0" — longboard</option>
-      </select>
-    </div>
-
-    <button class="btn" id="savePersonalization" style="width:100%">Save preferences</button>
+ <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="row">
+   <div>
+    <div class="label">YOUR SURF PROFILE</div>
+    <h2 id="modalTitle" style="margin:8px 0">Personalize SWELL</h2>
+   </div>
+   <button class="btn alt" id="closeModal">✕</button>
   </div>
+
+  <p class="small">
+   Tell SWELL what conditions you enjoy. The forecast stays the same for everyone.
+  </p>
+
+  <div class="field">
+   <label for="skill">Your surfing level</label>
+   <select id="skill">
+    <option value="beginner">Beginner</option>
+    <option value="intermediate">Intermediate</option>
+    <option value="advanced">Advanced</option>
+   </select>
+  </div>
+
+  <div class="field">
+   <label for="wavePreference">Favorite wave height</label>
+   <select id="wavePreference">
+    <option value="auto">Recommend for my skill</option>
+    <option value="1.5">1–2 ft</option>
+    <option value="2.5">2–3 ft</option>
+    <option value="4">3–5 ft</option>
+    <option value="6">5–7 ft</option>
+    <option value="8">7+ ft</option>
+   </select>
+  </div>
+
+  <div class="field">
+   <label for="windPreference">Preferred wind</label>
+   <select id="windPreference">
+    <option value="glassy">Glassy / light wind</option>
+    <option value="offshore">Offshore wind</option>
+    <option value="any">No preference</option>
+   </select>
+  </div>
+
+  <div class="field">
+   <label for="boardLength">Board length you normally use</label>
+   <select id="boardLength">
+    <option value="short">Under 6'6" — Shortboard</option>
+    <option value="mid">6'6"–8'0" — Mid-length</option>
+    <option value="long">Over 8'0" — Longboard</option>
+   </select>
+  </div>
+
+  <div class="note">
+   Personalization changes only your conditions match and board notes. It does not change wave heights, wind speeds, swell data, or forecast charts.
+  </div>
+
+  <button class="btn" id="savePreferences" style="width:100%;margin-top:20px">
+   Save my preferences
+  </button>
+ </div>
 </div>
 
 <footer>
 <div class="wrap">
-SWELL · Marine data from Open-Meteo · Weather data from Open-Meteo · Maps © OpenStreetMap contributors
+SWELL · Ocean intelligence · Open-Meteo marine and weather data · © OpenStreetMap contributors
 </div>
 </footer>
 
@@ -309,7 +311,7 @@ const $=id=>document.getElementById(id);
 const valid=v=>typeof v==="number"&&Number.isFinite(v);
 
 const RAW=[
-["El Porto",33.9008,-118.422,"South Bay"],
+["El Porto",33.9008,-118.4220,"South Bay"],
 ["Hammerland",33.906,-118.424,"South Bay"],
 ["Manhattan 26th Street",33.895,-118.417,"South Bay"],
 ["Bruce's Beach",33.894,-118.417,"South Bay"],
@@ -362,710 +364,792 @@ const RAW=[
 ];
 
 const spots=RAW.map((r,id)=>({
-  id,name:r[0],lat:r[1],lon:r[2],region:r[3]
+ id,name:r[0],lat:r[1],lon:r[2],region:r[3]
 }));
 
 function read(key,fallback){
-  try{
-    const v=JSON.parse(localStorage.getItem(key));
-    return v===null?fallback:v;
-  }catch{return fallback;}
+ try{
+  const v=JSON.parse(localStorage.getItem(key));
+  return v===null?fallback:v;
+ }catch{return fallback;}
 }
 function save(key,value){
-  try{localStorage.setItem(key,JSON.stringify(value));}
-  catch(e){console.warn("Storage unavailable",e);}
+ try{localStorage.setItem(key,JSON.stringify(value));}
+ catch(e){console.warn("Storage unavailable",e);}
 }
 
 let selected=spots[read("swellSelected",5)]||spots[5];
 let favorites=read("swellFavorites",[]);
 if(!Array.isArray(favorites))favorites=[];
-let prefs=read("swellPreferences",{
-  skill:"intermediate",
-  heightPref:"auto",
-  windPref:"light",
-  boardLength:"mid"
-});
+
+let prefs=Object.assign({
+ skill:"intermediate",
+ wavePreference:"auto",
+ windPreference:"glassy",
+ boardLength:"mid"
+},read("swellPersonalization",{}));
+
 let data=null;
-let activePage="home";
+let currentPage="forecast";
+let selectedDay=null;
 let map=null;
 let markers=[];
-let requestId=0;
+let requestNumber=0;
 
-function feet(v){
-  return valid(v)?(v*3.28084).toFixed(1)+" ft":"—";
+function ft(v){
+ return valid(v)?(v*3.28084).toFixed(1)+" ft":"—";
 }
 function mph(v){
-  return valid(v)?Math.round(v/1.609344)+" mph":"—";
+ return valid(v)?Math.round(v/1.609344)+" mph":"—";
 }
-function fahrenheit(v){
-  return valid(v)?Math.round(v*9/5+32)+"°F":"—";
+function temp(v){
+ return valid(v)?Math.round(v*9/5+32)+"°F":"—";
 }
-function period(v){
-  return valid(v)?v.toFixed(1)+" s":"—";
+function sec(v){
+ return valid(v)?v.toFixed(1)+" s":"—";
 }
 function compass(v){
-  if(!valid(v))return "—";
-  return ["N","NE","E","SE","S","SW","W","NW"]
-    [Math.round(v/45)%8];
+ if(!valid(v))return "—";
+ return ["N","NE","E","SE","S","SW","W","NW"][Math.round(v/45)%8];
 }
 function direction(v){
-  return valid(v)?Math.round(v)+"° "+compass(v):"—";
+ return valid(v)?Math.round(v)+"° "+compass(v):"—";
 }
 function clock(t){
-  if(!t)return "—";
-  const h=Number(t.slice(11,13));
-  const m=t.slice(14,16);
-  return (h%12||12)+":"+m+(h>=12?" PM":" AM");
+ if(!t)return "—";
+ const hour=Number(t.slice(11,13));
+ const minutes=t.slice(14,16);
+ return (hour%12||12)+":"+minutes+(hour>=12?" PM":" AM");
 }
-function day(t){
-  if(!t)return "—";
-  return new Date(t.slice(0,10)+"T12:00:00")
-    .toLocaleDateString("en-US",{
-      weekday:"short",month:"short",day:"numeric"
-    });
+function dateLabel(t){
+ if(!t)return "—";
+ return new Date(t.slice(0,10)+"T12:00:00")
+  .toLocaleDateString("en-US",{
+   weekday:"short",month:"short",day:"numeric"
+  });
 }
 function at(hourly,key,t){
-  const i=hourly?.time?.indexOf(t)??-1;
-  return i<0?null:hourly[key]?.[i]??null;
+ const i=hourly?.time?.indexOf(t)??-1;
+ return i<0?null:hourly[key]?.[i]??null;
 }
-function average(values){
-  const list=values.filter(valid);
-  return list.length
-    ?list.reduce((a,b)=>a+b,0)/list.length:null;
+function avg(values){
+ const list=values.filter(valid);
+ return list.length
+  ?list.reduce((a,b)=>a+b,0)/list.length:null;
 }
-
-// Experimental display range around offshore wave height.
-// Not a calibrated breaking-wave prediction.
-function surfRange(waveMeters,swellPeriod){
-  if(!valid(waveMeters))return "—";
-  const ft=waveMeters*3.28084;
-  const adjustment=valid(swellPeriod)
-    ?Math.max(.9,Math.min(1.12,1+(swellPeriod-10)*.012))
-    :1;
-  const center=ft*adjustment;
-  const low=Math.max(0,Math.floor(center-.5));
-  const high=Math.max(low+1,Math.ceil(center+.5));
-  return low+"–"+high+" ft";
-}
-
 function metric(label,value,note){
-  return `<div class="card metric">
-    <div class="label">${label}</div>
-    <div class="big">${value}</div>
-    <div class="small">${note}</div>
-  </div>`;
+ return `<div class="card metric">
+  <div class="label">${label}</div>
+  <div class="big">${value}</div>
+  <div class="small">${note}</div>
+ </div>`;
 }
 
-// Preference rating is deliberately separate from the forecast.
-// This is not a safety rating or a calibrated surf-quality model.
-function personalScore(waveMeters,windKmh,windDirection){
-  if(!valid(waveMeters))return null;
+// Experimental surf-height display.
+// It is not a locally calibrated breaking-wave model.
+function surfEstimate(waveMeters,periodSeconds){
+ if(!valid(waveMeters))return null;
+ const offshoreFeet=waveMeters*3.28084;
+ const factor=valid(periodSeconds)
+  ?Math.max(.9,Math.min(1.12,1+(periodSeconds-10)*.012))
+  :1;
+ const center=offshoreFeet*factor;
+ const low=Math.max(0,Math.floor(center-.5));
+ const high=Math.max(low+1,Math.ceil(center+.5));
+ return {low,high,center};
+}
+function surfRange(waveMeters,periodSeconds){
+ const estimate=surfEstimate(waveMeters,periodSeconds);
+ return estimate
+  ?estimate.low+"–"+estimate.high+" ft"
+  :"—";
+}
 
-  const waveFt=waveMeters*3.28084;
-  let ideal={beginner:1.5,intermediate:3.5,advanced:5.5}
-    [prefs.skill]||3.5;
+// Personalization is separate from raw forecast data.
+// A real offshore-wind calculation would require
+// verified shoreline orientation for each break.
+function personalizedRating(waveMeters,windKmh){
+ if(!valid(waveMeters))return null;
 
-  if(prefs.heightPref!=="auto"){
-    ideal=Number(prefs.heightPref);
+ const estimate=surfEstimate(waveMeters,null);
+ const height=estimate.center;
+
+ let ideal={
+  beginner:1.5,
+  intermediate:3.5,
+  advanced:5.5
+ }[prefs.skill]||3.5;
+
+ if(prefs.wavePreference!=="auto"){
+  ideal=Number(prefs.wavePreference);
+ }
+
+ let score=88-Math.abs(height-ideal)*12;
+
+ if(valid(windKmh)){
+  if(prefs.windPreference==="glassy"){
+   score-=Math.max(0,windKmh-8)*1.2;
+  }else if(prefs.windPreference==="offshore"){
+   // Light wind is rewarded, but offshore direction
+   // is not claimed without shoreline data.
+   score-=Math.max(0,windKmh-12)*.8;
   }
+ }
 
-  let score=85-Math.abs(waveFt-ideal)*12;
+ // Board length contributes only a small preference adjustment.
+ if(prefs.boardLength==="long"&&height<=3)score+=5;
+ if(prefs.boardLength==="short"&&height>=3)score+=4;
+ if(prefs.boardLength==="mid"&&height>=2&&height<=5)score+=4;
 
-  if(valid(windKmh)){
-    if(prefs.windPref==="light"){
-      score-=Math.max(0,windKmh-8)*1.3;
-    }else if(prefs.windPref==="offshore"){
-      // Direction alone cannot determine offshore wind
-      // without a verified shoreline orientation.
-      score-=Math.max(0,windKmh-12)*.8;
-    }
-  }
-
-  return Math.round(Math.max(0,Math.min(100,score)));
+ return Math.max(0,Math.min(100,Math.round(score)));
 }
 
 function renderPersonal(){
-  const m=data?.marine?.current||{};
-  const w=data?.weather?.current||{};
-  const score=personalScore(
-    m.wave_height,w.wind_speed_10m,w.wind_direction_10m
-  );
+ const m=data?.marine?.current||{};
+ const w=data?.weather?.current||{};
+ const score=personalizedRating(m.wave_height,w.wind_speed_10m);
 
-  let label="Unavailable",cls="";
-  if(score!==null){
-    if(score>=75){label="Favorable";cls="good";}
-    else if(score>=45){label="Mixed";cls="fair";}
-    else{label="Less favorable";cls="poor";}
-  }
+ let label="Unavailable",cls="";
+ if(score!==null){
+  if(score>=75){label="Favorable";cls="good";}
+  else if(score>=45){label="Mixed";cls="fair";}
+  else{label="Less favorable";cls="poor";}
+ }
 
-  $("personalRating").innerHTML=`
-    <div class="label">YOUR PERSONAL SURF OUTLOOK</div>
-    <h2 style="margin:13px 0">${label}</h2>
-    <span class="tag ${cls}">
-      ${score===null?"No data":score+"/100"}
-    </span>
-    <p class="small" style="margin-top:15px">
-      Based on your saved preferences.
-      This is a simple preference match, not a safety assessment.
-    </p>
-    <button class="btn alt" id="inlinePersonalize">
-      Adjust preferences
-    </button>`;
+ const boardName={
+  short:"Shortboard",
+  mid:"Mid-length",
+  long:"Longboard"
+ }[prefs.boardLength];
 
-  $("inlinePersonalize").onclick=openModal;
+ $("personalCard").innerHTML=`
+  <div class="label">PERSONALIZED CONDITIONS</div>
+  <h2 style="margin:12px 0">${label}</h2>
+  <span class="tag ${cls}">
+   ${score===null?"No data":score+"/100"}
+  </span>
+  <div class="condition-row">
+   <span>Experience</span><strong>${prefs.skill}</strong>
+  </div>
+  <div class="condition-row">
+   <span>Your board</span><strong>${boardName}</strong>
+  </div>
+  <div class="condition-row">
+   <span>Preferred wind</span>
+   <strong>${prefs.windPreference}</strong>
+  </div>
+  <p class="small" style="margin-top:13px">
+   Experimental preference match, not a surf safety rating.
+  </p>
+  <button class="btn alt" id="editPersonal">Edit preferences</button>`;
+
+ $("editPersonal").onclick=openModal;
 }
 
 function renderConditions(){
-  const m=data?.marine?.current||{};
-  const w=data?.weather?.current||{};
-  const d=data?.weather?.daily||{};
+ const m=data?.marine?.current||{};
+ const w=data?.weather?.current||{};
+ const d=data?.weather?.daily||{};
 
-  $("conditions").innerHTML=`
-    <div class="label">CURRENT MARINE CONDITIONS</div>
-    <div class="saved"><span>Primary swell</span>
-      <strong>${feet(m.swell_wave_height)}</strong></div>
-    <div class="saved"><span>Swell period</span>
-      <strong>${period(m.swell_wave_period)}</strong></div>
-    <div class="saved"><span>Swell direction</span>
-      <strong>${direction(m.swell_wave_direction)}</strong></div>
-    <div class="saved"><span>Wind</span>
-      <strong>${mph(w.wind_speed_10m)}</strong></div>
-    <div class="saved"><span>Sunrise</span>
-      <strong>${clock(d.sunrise?.[0])}</strong></div>
-    <div class="saved"><span>Sunset</span>
-      <strong>${clock(d.sunset?.[0])}</strong></div>`;
+ const rows=[
+  ["Primary swell",ft(m.swell_wave_height)],
+  ["Swell period",sec(m.swell_wave_period)],
+  ["Swell direction",direction(m.swell_wave_direction)],
+  ["Wind",mph(w.wind_speed_10m)],
+  ["Wind direction",direction(w.wind_direction_10m)],
+  ["Water temperature",temp(m.sea_surface_temperature)],
+  ["Sunrise",clock(d.sunrise?.[0])],
+  ["Sunset",clock(d.sunset?.[0])]
+ ];
+
+ $("conditionDetails").innerHTML=
+  '<div class="label">OCEAN CONDITIONS</div>'+
+  rows.map(r=>`
+   <div class="condition-row">
+    <span>${r[0]}</span><strong>${r[1]}</strong>
+   </div>`).join("");
 }
 
-function navigate(name){
-  if(!$(name))return;
-  activePage=name;
-  document.querySelectorAll(".page").forEach(p=>{
-    p.classList.toggle("active",p.id===name);
-  });
-  document.querySelectorAll("nav button").forEach(b=>{
-    b.classList.toggle("active",b.dataset.page===name);
-  });
-  window.scrollTo(0,0);
-  if(name==="explore")setTimeout(initMap,100);
-  if(name==="forecast")setTimeout(drawCharts,50);
-  if(name==="favorites")renderFavorites();
+function navigate(page){
+ if(!$(page))return;
+ currentPage=page;
+ document.querySelectorAll(".page").forEach(el=>{
+  el.classList.toggle("active",el.id===page);
+ });
+ document.querySelectorAll("nav button").forEach(el=>{
+  el.classList.toggle("active",el.dataset.page===page);
+ });
+ window.scrollTo(0,0);
+ if(page==="explore")setTimeout(initMap,80);
+ if(page==="forecast")setTimeout(drawAllCharts,50);
+ if(page==="favorites")renderFavorites();
 }
 
 function selectSpot(id){
-  if(!spots[id])return;
-  selected=spots[id];
-  save("swellSelected",id);
-  data=null;
-  requestId++;
-  render();
-  navigate("forecast");
-  load();
+ if(!spots[id])return;
+ selected=spots[id];
+ save("swellSelected",id);
+ data=null;
+ selectedDay=null;
+ requestNumber++;
+ render();
+ navigate("forecast");
+ loadForecast();
 }
 
 function toggleFavorite(id){
-  if(favorites.includes(id)){
-    favorites=favorites.filter(x=>x!==id);
-  }else{
-    favorites.push(id);
-  }
-  save("swellFavorites",favorites);
-  renderFavorites();
-  renderSpots();
-  render();
+ if(favorites.includes(id)){
+  favorites=favorites.filter(x=>x!==id);
+ }else{
+  favorites.push(id);
+ }
+ save("swellFavorites",favorites);
+ renderFavorites();
+ renderSpots();
+ render();
 }
 
 function spotCard(s){
-  return `<div class="card spot">
-    <div class="label">${s.region}</div>
-    <h3>${s.name}</h3>
-    <div class="row">
-      <button class="btn" data-select="${s.id}">Forecast →</button>
-      <button class="btn alt" data-fav="${s.id}">
-        ${favorites.includes(s.id)?"★":"☆"}
-      </button>
-    </div>
-  </div>`;
+ return `<div class="card spot-card">
+  <div class="label">${s.region}</div>
+  <h3>${s.name}</h3>
+  <div class="row">
+   <button class="btn" data-select="${s.id}">Forecast →</button>
+   <button class="btn alt" data-fav="${s.id}">
+    ${favorites.includes(s.id)?"★":"☆"}
+   </button>
+  </div>
+ </div>`;
 }
 
 function filteredSpots(){
-  const q=$("search").value.toLowerCase().trim();
-  const region=$("region").value;
-  return spots.filter(s=>
-    s.name.toLowerCase().includes(q)&&
-    (region==="all"||s.region===region)
-  );
+ const q=$("search").value.toLowerCase().trim();
+ const region=$("regionFilter").value;
+ return spots.filter(s=>
+  s.name.toLowerCase().includes(q)&&
+  (region==="all"||s.region===region)
+ );
 }
 
 function renderSpots(){
-  const list=filteredSpots();
-  $("spotCards").innerHTML=list.map(spotCard).join("");
-  $("spotCount").textContent=list.length+" spots";
-  if(map)updateMarkers(list);
+ const list=filteredSpots();
+ $("spotCards").innerHTML=list.map(spotCard).join("");
+ $("spotCount").textContent=list.length+" spots";
+ if(map)updateMarkers(list);
 }
 
 function renderFavorites(){
-  const list=spots.filter(s=>favorites.includes(s.id));
-  $("saved").innerHTML=list.length
-    ?list.map(s=>`
-      <div class="saved">
-        <div><strong>${s.name}</strong>
-          <div class="small">${s.region}</div></div>
-        <div class="row">
-          <button class="btn" data-select="${s.id}">Forecast</button>
-          <button class="btn alt" data-fav="${s.id}">Remove</button>
-        </div>
-      </div>`).join("")
-    :"<p class='muted'>No favorites yet. Save spots from Explore.</p>";
+ const list=spots.filter(s=>favorites.includes(s.id));
+ $("savedSpots").innerHTML=list.length
+  ?list.map(s=>`
+   <div class="saved">
+    <div><strong>${s.name}</strong>
+     <div class="small">${s.region}</div>
+    </div>
+    <div class="row">
+     <button class="btn" data-select="${s.id}">Forecast</button>
+     <button class="btn alt" data-fav="${s.id}">Remove</button>
+    </div>
+   </div>`).join("")
+  :'<p class="muted">No favorites yet. Save spots from Explore.</p>';
 }
 
 function initMap(){
-  if(map){map.invalidateSize();return;}
-  if(typeof L==="undefined"){
-    $("map").textContent="Map unavailable. Search still works.";
-    return;
-  }
+ if(map){map.invalidateSize();return;}
+ if(typeof L==="undefined"){
+  $("map").textContent="Map unavailable. Search still works.";
+  return;
+ }
 
-  map=L.map("map",{scrollWheelZoom:false})
-    .setView([33.94,-118.46],10);
+ map=L.map("map",{scrollWheelZoom:false})
+  .setView([33.94,-118.46],10);
 
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {maxZoom:18,attribution:"© OpenStreetMap contributors"}
-  ).addTo(map);
+ L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {maxZoom:18,attribution:"© OpenStreetMap contributors"}
+ ).addTo(map);
 
-  updateMarkers(filteredSpots());
+ updateMarkers(filteredSpots());
 }
 
 function updateMarkers(list){
-  if(!map)return;
-  markers.forEach(m=>map.removeLayer(m));
-  markers=[];
+ if(!map)return;
+ markers.forEach(m=>map.removeLayer(m));
+ markers=[];
 
-  list.forEach(s=>{
-    const marker=L.circleMarker([s.lat,s.lon],{
-      radius:7,color:"#fff",weight:2,
-      fillColor:"#141b23",fillOpacity:1
-    }).addTo(map);
+ list.forEach(s=>{
+  const marker=L.circleMarker([s.lat,s.lon],{
+   radius:7,color:"#fff",weight:2,
+   fillColor:"#15202b",fillOpacity:1
+  }).addTo(map);
 
-    const popup=document.createElement("div");
-    const title=document.createElement("strong");
-    title.textContent=s.name;
+  const popup=document.createElement("div");
+  const name=document.createElement("strong");
+  name.textContent=s.name;
 
-    const button=document.createElement("button");
-    button.textContent="View forecast →";
-    button.style.cssText=
-      "display:block;margin-top:8px;padding:8px;background:#141b23;color:white;border:0;border-radius:7px";
-    button.onclick=()=>selectSpot(s.id);
+  const button=document.createElement("button");
+  button.textContent="View forecast →";
+  button.style.cssText=
+   "display:block;margin-top:9px;padding:9px;background:#15202b;color:#fff;border:0;border-radius:7px";
+  button.onclick=()=>selectSpot(s.id);
 
-    popup.append(title,button);
-    marker.bindPopup(popup);
-    markers.push(marker);
-  });
+  popup.append(name,button);
+  marker.bindPopup(popup);
+  markers.push(marker);
+ });
 }
 
-function api(base,params,spot){
-  const url=new URL(base);
-  url.searchParams.set("latitude",spot.lat);
-  url.searchParams.set("longitude",spot.lon);
-  url.searchParams.set("timezone","America/Los_Angeles");
-  url.searchParams.set("forecast_days","14");
-  Object.entries(params).forEach(([k,v])=>{
-    url.searchParams.set(k,v);
-  });
-  return url.toString();
+function apiURL(base,params,spot,days){
+ const url=new URL(base);
+ url.searchParams.set("latitude",spot.lat);
+ url.searchParams.set("longitude",spot.lon);
+ url.searchParams.set("timezone","America/Los_Angeles");
+ url.searchParams.set("forecast_days",days);
+ Object.entries(params).forEach(([k,v])=>{
+  url.searchParams.set(k,v);
+ });
+ return url.toString();
 }
 
 async function getJSON(url){
-  const response=await fetch(url);
-  if(!response.ok)throw Error("HTTP "+response.status);
-  const result=await response.json();
-  if(result.error)throw Error(result.reason||"API error");
-  return result;
+ const response=await fetch(url);
+ if(!response.ok)throw Error("HTTP "+response.status);
+ const result=await response.json();
+ if(result.error)throw Error(result.reason||"API error");
+ return result;
 }
 
-async function load(){
-  const id=++requestId;
-  const spot={...selected};
-  $("refresh").disabled=true;
-  $("dataStatus").textContent="Loading forecast models...";
-  $("heroStatus").textContent="Loading ocean conditions...";
+async function loadForecast(){
+ const id=++requestNumber;
+ const spot={...selected};
 
-  const marine=api(
-    "https://marine-api.open-meteo.com/v1/marine",
-    {
-      current:[
-        "wave_height","wave_period","wave_direction",
-        "swell_wave_height","swell_wave_period",
-        "swell_wave_direction","sea_surface_temperature"
-      ].join(","),
-      hourly:[
-        "wave_height","wave_period","wave_direction",
-        "swell_wave_height","swell_wave_period",
-        "swell_wave_direction","sea_surface_temperature",
-        "sea_level_height_msl"
-      ].join(",")
-    },spot
-  );
+ $("refreshButton").disabled=true;
+ $("status").textContent="Loading marine and weather forecasts...";
 
-  const weather=api(
-    "https://api.open-meteo.com/v1/forecast",
-    {
-      current:[
-        "wind_speed_10m","wind_direction_10m",
-        "wind_gusts_10m","temperature_2m"
-      ].join(","),
-      hourly:[
-        "wind_speed_10m","wind_direction_10m",
-        "wind_gusts_10m"
-      ].join(","),
-      daily:"sunrise,sunset",
-      wind_speed_unit:"kmh"
-    },spot
-  );
+ const marine=apiURL(
+  "https://marine-api.open-meteo.com/v1/marine",
+  {
+   current:[
+    "wave_height","wave_period","wave_direction",
+    "swell_wave_height","swell_wave_period",
+    "swell_wave_direction","sea_surface_temperature"
+   ].join(","),
+   hourly:[
+    "wave_height","wave_period","wave_direction",
+    "swell_wave_height","swell_wave_period",
+    "swell_wave_direction",
+    "secondary_swell_wave_height",
+    "secondary_swell_wave_period",
+    "secondary_swell_wave_direction",
+    "sea_surface_temperature",
+    "sea_level_height_msl"
+   ].join(",")
+  },spot,14
+ );
 
-  const results=await Promise.allSettled([
-    getJSON(marine),getJSON(weather)
-  ]);
+ const weather=apiURL(
+  "https://api.open-meteo.com/v1/forecast",
+  {
+   current:[
+    "wind_speed_10m","wind_direction_10m",
+    "wind_gusts_10m","temperature_2m"
+   ].join(","),
+   hourly:[
+    "wind_speed_10m","wind_direction_10m",
+    "wind_gusts_10m"
+   ].join(","),
+   daily:"sunrise,sunset",
+   wind_speed_unit:"kmh"
+  },spot,14
+ );
 
-  if(id!==requestId)return;
+ const results=await Promise.allSettled([
+  getJSON(marine),getJSON(weather)
+ ]);
 
-  data={
-    marine:results[0].status==="fulfilled"
-      ?results[0].value:null,
-    weather:results[1].status==="fulfilled"
-      ?results[1].value:null
-  };
+ if(id!==requestNumber)return;
 
-  $("refresh").disabled=false;
-  $("dataStatus").textContent=
-    "Marine: "+(data.marine?"available":"unavailable")+
-    " · Weather: "+(data.weather?"available":"unavailable");
+ data={
+  marine:results[0].status==="fulfilled"
+   ?results[0].value:null,
+  weather:results[1].status==="fulfilled"
+   ?results[1].value:null
+ };
 
-  $("heroStatus").textContent=
-    data.marine?"Latest available model conditions":
-    "Marine forecast unavailable";
+ $("refreshButton").disabled=false;
 
-  render();
+ $("status").textContent=
+  "Marine model: "+(data.marine?"available":"unavailable")+
+  " · Weather model: "+(data.weather?"available":"unavailable")+
+  " · Forecasts are estimates";
+
+ render();
 }
 
 function render(){
-  const m=data?.marine?.current||{};
-  const w=data?.weather?.current||{};
-  const d=data?.weather?.daily||{};
+ const m=data?.marine?.current||{};
+ const w=data?.weather?.current||{};
+ const mh=data?.marine?.hourly||{};
+ const d=data?.weather?.daily||{};
 
-  $("heroName").textContent=selected.name;
-  $("forecastName").textContent=selected.name;
-  $("forecastRegion").textContent=
-    selected.region+" · Southern California";
+ $("spotTitle").textContent=selected.name;
+ $("spotRegion").textContent=selected.region+" · California";
+ $("favoriteButton").textContent=
+  favorites.includes(selected.id)?"★ Saved":"☆ Favorite";
 
-  $("favBtn").textContent=
-    favorites.includes(selected.id)?"★ Saved":"☆ Favorite";
+ $("mainMetrics").innerHTML=[
+  metric(
+   "Estimated surf",
+   surfRange(m.wave_height,m.swell_wave_period),
+   "Experimental breaking-wave range"
+  ),
+  metric("Offshore waves",ft(m.wave_height),"Significant wave height"),
+  metric("Swell period",sec(m.swell_wave_period),"Primary swell"),
+  metric("Wind",mph(w.wind_speed_10m),direction(w.wind_direction_10m))
+ ].join("");
 
-  const metrics=[
-    metric("Estimated surf",surfRange(
-      m.wave_height,m.swell_wave_period
-    ),"Experimental range"),
-    metric("Offshore waves",feet(m.wave_height),
-      "Significant wave height"),
-    metric("Swell period",period(m.swell_wave_period),
-      "Primary swell"),
-    metric("Wind",mph(w.wind_speed_10m),
-      direction(w.wind_direction_10m))
-  ].join("");
+ const first=mh.time?.[0];
 
-  $("homeMetrics").innerHTML=metrics;
-  $("forecastMetrics").innerHTML=metrics;
+ $("extraMetrics").innerHTML=[
+  metric("Primary swell",ft(m.swell_wave_height),"Height"),
+  metric("Primary direction",direction(m.swell_wave_direction),"Direction"),
+  metric("Secondary swell",ft(at(mh,"secondary_swell_wave_height",first)),"Height"),
+  metric("Secondary period",sec(at(mh,"secondary_swell_wave_period",first)),"Period"),
+  metric("Water temperature",temp(m.sea_surface_temperature),"Sea surface"),
+  metric("Air temperature",temp(w.temperature_2m),"At 2 meters"),
+  metric("Wind gusts",mph(w.wind_gusts_10m),"10-meter gusts"),
+  metric("Sunrise",clock(d.sunrise?.[0]),"Local time"),
+  metric("Sunset",clock(d.sunset?.[0]),"Local time")
+ ].join("");
 
-  $("extraMetrics").innerHTML=[
-    metric("Primary swell",feet(m.swell_wave_height),"Swell height"),
-    metric("Swell direction",direction(m.swell_wave_direction),"Primary swell"),
-    metric("Water temperature",fahrenheit(m.sea_surface_temperature),"Sea surface"),
-    metric("Wind gusts",mph(w.wind_gusts_10m),"10-meter gusts"),
-    metric("Air temperature",fahrenheit(w.temperature_2m),"Current air"),
-    metric("Wave direction",direction(m.wave_direction),"Combined waves"),
-    metric("Sunrise",clock(d.sunrise?.[0]),"Local time"),
-    metric("Sunset",clock(d.sunset?.[0]),"Local time")
-  ].join("");
+ renderConditions();
+ renderPersonal();
+ renderDays();
+ renderHourly();
 
-  $("nearby").innerHTML=
-    [0,5,8,11,40,41].map(i=>spotCard(spots[i])).join("");
-
-  renderConditions();
-  renderPersonal();
-  renderDays();
-  renderHourly();
-
-  if(activePage==="forecast")drawCharts();
+ if(currentPage==="forecast")drawAllCharts();
 }
 
 function renderDays(){
-  const m=data?.marine?.hourly;
-  if(!m?.time?.length){
-    const message="<div class='card pad'>Forecast unavailable.</div>";
-    $("homeDays").innerHTML=message;
-    $("forecastDays").innerHTML=message;
-    return;
-  }
+ const m=data?.marine?.hourly;
 
-  const dates=[...new Set(m.time.map(t=>t.slice(0,10)))];
-  const html=dates.slice(0,14).map(date=>{
-    const indices=m.time.map((t,i)=>
-      t.startsWith(date)?i:-1
-    ).filter(i=>i>=0);
+ if(!m?.time?.length){
+  $("dayCards").innerHTML=
+   '<div class="card pad">Daily forecast unavailable.</div>';
+  return;
+ }
 
-    const waves=indices.map(i=>m.wave_height?.[i]).filter(valid);
-    const periods=indices.map(i=>m.swell_wave_period?.[i]).filter(valid);
+ const dates=[...new Set(m.time.map(t=>t.slice(0,10)))];
 
-    const avgWave=average(waves);
-    const avgPeriod=average(periods);
+ $("dayCards").innerHTML=dates.slice(0,14).map((date,index)=>{
+  const indices=m.time.map((t,i)=>
+   t.startsWith(date)?i:-1
+  ).filter(i=>i>=0);
 
-    const uncertain=dates.indexOf(date)>=7;
+  const waves=indices.map(i=>m.wave_height?.[i]).filter(valid);
+  const periods=indices.map(i=>m.swell_wave_period?.[i]).filter(valid);
 
-    return `<div class="card day">
-      <div class="label">${day(date)}</div>
-      <div class="big">${surfRange(avgWave,avgPeriod)}</div>
-      <div class="small">Estimated surf</div>
-      <div class="small">Offshore: ${feet(avgWave)}</div>
-      <div class="small">Period: ${period(avgPeriod)}</div>
-      <div style="margin-top:10px">
-        <span class="tag">${uncertain?"Extended outlook":"Near-term"}</span>
-      </div>
-    </div>`;
-  }).join("");
+  const wave=avg(waves);
+  const swellPeriod=avg(periods);
 
-  $("homeDays").innerHTML=html;
-  $("forecastDays").innerHTML=html;
+  const selectedClass=selectedDay===date?" selected":"";
+  const max=waves.length?Math.max(...waves)*3.28084:0;
+
+  return `<div class="card day-card${selectedClass}" data-day="${date}">
+   <div class="label">${dateLabel(date)}</div>
+   <div class="big">${surfRange(wave,swellPeriod)}</div>
+   <div class="small">Estimated surf range</div>
+   <div class="small">Offshore: ${ft(wave)}</div>
+   <div class="small">Period: ${sec(swellPeriod)}</div>
+   <div class="mini-bar">
+    <i style="width:${Math.min(100,max/12*100)}%"></i>
+   </div>
+   <div style="margin-top:12px">
+    <span class="tag">${index>=7?"Extended outlook":"Near-term"}</span>
+   </div>
+  </div>`;
+ }).join("");
 }
 
 function renderHourly(){
-  const m=data?.marine?.hourly;
-  const w=data?.weather?.hourly;
+ const m=data?.marine?.hourly;
+ const w=data?.weather?.hourly;
 
-  if(!m?.time?.length){
-    $("hourlyRows").innerHTML=
-      "<tr><td colspan='8'>Hourly forecast unavailable.</td></tr>";
-    return;
-  }
+ if(!m?.time?.length){
+  $("hourlyRows").innerHTML=
+   '<tr><td colspan="8">Hourly forecast unavailable.</td></tr>';
+  return;
+ }
 
-  const current=data?.marine?.current?.time||m.time[0];
-  let start=m.time.findIndex(t=>t>=current.slice(0,13));
-  if(start<0)start=0;
+ const current=data?.marine?.current?.time||m.time[0];
 
-  $("hourlyRows").innerHTML=m.time.slice(start,start+120)
-    .map(t=>{
-      const wave=at(m,"wave_height",t);
-      const swellPeriod=at(m,"swell_wave_period",t);
-      return `<tr>
-        <td>${day(t)} ${clock(t)}</td>
-        <td><strong>${surfRange(wave,swellPeriod)}</strong></td>
-        <td>${feet(wave)}</td>
-        <td>${period(swellPeriod)}</td>
-        <td>${direction(at(m,"swell_wave_direction",t))}</td>
-        <td>${mph(at(w,"wind_speed_10m",t))}</td>
-        <td>${direction(at(w,"wind_direction_10m",t))}</td>
-        <td>${fahrenheit(at(m,"sea_surface_temperature",t))}</td>
-      </tr>`;
-    }).join("");
+ let times=m.time.filter(t=>
+  selectedDay?t.startsWith(selectedDay):t>=current.slice(0,13)
+ );
+
+ if(!selectedDay)times=times.slice(0,120);
+
+ $("hourlyTitle").textContent=selectedDay
+  ?"Hourly forecast · "+dateLabel(selectedDay)
+  :"Hourly forecast · Next 5 days";
+
+ $("hourlyRows").innerHTML=times.map(t=>{
+  const wave=at(m,"wave_height",t);
+  const swellPeriod=at(m,"swell_wave_period",t);
+
+  const primary=ft(at(m,"swell_wave_height",t))+
+   " / "+sec(swellPeriod);
+
+  const secondary=ft(at(m,"secondary_swell_wave_height",t))+
+   " / "+sec(at(m,"secondary_swell_wave_period",t));
+
+  return `<tr>
+   <td>${dateLabel(t)} ${clock(t)}</td>
+   <td><strong>${surfRange(wave,swellPeriod)}</strong></td>
+   <td>${ft(wave)}</td>
+   <td>${primary}</td>
+   <td>${secondary}</td>
+   <td>${mph(at(w,"wind_speed_10m",t))}</td>
+   <td>${direction(at(w,"wind_direction_10m",t))}</td>
+   <td>${temp(at(m,"sea_surface_temperature",t))}</td>
+  </tr>`;
+ }).join("")||
+ '<tr><td colspan="8">No hourly data for this day.</td></tr>';
 }
 
-function series(kind){
-  const m=data?.marine?.hourly||{};
-  const w=data?.weather?.hourly||{};
+function chartSeries(kind){
+ const m=data?.marine?.hourly||{};
+ const w=data?.weather?.hourly||{};
 
-  if(kind==="wave")return{
-    times:m.time||[],values:m.wave_height||[],
-    convert:v=>v*3.28084,format:feet,color:"#167ac6"
-  };
-  if(kind==="wind")return{
-    times:w.time||[],values:w.wind_speed_10m||[],
-    convert:v=>v/1.609344,format:mph,color:"#e49a43"
-  };
-  return{
-    times:m.time||[],values:m.sea_level_height_msl||[],
-    convert:v=>v*3.28084,
-    format:v=>valid(v)?(v*3.28084).toFixed(2)+" ft":"—",
-    color:"#8a71d9"
-  };
+ if(kind==="wave")return{
+  times:m.time||[],
+  values:m.wave_height||[],
+  convert:v=>v*3.28084,
+  format:ft,
+  color:"#197cc8"
+ };
+
+ if(kind==="wind")return{
+  times:w.time||[],
+  values:w.wind_speed_10m||[],
+  convert:v=>v/1.609344,
+  format:mph,
+  color:"#e49b44"
+ };
+
+ return{
+  times:m.time||[],
+  values:m.sea_level_height_msl||[],
+  convert:v=>v*3.28084,
+  format:v=>valid(v)?(v*3.28084).toFixed(2)+" ft":"—",
+  color:"#8a70da"
+ };
 }
 
-function drawCharts(){
-  ["wave","wind","tide"].forEach(drawChart);
+function drawAllCharts(){
+ ["wave","wind","tide"].forEach(drawChart);
 }
 
 function drawChart(kind){
-  const s=series(kind);
-  const canvas=$(kind+"Chart");
-  const scroll=$(kind+"Scroll");
-  const slider=$(kind+"Slider");
-  const info=$(kind+"Info");
+ const s=chartSeries(kind);
+ const canvas=$(kind+"Chart");
+ const scroll=$(kind+"Scroll");
+ const slider=$(kind+"Slider");
+ const info=$(kind+"Info");
 
-  const n=s.times.length;
-  const left=48,step=26,top=18,bottom=40,h=215;
-  const width=Math.max(
-    scroll.clientWidth-2,left+30+Math.max(1,n-1)*step
-  );
-  const dpr=window.devicePixelRatio||1;
+ const n=s.times.length;
+ const left=52,step=27,top=20,bottom=42,height=220;
+ const width=Math.max(
+  scroll.clientWidth-2,
+  left+35+Math.max(1,n-1)*step
+ );
+ const dpr=window.devicePixelRatio||1;
 
-  canvas.style.width=width+"px";
-  canvas.style.height=h+"px";
-  canvas.width=Math.round(width*dpr);
-  canvas.height=Math.round(h*dpr);
+ canvas.style.width=width+"px";
+ canvas.style.height=height+"px";
+ canvas.width=Math.round(width*dpr);
+ canvas.height=Math.round(height*dpr);
 
-  const ctx=canvas.getContext("2d");
-  ctx.scale(dpr,dpr);
-  ctx.font="11px Arial";
+ const ctx=canvas.getContext("2d");
+ ctx.scale(dpr,dpr);
+ ctx.font="11px Arial";
+ ctx.textBaseline="middle";
 
-  slider.max=Math.max(0,n-1);
+ slider.max=Math.max(0,n-1);
 
-  const available=s.values.filter(valid).map(s.convert);
+ const values=s.values.filter(valid).map(s.convert);
 
-  if(!available.length){
-    ctx.fillStyle="#78828c";
-    ctx.fillText("Forecast data unavailable",20,100);
-    info.textContent="No data";
-    return;
-  }
+ if(!values.length){
+  ctx.fillStyle="#788592";
+  ctx.fillText("Chart data unavailable",20,110);
+  info.textContent="No data";
+  return;
+ }
 
-  let min=Math.min(...available);
-  let max=Math.max(...available);
-  const padding=(max-min||1)*.2;
-  min-=padding;max+=padding;
+ let min=Math.min(...values);
+ let max=Math.max(...values);
+ const padding=(max-min||1)*.2;
+ min-=padding;
+ max+=padding;
 
-  const x=i=>left+i*step;
-  const y=v=>top+(max-v)/(max-min)*(h-top-bottom);
+ const x=i=>left+i*step;
+ const y=v=>top+(max-v)/(max-min)*(height-top-bottom);
 
-  for(let i=0;i<=4;i++){
-    const v=min+(max-min)*i/4;
-    const yy=y(v);
-    ctx.strokeStyle="#dce3e8";
-    ctx.beginPath();
-    ctx.moveTo(left,yy);
-    ctx.lineTo(width-10,yy);
-    ctx.stroke();
-    ctx.fillStyle="#78828c";
-    ctx.textAlign="right";
-    ctx.fillText(v.toFixed(1),left-8,yy+3);
-  }
+ for(let i=0;i<=4;i++){
+  const v=min+(max-min)*i/4;
+  const yy=y(v);
 
-  ctx.textAlign="center";
-  for(let i=0;i<n;i+=8){
-    ctx.fillStyle="#78828c";
-    ctx.fillText(clock(s.times[i]),x(i),h-12);
-  }
-
+  ctx.strokeStyle="#e0e6eb";
+  ctx.lineWidth=1;
   ctx.beginPath();
-  let started=false;
-
-  s.values.forEach((v,i)=>{
-    if(!valid(v)){started=false;return;}
-    if(!started)ctx.moveTo(x(i),y(s.convert(v)));
-    else ctx.lineTo(x(i),y(s.convert(v)));
-    started=true;
-  });
-
-  ctx.strokeStyle=s.color;
-  ctx.lineWidth=3;
+  ctx.moveTo(left,yy);
+  ctx.lineTo(width-15,yy);
   ctx.stroke();
 
-  const index=Math.max(
-    0,Math.min(n-1,Number(slider.value)||0)
-  );
-  const raw=s.values[index];
+  ctx.fillStyle="#788592";
+  ctx.textAlign="right";
+  ctx.fillText(v.toFixed(1),left-8,yy);
+ }
 
-  ctx.setLineDash([4,4]);
-  ctx.strokeStyle="#999";
+ ctx.textAlign="center";
+ for(let i=0;i<n;i+=8){
+  ctx.fillStyle="#788592";
+  ctx.fillText(clock(s.times[i]),x(i),height-15);
+ }
+
+ ctx.beginPath();
+ let started=false;
+
+ s.values.forEach((v,i)=>{
+  if(!valid(v)){started=false;return;}
+  if(!started)ctx.moveTo(x(i),y(s.convert(v)));
+  else ctx.lineTo(x(i),y(s.convert(v)));
+  started=true;
+ });
+
+ ctx.strokeStyle=s.color;
+ ctx.lineWidth=3;
+ ctx.lineJoin="round";
+ ctx.stroke();
+
+ const index=Math.max(
+  0,Math.min(n-1,Number(slider.value)||0)
+ );
+ const raw=s.values[index];
+
+ ctx.setLineDash([5,5]);
+ ctx.strokeStyle="#9ba5ae";
+ ctx.beginPath();
+ ctx.moveTo(x(index),top);
+ ctx.lineTo(x(index),height-bottom);
+ ctx.stroke();
+ ctx.setLineDash([]);
+
+ if(valid(raw)){
+  ctx.fillStyle=s.color;
   ctx.beginPath();
-  ctx.moveTo(x(index),top);
-  ctx.lineTo(x(index),h-bottom);
-  ctx.stroke();
-  ctx.setLineDash([]);
+  ctx.arc(x(index),y(s.convert(raw)),5,0,Math.PI*2);
+  ctx.fill();
+ }
 
-  if(valid(raw)){
-    ctx.fillStyle=s.color;
-    ctx.beginPath();
-    ctx.arc(x(index),y(s.convert(raw)),5,0,Math.PI*2);
-    ctx.fill();
-  }
+ info.innerHTML=`
+  <span class="small">
+   ${dateLabel(s.times[index])} ${clock(s.times[index])}
+  </span>
+  <strong>${s.format(raw)}</strong>`;
 
-  info.innerHTML=`
-    <span class="small">${day(s.times[index])} ${clock(s.times[index])}</span>
-    <strong>${s.format(raw)}</strong>`;
+ function pick(e){
+  const rect=canvas.getBoundingClientRect();
+  slider.value=Math.max(0,Math.min(
+   n-1,Math.round((e.clientX-rect.left-left)/step)
+  ));
+  drawChart(kind);
+ }
 
-  function pick(e){
-    const rect=canvas.getBoundingClientRect();
-    slider.value=Math.max(0,Math.min(
-      n-1,Math.round((e.clientX-rect.left-left)/step)
-    ));
-    drawChart(kind);
-  }
+ canvas.onclick=pick;
+ canvas.onpointermove=e=>{
+  if(e.pointerType==="mouse"||e.buttons)pick(e);
+ };
 
-  canvas.onclick=pick;
-  canvas.onpointermove=e=>{
-    if(e.pointerType==="mouse"||e.buttons)pick(e);
-  };
-  slider.oninput=()=>{
-    drawChart(kind);
-    scroll.scrollLeft=x(Number(slider.value))-scroll.clientWidth/2;
-  };
+ slider.oninput=()=>{
+  drawChart(kind);
+  scroll.scrollLeft=x(Number(slider.value))-scroll.clientWidth/2;
+ };
 }
 
 function openModal(){
-  $("skill").value=prefs.skill;
-  $("heightPref").value=prefs.heightPref;
-  $("windPref").value=prefs.windPref;
-  $("boardLength").value=prefs.boardLength;
-  $("personalizeModal").classList.add("show");
+ $("skill").value=prefs.skill;
+ $("wavePreference").value=prefs.wavePreference;
+ $("windPreference").value=prefs.windPreference;
+ $("boardLength").value=prefs.boardLength;
+ $("personalizeModal").classList.add("show");
 }
 function closeModal(){
-  $("personalizeModal").classList.remove("show");
+ $("personalizeModal").classList.remove("show");
 }
 
-$("personalizeBtn").onclick=openModal;
+$("personalizeButton").onclick=openModal;
 $("closeModal").onclick=closeModal;
 
 $("personalizeModal").onclick=e=>{
-  if(e.target===$("personalizeModal"))closeModal();
+ if(e.target===$("personalizeModal"))closeModal();
 };
 
-$("savePersonalization").onclick=()=>{
-  prefs={
-    skill:$("skill").value,
-    heightPref:$("heightPref").value,
-    windPref:$("windPref").value,
-    boardLength:$("boardLength").value
-  };
-  save("swellPreferences",prefs);
-  closeModal();
-  renderPersonal();
+$("savePreferences").onclick=()=>{
+ prefs={
+  skill:$("skill").value,
+  wavePreference:$("wavePreference").value,
+  windPreference:$("windPreference").value,
+  boardLength:$("boardLength").value
+ };
+ save("swellPersonalization",prefs);
+ closeModal();
+ renderPersonal();
 };
 
 document.addEventListener("click",e=>{
-  const p=e.target.closest("[data-page]");
-  if(p)navigate(p.dataset.page);
+ const page=e.target.closest("[data-page]");
+ if(page)navigate(page.dataset.page);
 
-  const s=e.target.closest("[data-select]");
-  if(s)selectSpot(Number(s.dataset.select));
+ const spot=e.target.closest("[data-select]");
+ if(spot)selectSpot(Number(spot.dataset.select));
 
-  const f=e.target.closest("[data-fav]");
-  if(f)toggleFavorite(Number(f.dataset.fav));
+ const fav=e.target.closest("[data-fav]");
+ if(fav)toggleFavorite(Number(fav.dataset.fav));
+
+ const day=e.target.closest("[data-day]");
+ if(day){
+  selectedDay=day.dataset.day;
+  renderDays();
+  renderHourly();
+ }
 });
 
 $("search").addEventListener("input",renderSpots);
-$("region").addEventListener("change",renderSpots);
-$("refresh").addEventListener("click",load);
-$("favBtn").addEventListener("click",()=>{
-  toggleFavorite(selected.id);
+$("regionFilter").addEventListener("change",renderSpots);
+$("refreshButton").addEventListener("click",loadForecast);
+$("favoriteButton").addEventListener("click",()=>{
+ toggleFavorite(selected.id);
+});
+$("showAllHours").addEventListener("click",()=>{
+ selectedDay=null;
+ renderDays();
+ renderHourly();
 });
 
 window.addEventListener("resize",()=>{
-  if(activePage==="forecast")drawCharts();
-  if(map)map.invalidateSize();
+ if(currentPage==="forecast")drawAllCharts();
+ if(map)map.invalidateSize();
+});
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape")closeModal();
 });
 
 renderSpots();
 renderFavorites();
 render();
-load();
+loadForecast();
 </script>
 </body>
 </html>
