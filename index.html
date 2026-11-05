@@ -3,93 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SWELL — Surf Forecast</title>
+<title>SWELL | Surf Made Personal</title>
+
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
 :root {
---bg:#f3f6fa;--ink:#18212e;--muted:#8490a0;
---line:#e5eaf1;--blue:#477be8;--green:#1caa74;
---yellow:#d9a329;--red:#df6262;
+--bg:#f4f6f9;
+--white:#fff;
+--text:#18202c;
+--muted:#8490a0;
+--border:#e5eaf1;
+--blue:#4779e8;
+--green:#23b37a;
+--yellow:#dba72d;
+--red:#e96d68;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-h1{font-size:30px;letter-spacing:-1px}
-h2{font-size:20px;margin:0 0 12px}
+h1{font-size:29px;letter-spacing:-1px;margin:5px 0 12px}
+h2{font-size:20px;letter-spacing:-.5px;margin:0 0 12px}
+h3{margin:0 0 8px}
 p{line-height:1.5}
 small,.muted{color:var(--muted)}
 .app{max-width:1050px;margin:auto;padding:20px 15px 115px}
 .page{display:none}
 .page.active{display:block}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:23px}
 .logo{font-size:27px;font-weight:800;letter-spacing:-2px}
 .logo span{color:var(--blue)}
-.card{background:white;border:1px solid var(--line);border-radius:20px;padding:20px;margin:13px 0}
-.hero{background:linear-gradient(130deg,#fff,#e9f0fc)}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.eyebrow{font-size:10px;letter-spacing:1.4px;font-weight:800;color:#929dac}
-.big{font-size:40px;font-weight:800;letter-spacing:-2px}
-.grid{display:grid;gap:10px}
-.conditions{grid-template-columns:repeat(3,1fr)}
-.condition{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px}
-.condition .symbol{font-size:24px}
-.condition strong{display:block;font-size:19px;margin:10px 0 4px}
-.condition small{font-size:10px;font-weight:800}
+.card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:20px;margin:13px 0}
+.hero{background:linear-gradient(130deg,#fff,#eaf1fc)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{font-size:10px;letter-spacing:1.3px;font-weight:800;color:#8995a5}
+.big{font-size:39px;font-weight:800;letter-spacing:-2px}
 .green{color:var(--green)}
 .yellow{color:var(--yellow)}
 .red{color:var(--red)}
-.btn{border:1px solid var(--line);background:white;border-radius:12px;padding:12px 16px;font-weight:800}
-.btn.primary{background:var(--ink);color:white}
+.btn{border:1px solid var(--border);background:#fff;border-radius:12px;padding:12px 15px;font-weight:800;font-size:13px}
+.btn.primary{background:var(--text);color:white}
+.btn.blue{background:var(--blue);color:white;border-color:var(--blue)}
+.btn:disabled{opacity:.45}
+.grid{display:grid;gap:10px}
+.conditions{grid-template-columns:repeat(3,1fr)}
+.condition{background:#fff;border:1px solid var(--border);border-radius:16px;padding:15px}
+.condition .symbol{font-size:23px}
+.condition strong{display:block;font-size:18px;margin:10px 0 4px}
+.condition small{font-size:10px;font-weight:800}
 .scroll{overflow-x:auto}
-.days{display:grid;grid-template-columns:repeat(10,1fr);min-width:900px}
-.day{border:0;border-right:1px solid var(--line);background:white;padding:15px 5px;text-align:center}
+.days{display:grid;grid-template-columns:repeat(10,1fr);min-width:850px}
+.day{border:0;border-right:1px solid var(--border);background:white;padding:14px 5px;text-align:center}
 .day.active{background:#edf3ff;border-radius:12px}
 .day span,.day strong{display:block}
-.day .weather{font-size:25px;margin:10px 0}
+.day .weather{font-size:24px;margin:10px 0}
 .day .rating{font-size:20px;font-weight:800;margin-top:10px}
+.chart-inner{min-width:850px}
 .graph{width:100%;height:210px;display:block}
-.chart-inner{min-width:900px}
-#tideGraph{min-width:850px;width:100%;height:230px}
+#tideGraph{min-width:850px;width:100%;height:210px;cursor:crosshair}
 .bottom{
 position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
 width:min(95%,600px);display:grid;grid-template-columns:repeat(5,1fr);
-background:#fffffff2;border:1px solid var(--line);
+background:#fffffff2;border:1px solid var(--border);
 border-radius:25px;padding:8px;box-shadow:0 12px 40px #17253b30;
 z-index:1000;backdrop-filter:blur(15px)
 }
 .bottom button{border:0;background:none;border-radius:17px;padding:9px 2px;font-size:10px;font-weight:800;color:#7f8998}
 .bottom button.active{background:#eaf0ff;color:var(--blue)}
-.bottom .icon{display:block;font-size:23px;margin-bottom:5px}
-.search,.field{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:white}
+.bottom .icon{display:block;font-size:22px;margin-bottom:5px}
+.field{width:100%;padding:13px;border:1px solid var(--border);border-radius:12px;background:#fff}
 #map{height:300px;border-radius:16px}
-.spot{padding:15px 0;border-bottom:1px solid var(--line)}
+.spot{padding:15px 0;border-bottom:1px solid var(--border)}
 .options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
-.option{border:2px solid var(--line);border-radius:13px;background:white;padding:18px 8px;font-weight:800}
+.option{border:2px solid var(--border);border-radius:13px;background:white;padding:18px 8px;font-weight:800}
 .option.active{border-color:var(--blue);background:#edf3ff}
 .progress{height:7px;background:#e9edf4;border-radius:10px;overflow:hidden}
 .progress div{height:100%;background:var(--blue)}
 .form{display:grid;gap:11px}
 .table-scroll{overflow:auto}
 table{width:100%;border-collapse:collapse;white-space:nowrap}
-td,th{padding:13px;border-bottom:1px solid var(--line);font-size:12px;text-align:left}
+td,th{padding:13px;border-bottom:1px solid var(--border);font-size:12px;text-align:left}
 th{color:var(--muted)}
+.upload{display:block;border:2px dashed #c8d5e8;background:#f7faff;border-radius:18px;padding:30px 15px;text-align:center;cursor:pointer}
+.upload input{display:none}
+#surfVideo{width:100%;max-height:360px;border-radius:14px;background:#111;margin-top:15px}
+#poseCanvas{width:100%;border-radius:14px;background:#111;margin-top:12px}
+.feedback{padding:13px 15px;border-radius:13px;background:#f4f7fb;margin:9px 0}
+.feedback strong{display:block;margin-bottom:5px}
+.feedback p{margin:0;font-size:13px}
+.setting{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 0;border-bottom:1px solid var(--border)}
+.setting select{padding:10px;border:1px solid var(--border);border-radius:10px;background:#f8fafc}
 @media(max-width:500px){
 .conditions{grid-template-columns:repeat(2,1fr)}
 .options{grid-template-columns:repeat(2,1fr)}
-.big{font-size:34px}
+.big{font-size:33px}
 }
 </style>
 </head>
-<body>
 
+<body>
 <div class="app">
 <header class="top">
 <div class="logo">SWELL<span>.</span></div>
 <button class="btn" onclick="showPage('explore')">⌕ Explore</button>
 </header>
 
+<!-- HOME -->
 <section id="home" class="page active">
 <div class="card hero">
 <div class="row">
@@ -97,10 +118,10 @@ th{color:var(--muted)}
 <button class="btn" id="favoriteBtn">☆</button>
 </div>
 <h1 id="spotName">El Porto</h1>
-<p class="muted" id="status">Loading live forecast...</p>
-<div class="grid" style="grid-template-columns:1fr 1fr;margin-top:25px">
+<p class="muted" id="status">Loading forecast...</p>
+<div class="grid" style="grid-template-columns:1fr 1fr;margin-top:22px">
 <div>
-<div class="eyebrow">OFFSHORE WAVES</div>
+<div class="eyebrow">MODEL WAVE HEIGHT</div>
 <div class="big" id="heroWave">—</div>
 </div>
 <div>
@@ -108,13 +129,16 @@ th{color:var(--muted)}
 <div class="big" id="heroScore">—</div>
 </div>
 </div>
+<button class="btn blue" style="margin-top:18px" onclick="showPage('personalize')">
+Personalize this forecast
+</button>
 </div>
 
 <h2 style="margin-top:28px">Today's conditions</h2>
 <div class="grid conditions" id="conditions"></div>
 
-<h2 style="margin-top:30px">10-day forecast</h2>
-<p class="muted">Swipe across the forecast. Tap any day.</p>
+<h2 style="margin-top:28px">10-day forecast</h2>
+<p class="muted">Swipe through the days and tap one for details.</p>
 <div class="card scroll">
 <div class="chart-inner">
 <svg class="graph" id="forecastGraph" viewBox="0 0 900 210"></svg>
@@ -127,42 +151,41 @@ th{color:var(--muted)}
 <div id="dayDetails"></div>
 </div>
 
-<h2 style="margin-top:30px">Tides</h2>
+<h2 style="margin-top:28px">Tides</h2>
 <div class="card">
 <div class="row">
 <div>
-<div class="eyebrow">TIDE PREDICTION</div>
+<div class="eyebrow">NOAA TIDE PREDICTIONS</div>
 <h2 id="tideReading">Loading...</h2>
 </div>
-<small>NOAA Santa Monica reference station</small>
+<small>Santa Monica reference station</small>
 </div>
 <div class="scroll">
-<svg id="tideGraph" viewBox="0 0 900 230"></svg>
+<svg id="tideGraph" viewBox="0 0 900 210"></svg>
 </div>
 <p class="muted" id="tideInfo"></p>
 </div>
 
-<h2 style="margin-top:30px">Hourly surf conditions</h2>
+<h2 style="margin-top:28px">Hourly conditions</h2>
 <div class="card table-scroll">
 <table>
-<thead><tr>
-<th>TIME</th><th>WAVES</th><th>PERIOD</th>
-<th>WIND</th><th>WEATHER</th><th>MATCH</th>
-</tr></thead>
+<thead>
+<tr><th>TIME</th><th>WAVES</th><th>PERIOD</th><th>WIND</th><th>WEATHER</th><th>YOUR MATCH</th></tr>
+</thead>
 <tbody id="hourly"></tbody>
 </table>
 </div>
-
-<div class="card muted" style="font-size:12px">
-Offshore wave heights are model forecasts, not measured breaking surf.
-Personalized scores describe preference matches, not surf safety.
-</div>
+<p class="muted" style="font-size:11px">
+Wave heights are offshore model estimates, not observed breaking surf.
+Personalized scores indicate preference matches, not safety.
+</p>
 </section>
 
+<!-- EXPLORE -->
 <section id="explore" class="page">
 <h1>Explore surf spots</h1>
-<p class="muted">Discover your next session.</p>
-<input class="search" id="search" placeholder="Search beaches...">
+<p class="muted">Find the conditions that match your surfing.</p>
+<input class="field" id="search" placeholder="Search beaches...">
 <div class="card"><div id="map"></div></div>
 <div class="row">
 <h2>Surf spots</h2>
@@ -171,9 +194,10 @@ Personalized scores describe preference matches, not surf safety.
 <div class="card" id="spotList"></div>
 </section>
 
+<!-- SESSIONS -->
 <section id="sessions" class="page">
 <h1>Your sessions</h1>
-<p class="muted">Track your progress in the water.</p>
+<p class="muted">Track your time in the water.</p>
 <div class="card">
 <h2>Log a session</h2>
 <form id="sessionForm" class="form">
@@ -181,7 +205,7 @@ Personalized scores describe preference matches, not surf safety.
 <input class="field" id="sessionDate" type="date" required>
 <input class="field" id="sessionDuration" type="number" min="1" placeholder="Minutes surfing" required>
 <input class="field" id="sessionWaves" type="number" min="0" placeholder="Waves caught" required>
-<textarea class="field" id="sessionNotes" placeholder="Session notes" rows="3"></textarea>
+<textarea class="field" id="sessionNotes" rows="3" placeholder="Session notes"></textarea>
 <button class="btn primary" type="submit">Save session</button>
 </form>
 </div>
@@ -195,9 +219,11 @@ Personalized scores describe preference matches, not surf safety.
 </div>
 </section>
 
+<!-- PERSONALIZE -->
 <section id="personalize" class="page">
 <h1>Personalize SWELL</h1>
-<p class="muted">Your answers change the surf ratings throughout the app.</p>
+<p class="muted">Your answers change the surf match ratings across the app.</p>
+
 <div class="card">
 <div class="row">
 <span class="eyebrow" id="questionCounter"></span>
@@ -213,22 +239,94 @@ Personalized scores describe preference matches, not surf safety.
 <button class="btn primary" id="nextQuestion">Continue</button>
 </div>
 </div>
+
 <div class="card">
 <h2>Your saved profile</h2>
 <div id="profileSummary"></div>
 </div>
+
+<!-- AI FILM GRADER -->
+<h2 style="margin-top:30px">AI Surf Film Grader</h2>
+<div class="card">
+<span class="eyebrow">SURF TECHNIQUE ANALYSIS</span>
+<h2 style="margin-top:10px">Analyze your surfing</h2>
+<p class="muted">Upload a clip of yourself surfing to get technique feedback.</p>
+
+<label class="upload">
+<div style="font-size:40px">▶</div>
+<strong>Choose a surfing video</strong>
+<p class="muted">MP4, MOV, or browser-supported video</p>
+<input id="videoInput" type="file" accept="video/*">
+</label>
+
+<video id="surfVideo" controls playsinline hidden></video>
+<canvas id="poseCanvas" hidden></canvas>
+
+<div class="row" style="margin-top:15px">
+<button class="btn blue" id="analyzeBtn" disabled>
+Analyze surfing technique
+</button>
+<button class="btn" id="clearVideo">Clear</button>
+</div>
+
+<p class="muted" id="analysisStatus">
+Upload a video to begin.
+</p>
+<div class="progress">
+<div id="analysisProgress" style="width:0%"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Key points & how to improve</h2>
+<p class="muted" id="analysisSummary">
+Your technique feedback will appear here after analysis.
+</p>
+<ul id="analysisBullets">
+<li>Upload a clear video showing your whole body.</li>
+<li>Press Analyze surfing technique.</li>
+<li>Review your key points and improvement tips.</li>
+</ul>
+<div id="analysisMetrics"></div>
+</div>
 </section>
 
-<section id="grader" class="page">
-<h1>Surf Film Grader</h1>
-<div class="card" style="text-align:center;padding:45px 20px">
-<div style="font-size:50px">▶</div>
-<h2>Coming soon</h2>
-<p class="muted">
-Future AI video analysis for surfing technique,
-maneuvers, and wave selection.
-</p>
-<p class="muted">Video grading is not active yet.</p>
+<!-- SETTINGS -->
+<section id="settings" class="page">
+<h1>Settings</h1>
+<p class="muted">Customize your SWELL experience.</p>
+<div class="card">
+<h2>Forecast units</h2>
+<div class="setting">
+<span>Wave height</span>
+<select id="waveUnit">
+<option value="ft">Feet</option>
+<option value="m">Meters</option>
+</select>
+</div>
+<div class="setting">
+<span>Wind speed</span>
+<select id="windUnit">
+<option value="mph">MPH</option>
+<option value="kts">Knots</option>
+</select>
+</div>
+<div class="setting">
+<span>Temperature</span>
+<select id="tempUnit">
+<option value="F">Fahrenheit</option>
+<option value="C">Celsius</option>
+</select>
+</div>
+</div>
+<div class="card">
+<h2>Surf profile</h2>
+<p class="muted">Update your answers whenever your surfing changes.</p>
+<button class="btn primary" onclick="showPage('personalize')">Edit personalization</button>
+</div>
+<div class="card">
+<h2>About SWELL</h2>
+<p class="muted">Surf forecasting, personalized ratings, session tracking, and experimental video technique analysis.</p>
 </div>
 </section>
 </div>
@@ -238,15 +336,18 @@ maneuvers, and wave selection.
 <button data-page="explore"><span class="icon">⌕</span>Explore</button>
 <button data-page="sessions"><span class="icon">≋</span>Sessions</button>
 <button data-page="personalize"><span class="icon">☷</span>Personalize</button>
-<button data-page="grader"><span class="icon">▷</span>Film Grader</button>
+<button data-page="settings"><span class="icon">⚙</span>Settings</button>
 </nav>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-"use strict";
+
+<script type="module">
+import {
+FilesetResolver,
+PoseLandmarker
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm";
 
 const $=id=>document.getElementById(id);
-
 const spots=[
 ["El Porto",33.9008,-118.422],
 ["Manhattan Beach",33.8847,-118.4109],
@@ -280,54 +381,59 @@ const questions=[
 ["priority","What matters most?",["Wave height","Clean conditions","Swell quality","Consistency"]]
 ];
 
-function read(key,fallback){
-try{return JSON.parse(localStorage.getItem(key))??fallback}
-catch{return fallback}
+function read(k,d){
+try{return JSON.parse(localStorage.getItem(k))??d}
+catch{return d}
 }
-function save(key,value){
-try{localStorage.setItem(key,JSON.stringify(value))}catch(e){}
+function save(k,v){
+try{localStorage.setItem(k,JSON.stringify(v))}catch{}
 }
 
 let selected=read("swellSelected",0);
 let favorites=read("swellFavorites",[]);
 let profile=read("swellProfile",{});
 let sessions=read("swellSessions",[]);
-let questionIndex=0;
-let selectedDate=null;
-let forecast=null;
-let map=null;
-let mapMarkers=[];
-let favoritesOnly=false;
-let requestId=0;
+let settings=read("swellSettings",{wave:"ft",wind:"mph",temp:"F"});
+let forecast=null,selectedDate=null,questionIndex=0,map=null;
+let favoritesOnly=false,requestId=0;
+let poseModel=null,videoURL=null,analyzing=false;
 
 if(!spots[selected])selected=0;
 if(!Array.isArray(favorites))favorites=[];
 if(!Array.isArray(sessions))sessions=[];
-if(!profile||typeof profile!=="object")profile={};
 
 const valid=n=>typeof n==="number"&&Number.isFinite(n);
-const feet=n=>valid(n)?(n*3.28084).toFixed(1)+" ft":"—";
-const mph=n=>valid(n)?Math.round(n/1.609344)+" mph":"—";
-const sec=n=>valid(n)?n.toFixed(1)+" sec":"—";
-const temp=n=>valid(n)?Math.round(n*9/5+32)+"°F":"—";
-const average=a=>{
-const values=a.filter(valid);
-return values.length?values.reduce((x,y)=>x+y,0)/values.length:null;
+const avg=a=>{
+const v=a.filter(valid);
+return v.length?v.reduce((x,y)=>x+y,0)/v.length:null;
 };
 const ready=()=>questions.every(q=>profile[q[0]]!==undefined);
 const scoreColor=n=>n===null?"":n>=80?"green":n>=60?"yellow":"red";
 
-function get(h,key,time){
-const i=h?.time?.indexOf(time)??-1;
+function feet(n){
+if(!valid(n))return "—";
+return settings.wave==="m"?n.toFixed(1)+" m":(n*3.28084).toFixed(1)+" ft";
+}
+function mph(n){
+if(!valid(n))return "—";
+return settings.wind==="kts"?(n/1.852).toFixed(0)+" kts":(n/1.609344).toFixed(0)+" mph";
+}
+function temp(n){
+if(!valid(n))return "—";
+return settings.temp==="C"?Math.round(n)+"°C":Math.round(n*9/5+32)+"°F";
+}
+function sec(n){return valid(n)?n.toFixed(1)+" sec":"—"}
+function get(h,key,t){
+const i=h?.time?.indexOf(t)??-1;
 return i<0?null:h[key]?.[i]??null;
 }
-function weather(code){
-if(!valid(code))return "◌";
-if(code===0)return "☀️";
-if(code<=3)return "⛅";
-if(code<=48)return "🌫️";
-if(code<=67)return "🌧️";
-if(code<=86)return "❄️";
+function weather(c){
+if(!valid(c))return "◌";
+if(c===0)return "☀️";
+if(c<=3)return "⛅";
+if(c<=48)return "🌫️";
+if(c<=67)return "🌧️";
+if(c<=86)return "❄️";
 return "⛈️";
 }
 function clock(t){
@@ -335,209 +441,119 @@ if(!t)return "—";
 const h=Number(t.slice(11,13));
 return (h%12||12)+":"+t.slice(14,16)+(h>=12?" PM":" AM");
 }
-function dayLabel(date){
-return new Date(date+"T12:00:00").toLocaleDateString(
-"en-US",{weekday:"short",month:"short",day:"numeric"}
-);
+function dayLabel(d){
+return new Date(d+"T12:00:00").toLocaleDateString("en-US",{
+weekday:"short",month:"short",day:"numeric"
+});
 }
-
 function rating(wave,wind,period){
 if(!ready()||!valid(wave))return null;
-
 const h=wave*3.28084;
 const ideals={"1–2 ft":1.5,"2–3 ft":2.5,"3–5 ft":4,"5–7 ft":6,"7+ ft":8};
-const limits={"2 ft":2,"3 ft":3,"5 ft":5,"7 ft":7,"10+ ft":10};
-const windLimits={
-"Under 5 mph":5,"Under 10 mph":10,
-"Under 15 mph":15,"Any wind":30
-};
-
+const maxes={"2 ft":2,"3 ft":3,"5 ft":5,"7 ft":7,"10+ ft":10};
+const limits={"Under 5 mph":5,"Under 10 mph":10,"Under 15 mph":15,"Any wind":30};
 let s=95-Math.abs(h-ideals[profile.ideal])*14;
-
-if(h>limits[profile.max])
-s-=(h-limits[profile.max])*17;
-
+if(h>maxes[profile.max])s-=(h-maxes[profile.max])*17;
 if(valid(wind)){
 const w=wind/1.609344;
-s-=Math.max(0,w-windLimits[profile.windLimit])*2.8;
+s-=Math.max(0,w-limits[profile.windLimit])*2.8;
 if(profile.wind==="Glassy")s-=Math.max(0,w-4);
 }
-
 if(valid(period)){
-if(profile.period==="15+ sec")
-s-=Math.max(0,15-period)*2.5;
-if(profile.period==="10–14 sec")
-s-=Math.max(0,10-period,period-14)*2.5;
-if(profile.period==="Under 10 sec")
-s-=Math.max(0,period-10)*2.5;
+if(profile.period==="15+ sec")s-=Math.max(0,15-period)*2.5;
+if(profile.period==="10–14 sec")s-=Math.max(0,10-period,period-14)*2.5;
+if(profile.period==="Under 10 sec")s-=Math.max(0,period-10)*2.5;
 }
-
 if(profile.board==="Longboard"&&h<3)s+=5;
 if(profile.board==="Shortboard"&&h>=3)s+=4;
 if(profile.board==="Mid-length"&&h>=2&&h<=5)s+=4;
-
 return Math.max(0,Math.min(100,Math.round(s)));
 }
 
 function showPage(page){
-document.querySelectorAll(".page").forEach(el=>
-el.classList.toggle("active",el.id===page));
-document.querySelectorAll(".bottom button").forEach(el=>
-el.classList.toggle("active",el.dataset.page===page));
-if(page==="explore"){
-renderSpots();
-setTimeout(initMap,100);
-}
+document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id===page));
+document.querySelectorAll(".bottom button").forEach(e=>e.classList.toggle("active",e.dataset.page===page));
+if(page==="explore"){renderSpots();setTimeout(initMap,100)}
 if(page==="sessions")renderSessions();
 if(page==="personalize")renderQuestion();
 window.scrollTo(0,0);
 }
-
-document.querySelectorAll(".bottom button").forEach(b=>{
-b.onclick=()=>showPage(b.dataset.page);
-});
-
-function boardSVG(type){
-const size={
-Shortboard:[17,67],
-"Mid-length":[21,82],
-Longboard:[25,100]
-}[type];
-return `<svg viewBox="0 0 70 115" width="65" height="100">
-<rect x="${(70-size[0])/2}" y="${(115-size[1])/2}"
-width="${size[0]}" height="${size[1]}"
-rx="${size[0]/2}" fill="#18212e"/>
-<path d="M35 20V95" stroke="white" stroke-width="1"/>
-</svg>`;
-}
+window.showPage=showPage;
+document.querySelectorAll(".bottom button").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
 
 function renderQuestion(){
 const [key,title,options]=questions[questionIndex];
 const count=questions.filter(q=>profile[q[0]]!==undefined).length;
-
 $("questionCounter").textContent=`QUESTION ${questionIndex+1} OF 15`;
 $("questionProgress").textContent=count+"/15";
 $("progressFill").style.width=count/15*100+"%";
 $("questionTitle").textContent=title;
-
-$("questionOptions").innerHTML=options.map((option,i)=>`
-<button class="option ${profile[key]===option?"active":""}"
-data-answer="${i}">
-${key==="board"?boardSVG(option):""}
-<strong>${option}</strong>
-</button>
+$("questionOptions").innerHTML=options.map((o,i)=>`
+<button class="option ${profile[key]===o?"active":""}" data-answer="${i}">${o}</button>
 `).join("");
-
-document.querySelectorAll("[data-answer]").forEach(button=>{
-button.onclick=()=>{
-profile[key]=options[Number(button.dataset.answer)];
+document.querySelectorAll("[data-answer]").forEach(b=>b.onclick=()=>{
+profile[key]=options[Number(b.dataset.answer)];
 save("swellProfile",profile);
 renderQuestion();
 renderHome();
-};
 });
-
 $("previousQuestion").disabled=questionIndex===0;
-$("nextQuestion").textContent=
-questionIndex===14?"Save profile":"Continue";
-
-$("profileSummary").innerHTML=questions
-.filter(q=>profile[q[0]])
-.map(q=>`<div class="row" style="padding:10px 0;border-bottom:1px solid #eee">
-<span class="muted">${q[1]}</span>
-<strong>${profile[q[0]]}</strong>
-</div>`).join("")||"Complete your questions to build your profile.";
+$("nextQuestion").textContent=questionIndex===14?"Save profile":"Continue";
+$("profileSummary").innerHTML=questions.filter(q=>profile[q[0]]).map(q=>`
+<div class="row" style="padding:10px 0;border-bottom:1px solid #eee">
+<span class="muted">${q[1]}</span><strong>${profile[q[0]]}</strong>
+</div>
+`).join("")||"Complete the questions to build your profile.";
 }
-
-$("previousQuestion").onclick=()=>{
-questionIndex=Math.max(0,questionIndex-1);
-renderQuestion();
-};
-
+$("previousQuestion").onclick=()=>{questionIndex=Math.max(0,questionIndex-1);renderQuestion()};
 $("nextQuestion").onclick=()=>{
-if(!profile[questions[questionIndex][0]]){
-alert("Choose an answer first.");
-return;
-}
-if(questionIndex<14){
-questionIndex++;
-renderQuestion();
-}else{
-save("swellProfile",profile);
-renderHome();
-showPage("home");
-}
+if(!profile[questions[questionIndex][0]])return alert("Choose an answer first.");
+if(questionIndex<14){questionIndex++;renderQuestion()}
+else{save("swellProfile",profile);renderHome();showPage("home")}
 };
 
 async function fetchJSON(url){
-const response=await fetch(url);
-if(!response.ok)throw Error("HTTP "+response.status);
-const json=await response.json();
-if(json.error)throw Error(json.reason||"API error");
-return json;
+const r=await fetch(url);
+if(!r.ok)throw Error("HTTP "+r.status);
+const j=await r.json();
+if(j.error)throw Error(j.reason||"API error");
+return j;
 }
-
-async function loadSpot(index){
-selected=index;
-selectedDate=null;
-save("swellSelected",index);
-
-const token=++requestId;
-const spot=spots[index];
-
-$("spotName").textContent=spot[0];
+async function loadSpot(i){
+selected=i;selectedDate=null;save("swellSelected",i);
+const token=++requestId,s=spots[i];
+$("spotName").textContent=s[0];
 $("status").textContent="Loading forecast...";
-forecast=null;
-renderHome();
-
-const marine=new URL("https://marine-api.open-meteo.com/v1/marine");
-const weatherURL=new URL("https://api.open-meteo.com/v1/forecast");
-
-for(const url of [marine,weatherURL]){
-url.searchParams.set("latitude",spot[1]);
-url.searchParams.set("longitude",spot[2]);
-url.searchParams.set("timezone","America/Los_Angeles");
-url.searchParams.set("forecast_days","10");
+forecast=null;renderHome();
+const m=new URL("https://marine-api.open-meteo.com/v1/marine");
+const w=new URL("https://api.open-meteo.com/v1/forecast");
+for(const u of [m,w]){
+u.searchParams.set("latitude",s[1]);
+u.searchParams.set("longitude",s[2]);
+u.searchParams.set("timezone","America/Los_Angeles");
+u.searchParams.set("forecast_days","10");
 }
-
-marine.searchParams.set("hourly",
-"wave_height,swell_wave_period,sea_surface_temperature");
-weatherURL.searchParams.set("hourly",
-"wind_speed_10m,weather_code,temperature_2m");
-weatherURL.searchParams.set("daily",
-"sunrise,sunset,weather_code");
-
-const results=await Promise.allSettled([
-fetchJSON(marine),fetchJSON(weatherURL)
-]);
-
+m.searchParams.set("hourly","wave_height,swell_wave_period,sea_surface_temperature");
+w.searchParams.set("hourly","wind_speed_10m,weather_code,temperature_2m");
+w.searchParams.set("daily","sunrise,sunset,weather_code");
+const r=await Promise.allSettled([fetchJSON(m),fetchJSON(w)]);
 if(token!==requestId)return;
-
 forecast={
-marine:results[0].status==="fulfilled"?results[0].value:null,
-weather:results[1].status==="fulfilled"?results[1].value:null
+marine:r[0].status==="fulfilled"?r[0].value:null,
+weather:r[1].status==="fulfilled"?r[1].value:null
 };
-
-$("status").textContent=
-forecast.marine?"10-day model forecast":"Marine forecast unavailable";
-
-renderHome();
-loadTides(token);
+$("status").textContent=forecast.marine?"10-day model forecast":"Marine data unavailable";
+renderHome();loadTides(token);
 }
-
 function dailyData(){
-const m=forecast?.marine?.hourly;
-const w=forecast?.weather?.hourly;
-const d=forecast?.weather?.daily;
+const m=forecast?.marine?.hourly,w=forecast?.weather?.hourly,d=forecast?.weather?.daily;
 if(!m?.time)return [];
-
 return [...new Set(m.time.map(t=>t.slice(0,10)))].slice(0,10).map(date=>{
 const times=m.time.filter(t=>t.startsWith(date));
-const wave=average(times.map(t=>get(m,"wave_height",t)));
-const period=average(times.map(t=>get(m,"swell_wave_period",t)));
-const wind=average(times.map(t=>get(w,"wind_speed_10m",t)));
+const wave=avg(times.map(t=>get(m,"wave_height",t)));
+const period=avg(times.map(t=>get(m,"swell_wave_period",t)));
+const wind=avg(times.map(t=>get(w,"wind_speed_10m",t)));
 const i=d?.time?.indexOf(date)??-1;
-
 return {
 date,wave,period,wind,
 code:i<0?null:d.weather_code?.[i],
@@ -547,96 +563,59 @@ score:rating(wave,wind,period)
 };
 });
 }
-
 function smooth(points){
 if(!points.length)return "";
-let path=`M ${points[0][0]} ${points[0][1]}`;
-
+let p=`M ${points[0][0]} ${points[0][1]}`;
 for(let i=1;i<points.length;i++){
-const a=points[i-1],b=points[i];
-const mid=(a[0]+b[0])/2;
-path+=` C ${mid} ${a[1]}, ${mid} ${b[1]}, ${b[0]} ${b[1]}`;
+const a=points[i-1],b=points[i],mid=(a[0]+b[0])/2;
+p+=` C ${mid} ${a[1]} ${mid} ${b[1]} ${b[0]} ${b[1]}`;
 }
-return path;
+return p;
 }
-
 function drawGraph(id,values,blue=false){
-const svg=$(id);
-const available=values.filter(valid);
-
-if(!available.length){
-svg.innerHTML='<text x="450" y="110" text-anchor="middle" fill="#999">Data unavailable</text>';
-return;
-}
-
-const min=Math.min(0,...available);
-const max=Math.max(1,...available)*1.15;
+const svg=$(id),available=values.filter(valid);
+if(!available.length){svg.innerHTML='<text x="450" y="110" text-anchor="middle" fill="#999">Data unavailable</text>';return}
+const min=Math.min(0,...available),max=Math.max(1,...available)*1.15;
 const x=i=>40+i*820/Math.max(1,values.length-1);
 const y=v=>180-(v-min)/(max-min)*145;
-
-const segments=[];
-let segment=[];
+const segments=[];let segment=[];
 values.forEach((v,i)=>{
 if(valid(v))segment.push([x(i),y(v)]);
-else if(segment.length){segments.push(segment);segment=[];}
+else if(segment.length){segments.push(segment);segment=[]}
 });
 if(segment.length)segments.push(segment);
-
 const color=blue?"#477be8":"#27384c";
-
 svg.innerHTML=`
-<defs>
-<linearGradient id="${id}Fill" x1="0" y1="0" x2="0" y2="1">
+<defs><linearGradient id="${id}Fill" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0%" stop-color="${color}" stop-opacity=".24"/>
 <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
-</linearGradient>
-</defs>
+</linearGradient></defs>
 <line x1="30" y1="180" x2="870" y2="180" stroke="#e8edf3"/>
-${segments.map(s=>{
-const p=smooth(s);
-return `<path d="${p} L ${s[s.length-1][0]} 180 L ${s[0][0]} 180 Z"
-fill="url(#${id}Fill)"/>
-<path d="${p}" stroke="${color}" stroke-width="3.5"
-fill="none" stroke-linecap="round"/>`;
-}).join("")}
-${values.map((v,i)=>valid(v)?`
-<circle cx="${x(i)}" cy="${y(v)}" r="4"
-fill="white" stroke="${color}" stroke-width="2"/>
-`:"").join("")}
+${segments.map(s=>`
+<path d="${smooth(s)} L ${s[s.length-1][0]} 180 L ${s[0][0]} 180 Z" fill="url(#${id}Fill)"/>
+<path d="${smooth(s)}" stroke="${color}" stroke-width="3.5" fill="none"/>
+`).join("")}
+${values.map((v,i)=>valid(v)?`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="white" stroke="${color}" stroke-width="2"/>`:"").join("")}
 `;
 }
-
 function renderHome(){
 const days=dailyData();
-
-$("favoriteBtn").textContent=
-favorites.includes(selected)?"★":"☆";
-
+$("favoriteBtn").textContent=favorites.includes(selected)?"★":"☆";
 if(!days.length){
-$("heroWave").textContent="—";
-$("heroScore").textContent="—";
-$("conditions").innerHTML="";
-$("days").innerHTML="";
-$("forecastGraph").innerHTML="";
-$("hourly").innerHTML="";
+$("heroWave").textContent="—";$("heroScore").textContent="—";
+$("conditions").innerHTML="";$("days").innerHTML="";
+$("forecastGraph").innerHTML="";$("hourly").innerHTML="";
 return;
 }
-
-const today=days[0];
-const chosen=days.find(d=>d.date===selectedDate)||today;
+const today=days[0],chosen=days.find(d=>d.date===selectedDate)||today;
 selectedDate=chosen.date;
-
 $("heroWave").textContent=feet(today.wave);
-$("heroScore").textContent=
-today.score===null?"—":today.score+"/100";
+$("heroScore").textContent=today.score===null?"—":today.score+"/100";
 $("heroScore").className="big "+scoreColor(today.score);
-
-const marine=forecast.marine.hourly;
-const w=forecast.weather?.hourly;
-const water=marine.sea_surface_temperature?.find(valid);
+const m=forecast.marine.hourly,w=forecast.weather?.hourly;
+const water=m.sea_surface_temperature?.find(valid);
 const air=w?.temperature_2m?.find(valid);
-
-const conditions=[
+const items=[
 ["🌊","WATER TEMP",temp(water)],
 ["🌅","SUNRISE",clock(today.sunrise)],
 ["🌇","SUNSET",clock(today.sunset)],
@@ -644,270 +623,332 @@ const conditions=[
 ["💨","WIND",mph(today.wind)],
 ["〰️","SWELL PERIOD",sec(today.period)]
 ];
-
-$("conditions").innerHTML=conditions.map(a=>`
-<div class="condition">
-<span class="symbol">${a[0]}</span>
-<strong>${a[2]}</strong>
-<small>${a[1]}</small>
-</div>
+$("conditions").innerHTML=items.map(a=>`
+<div class="condition"><span class="symbol">${a[0]}</span>
+<strong>${a[2]}</strong><small>${a[1]}</small></div>
 `).join("");
-
 $("days").innerHTML=days.map(d=>`
-<button class="day ${d.date===selectedDate?"active":""}"
-data-day="${d.date}">
+<button class="day ${d.date===selectedDate?"active":""}" data-day="${d.date}">
 <strong>${dayLabel(d.date)}</strong>
 <span class="weather">${weather(d.code)}</span>
 <strong>${feet(d.wave)}</strong>
 <small>${mph(d.wind)}</small>
-<span class="rating ${scoreColor(d.score)}">
-${d.score===null?"—":d.score}
-</span>
+<span class="rating ${scoreColor(d.score)}">${d.score===null?"—":d.score}</span>
 <small>Surf match</small>
 </button>
 `).join("");
-
-document.querySelectorAll("[data-day]").forEach(button=>{
-button.onclick=()=>{
-selectedDate=button.dataset.day;
-renderHome();
-};
+document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{
+selectedDate=b.dataset.day;renderHome();
 });
-
-drawGraph("forecastGraph",
-days.map(d=>valid(d.wave)?d.wave*3.28084:null));
-
+drawGraph("forecastGraph",days.map(d=>valid(d.wave)?d.wave*3.28084:null));
 $("selectedTitle").textContent=dayLabel(chosen.date);
-
 $("dayDetails").innerHTML=`
-<div class="row"><span>Offshore waves</span><strong>${feet(chosen.wave)}</strong></div>
-<hr style="border:0;border-top:1px solid #eee">
-<div class="row"><span>Swell period</span><strong>${sec(chosen.period)}</strong></div>
-<hr style="border:0;border-top:1px solid #eee">
-<div class="row"><span>Wind</span><strong>${mph(chosen.wind)}</strong></div>
-<hr style="border:0;border-top:1px solid #eee">
-<div class="row"><span>Your surf match</span>
-<strong class="${scoreColor(chosen.score)}">
-${chosen.score===null?"Set up profile":chosen.score+"/100"}
-</strong>
-</div>
+<div class="row"><span>Offshore waves</span><strong>${feet(chosen.wave)}</strong></div><hr>
+<div class="row"><span>Swell period</span><strong>${sec(chosen.period)}</strong></div><hr>
+<div class="row"><span>Wind</span><strong>${mph(chosen.wind)}</strong></div><hr>
+<div class="row"><span>Your surf match</span><strong class="${scoreColor(chosen.score)}">${chosen.score===null?"Complete profile":chosen.score+"/100"}</strong></div>
 `;
-
-const times=marine.time.filter(t=>t.startsWith(chosen.date));
-
+const times=m.time.filter(t=>t.startsWith(chosen.date));
 $("hourly").innerHTML=times.map(t=>{
-const wave=get(marine,"wave_height",t);
-const period=get(marine,"swell_wave_period",t);
-const wind=get(w,"wind_speed_10m",t);
+const wave=get(m,"wave_height",t),period=get(m,"swell_wave_period",t),wind=get(w,"wind_speed_10m",t);
 const score=rating(wave,wind,period);
-
-return `<tr>
-<td>${clock(t)}</td>
-<td>${feet(wave)}</td>
-<td>${sec(period)}</td>
-<td>${mph(wind)}</td>
-<td>${weather(get(w,"weather_code",t))}</td>
-<td class="${scoreColor(score)}">
-${score===null?"—":score+"/100"}
-</td>
-</tr>`;
+return `<tr><td>${clock(t)}</td><td>${feet(wave)}</td><td>${sec(period)}</td>
+<td>${mph(wind)}</td><td>${weather(get(w,"weather_code",t))}</td>
+<td class="${scoreColor(score)}">${score===null?"—":score+"/100"}</td></tr>`;
 }).join("");
 }
-
 async function loadTides(token){
-$("tideReading").textContent="Loading predictions...";
-$("tideInfo").textContent="";
-
-const now=new Date();
-const end=new Date(now.getTime()+48*3600000);
-const format=d=>
-d.getFullYear()+
-String(d.getMonth()+1).padStart(2,"0")+
-String(d.getDate()).padStart(2,"0");
-
-const url=new URL("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter");
-url.searchParams.set("begin_date",format(now));
-url.searchParams.set("end_date",format(end));
-url.searchParams.set("station","9410840");
-url.searchParams.set("product","predictions");
-url.searchParams.set("datum","MLLW");
-url.searchParams.set("units","english");
-url.searchParams.set("time_zone","lst_ldt");
-url.searchParams.set("interval","h");
-url.searchParams.set("format","json");
-
+$("tideReading").textContent="Loading...";
+const now=new Date(),end=new Date(now.getTime()+48*3600000);
+const format=d=>d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+const u=new URL("https://api.tidesandcurrents.noaa.gov/api/prod/datagetter");
+for(const [k,v] of Object.entries({
+begin_date:format(now),end_date:format(end),station:"9410840",
+product:"predictions",datum:"MLLW",units:"english",
+time_zone:"lst_ldt",interval:"h",format:"json"
+}))u.searchParams.set(k,v);
 try{
-const json=await fetchJSON(url);
+const j=await fetchJSON(u);
 if(token!==requestId)return;
-
-const predictions=(json.predictions||[])
-.map(p=>({time:p.t,value:Number(p.v)}))
-.filter(p=>valid(p.value))
-.slice(0,49);
-
-if(!predictions.length)throw Error("No tide predictions");
-
-$("tideReading").textContent=
-predictions[0].value.toFixed(2)+" ft";
-
-$("tideInfo").textContent=
-"Regional tide predictions · Select a point on the graph.";
-
-drawGraph("tideGraph",predictions.map(p=>p.value),true);
-
-const svg=$("tideGraph");
-svg.style.cursor="crosshair";
-svg.onclick=e=>{
-const rect=svg.getBoundingClientRect();
-const x=(e.clientX-rect.left)/rect.width;
-const i=Math.max(0,Math.min(predictions.length-1,
-Math.round(x*(predictions.length-1))));
-$("tideReading").textContent=
-predictions[i].value.toFixed(2)+" ft";
-$("tideInfo").textContent=predictions[i].time;
+const p=(j.predictions||[]).map(x=>({time:x.t,value:Number(x.v)})).filter(x=>valid(x.value)).slice(0,49);
+if(!p.length)throw Error("No predictions");
+$("tideReading").textContent=p[0].value.toFixed(2)+" ft";
+$("tideInfo").textContent="Tap the graph to inspect predicted tides.";
+drawGraph("tideGraph",p.map(x=>x.value),true);
+$("tideGraph").onclick=e=>{
+const rect=$("tideGraph").getBoundingClientRect();
+const i=Math.max(0,Math.min(p.length-1,Math.round((e.clientX-rect.left)/rect.width*(p.length-1))));
+$("tideReading").textContent=p[i].value.toFixed(2)+" ft";
+$("tideInfo").textContent=p[i].time;
 };
-}catch(e){
+}catch{
 if(token!==requestId)return;
 $("tideReading").textContent="Unavailable";
-$("tideInfo").textContent="NOAA predictions could not be loaded.";
+$("tideInfo").textContent="NOAA tide data could not be loaded.";
 }
 }
-
-function selectSpot(i){
-showPage("home");
-loadSpot(i);
-}
-
+function selectSpot(i){showPage("home");loadSpot(i)}
 function toggleFavorite(i){
-favorites=favorites.includes(i)
-?favorites.filter(x=>x!==i)
-:[...favorites,i];
-
-save("swellFavorites",favorites);
-renderSpots();
-renderHome();
+favorites=favorites.includes(i)?favorites.filter(x=>x!==i):[...favorites,i];
+save("swellFavorites",favorites);renderSpots();renderHome();
 }
-
 $("favoriteBtn").onclick=()=>toggleFavorite(selected);
-
 function renderSpots(){
 const search=$("search").value.toLowerCase();
-
-const filtered=spots.map((s,i)=>({s,i}))
-.filter(({s,i})=>
-s[0].toLowerCase().includes(search)&&
-(!favoritesOnly||favorites.includes(i))
+const filtered=spots.map((s,i)=>({s,i})).filter(({s,i})=>
+s[0].toLowerCase().includes(search)&&(!favoritesOnly||favorites.includes(i))
 );
-
-$("spotList").innerHTML=filtered.length
-?filtered.map(({s,i})=>`
+$("spotList").innerHTML=filtered.map(({s,i})=>`
 <div class="spot row">
-<div>
-<strong>${s[0]}</strong>
-<p class="muted" style="margin:5px 0">California surf spot</p>
-</div>
+<div><strong>${s[0]}</strong><p class="muted" style="margin:5px 0">California surf spot</p></div>
 <div class="row">
-<button class="btn" data-favorite="${i}">
-${favorites.includes(i)?"★":"☆"}
-</button>
-<button class="btn primary" data-spot="${i}">View</button>
+<button class="btn" data-favorite="${i}">${favorites.includes(i)?"★":"☆"}</button>
+<button class="btn" data-personalize="${i}">Personalize</button>
+<button class="btn primary" data-spot="${i}">Forecast</button>
 </div>
 </div>
-`).join("")
-:'<p class="muted">No matching spots.</p>';
-
-document.querySelectorAll("[data-spot]").forEach(b=>{
-b.onclick=()=>selectSpot(Number(b.dataset.spot));
+`).join("")||'<p>No matching spots.</p>';
+document.querySelectorAll("[data-spot]").forEach(b=>b.onclick=()=>selectSpot(+b.dataset.spot));
+document.querySelectorAll("[data-personalize]").forEach(b=>b.onclick=()=>{
+loadSpot(+b.dataset.personalize);showPage("personalize");
 });
-document.querySelectorAll("[data-favorite]").forEach(b=>{
-b.onclick=()=>toggleFavorite(Number(b.dataset.favorite));
-});
+document.querySelectorAll("[data-favorite]").forEach(b=>b.onclick=()=>toggleFavorite(+b.dataset.favorite));
 }
-
 $("search").oninput=renderSpots;
 $("filterFavorites").onclick=()=>{
 favoritesOnly=!favoritesOnly;
-$("filterFavorites").textContent=
-favoritesOnly?"★ Favorites":"☆ Favorites";
+$("filterFavorites").textContent=favoritesOnly?"★ Favorites":"☆ Favorites";
 renderSpots();
 };
-
 function initMap(){
 if(typeof L==="undefined")return;
-
 if(!map){
 map=L.map("map").setView([33.91,-118.47],10);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
 attribution:"© OpenStreetMap contributors"
 }).addTo(map);
-
 spots.forEach((s,i)=>{
 const marker=L.marker([s[1],s[2]]).addTo(map);
-marker.bindPopup(`<strong>${s[0]}</strong><br>Tap this marker to select.`);
+marker.bindPopup(s[0]);
 marker.on("click",()=>selectSpot(i));
-mapMarkers.push(marker);
 });
 }
 map.invalidateSize();
 }
-
-$("sessionSpot").innerHTML=spots.map((s,i)=>
-`<option value="${i}">${s[0]}</option>`).join("");
-
+$("sessionSpot").innerHTML=spots.map((s,i)=>`<option value="${i}">${s[0]}</option>`).join("");
 $("sessionDate").value=new Date().toLocaleDateString("en-CA");
-
 $("sessionForm").onsubmit=e=>{
 e.preventDefault();
-
 sessions.unshift({
-spot:Number($("sessionSpot").value),
-date:$("sessionDate").value,
-duration:Number($("sessionDuration").value),
-waves:Number($("sessionWaves").value),
+spot:+$("sessionSpot").value,date:$("sessionDate").value,
+duration:+$("sessionDuration").value,waves:+$("sessionWaves").value,
 notes:$("sessionNotes").value
 });
-
 save("swellSessions",sessions);
 $("sessionForm").reset();
 $("sessionDate").value=new Date().toLocaleDateString("en-CA");
 renderSessions();
 };
-
+function escapeHTML(s){
+return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+}
 function renderSessions(){
-const minutes=sessions.reduce((sum,s)=>sum+s.duration,0);
-const waves=sessions.reduce((sum,s)=>sum+s.waves,0);
-
+const minutes=sessions.reduce((a,s)=>a+s.duration,0);
+const waves=sessions.reduce((a,s)=>a+s.waves,0);
 $("sessionStats").innerHTML=`
 <div class="grid" style="grid-template-columns:repeat(3,1fr)">
 <div><div class="big">${sessions.length}</div><small>Sessions</small></div>
 <div><div class="big">${Math.round(minutes/60)}</div><small>Hours</small></div>
-<div><div class="big">${waves}</div><small>Waves caught</small></div>
-</div>
-`;
-
-$("sessionHistory").innerHTML=sessions.length
-?sessions.map((s,i)=>`
+<div><div class="big">${waves}</div><small>Waves</small></div>
+</div>`;
+$("sessionHistory").innerHTML=sessions.map((s,i)=>`
 <div class="spot row">
-<div>
-<strong>${spots[s.spot]?.[0]||"Surf spot"}</strong>
+<div><strong>${spots[s.spot]?.[0]||"Surf spot"}</strong>
 <p class="muted">${s.date} · ${s.duration} min · ${s.waves} waves</p>
-<small>${s.notes.replace(/[&<>"]/g,c=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"
-}[c]))}</small>
-</div>
+<small>${escapeHTML(s.notes)}</small></div>
 <button class="btn" data-delete="${i}">Delete</button>
 </div>
-`).join("")
-:'<p class="muted">No sessions logged yet.</p>';
-
-document.querySelectorAll("[data-delete]").forEach(b=>{
-b.onclick=()=>{
-sessions.splice(Number(b.dataset.delete),1);
-save("swellSessions",sessions);
-renderSessions();
-};
+`).join("")||'<p class="muted">No sessions yet.</p>';
+document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>{
+sessions.splice(+b.dataset.delete,1);save("swellSessions",sessions);renderSessions();
 });
 }
+
+// SETTINGS
+$("waveUnit").value=settings.wave;
+$("windUnit").value=settings.wind;
+$("tempUnit").value=settings.temp;
+for(const [id,key] of [["waveUnit","wave"],["windUnit","wind"],["tempUnit","temp"]]){
+$(id).onchange=e=>{
+settings[key]=e.target.value;save("swellSettings",settings);renderHome();
+};
+}
+
+// AI FILM GRADER
+const video=$("surfVideo");
+const canvas=$("poseCanvas");
+const ctx=canvas.getContext("2d");
+
+$("videoInput").onchange=e=>{
+const file=e.target.files[0];
+if(!file)return;
+if(videoURL)URL.revokeObjectURL(videoURL);
+videoURL=URL.createObjectURL(file);
+video.src=videoURL;
+video.hidden=false;
+canvas.hidden=true;
+$("analyzeBtn").disabled=false;
+$("analysisStatus").textContent="Video ready. Press Analyze surfing technique.";
+$("analysisProgress").style.width="0%";
+};
+$("clearVideo").onclick=()=>{
+if(analyzing)return;
+video.pause();video.removeAttribute("src");video.load();
+if(videoURL)URL.revokeObjectURL(videoURL);
+videoURL=null;
+video.hidden=true;canvas.hidden=true;
+$("videoInput").value="";
+$("analyzeBtn").disabled=true;
+$("analysisStatus").textContent="Upload a video to begin.";
+$("analysisProgress").style.width="0%";
+$("analysisSummary").textContent="Your technique feedback will appear here after analysis.";
+$("analysisBullets").innerHTML="<li>Upload a video, then press Analyze.</li>";
+$("analysisMetrics").innerHTML="";
+};
+
+function angle(a,b,c){
+const u={x:a.x-b.x,y:a.y-b.y};
+const v={x:c.x-b.x,y:c.y-b.y};
+const dot=u.x*v.x+u.y*v.y;
+const mag=Math.hypot(u.x,u.y)*Math.hypot(v.x,v.y);
+return mag?Math.acos(Math.max(-1,Math.min(1,dot/mag)))*180/Math.PI:null;
+}
+function pointVisible(p){
+return p&&p.visibility!==undefined?p.visibility>.55:!!p;
+}
+function poseMeasurements(p){
+const L={shoulder:p[11],hip:p[23],knee:p[25],ankle:p[27]};
+const R={shoulder:p[12],hip:p[24],knee:p[26],ankle:p[28]};
+const knees=[];
+for(const side of [L,R]){
+if([side.hip,side.knee,side.ankle].every(pointVisible))
+knees.push(angle(side.hip,side.knee,side.ankle));
+}
+let torso=null,stance=null;
+if([p[11],p[12],p[23],p[24]].every(pointVisible)){
+const shoulder={x:(p[11].x+p[12].x)/2,y:(p[11].y+p[12].y)/2};
+const hip={x:(p[23].x+p[24].x)/2,y:(p[23].y+p[24].y)/2};
+torso=Math.atan2(Math.abs(shoulder.x-hip.x),Math.abs(shoulder.y-hip.y))*180/Math.PI;
+}
+if([p[27],p[28],p[23],p[24]].every(pointVisible)){
+const hipWidth=Math.hypot(p[23].x-p[24].x,p[23].y-p[24].y);
+const ankleWidth=Math.hypot(p[27].x-p[28].x,p[27].y-p[28].y);
+if(hipWidth>.01)stance=ankleWidth/hipWidth;
+}
+return {knee:avg(knees),torso,stance};
+}
+function seekVideo(t){
+return new Promise((resolve,reject)=>{
+const timeout=setTimeout(()=>reject(Error("Video seek timed out")),7000);
+video.addEventListener("seeked",()=>{
+clearTimeout(timeout);resolve();
+},{once:true});
+video.currentTime=t;
+});
+}
+function feedback(metrics){
+const notes=[];
+if(valid(metrics.knee)){
+if(metrics.knee>155)notes.push("Your knees appear relatively straight in many sampled frames. Practice controlled knee flexion while maintaining balance.");
+else if(metrics.knee<85)notes.push("Your knees appear deeply bent in many sampled frames. Practice adjusting your stance as the wave changes.");
+else notes.push("Your knee angles show a moderate bend in the sampled frames. Focus on maintaining controlled movement through turns.");
+}
+if(valid(metrics.torso)){
+if(metrics.torso>35)notes.push("Your torso shows noticeable sideways lean in the sampled frames. Review whether that movement is intentional during each turn.");
+else notes.push("Your torso generally remains fairly upright in the sampled frames. Review how your upper body moves through transitions.");
+}
+if(valid(metrics.stance)){
+if(metrics.stance<1.1)notes.push("Your ankles appear close together relative to hip width in the camera view. Check your foot placement and balance.");
+else notes.push("Your detected stance has some separation. Check whether your foot placement stays comfortable and controlled.");
+}
+notes.push("Watch your takeoff and turns at half speed, and compare the moments before and after each maneuver.");
+return notes;
+}
+async function createPoseModel(){
+if(poseModel)return poseModel;
+const vision=await FilesetResolver.forVisionTasks(
+"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
+);
+poseModel=await PoseLandmarker.createFromOptions(vision,{
+baseOptions:{
+modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+delegate:"CPU"
+},
+runningMode:"VIDEO",
+numPoses:1
+});
+return poseModel;
+}
+$("analyzeBtn").onclick=async()=>{
+if(analyzing||!videoURL)return;
+analyzing=true;
+$("analyzeBtn").disabled=true;
+$("analysisStatus").textContent="Loading AI pose model...";
+$("analysisProgress").style.width="5%";
+$("analysisBullets").innerHTML="<li>Analyzing video frames...</li>";
+$("analysisMetrics").innerHTML="";
+try{
+const model=await createPoseModel();
+if(!Number.isFinite(video.duration)||video.duration<=0)
+throw Error("Video metadata is not ready.");
+video.pause();
+const count=Math.min(45,Math.max(8,Math.ceil(video.duration*2)));
+const results=[];
+const last=Math.max(.01,video.duration-.15);
+canvas.width=Math.min(video.videoWidth||640,900);
+canvas.height=Math.round(canvas.width*(video.videoHeight||360)/(video.videoWidth||640));
+canvas.hidden=false;
+let timestamp=0;
+for(let i=0;i<count;i++){
+const t=.05+(last-.05)*i/Math.max(1,count-1);
+await seekVideo(Math.min(last,t));
+ctx.drawImage(video,0,0,canvas.width,canvas.height);
+timestamp+=100;
+const detection=model.detectForVideo(canvas,timestamp);
+const landmarks=detection.landmarks?.[0];
+if(landmarks)results.push(poseMeasurements(landmarks));
+$("analysisProgress").style.width=Math.round((i+1)/count*100)+"%";
+$("analysisStatus").textContent=`Analyzing frame ${i+1} of ${count}...`;
+await new Promise(r=>setTimeout(r,0));
+}
+const knee=avg(results.map(r=>r.knee));
+const torso=avg(results.map(r=>r.torso));
+const stance=avg(results.map(r=>r.stance));
+if(results.length<Math.max(4,count*.25)){
+$("analysisSummary").textContent="The surfer wasn't visible clearly enough in enough frames for reliable technique feedback.";
+$("analysisBullets").innerHTML="<li>Try a clip with the surfer larger in frame and fewer obstructions.</li>";
+$("analysisMetrics").innerHTML=`Detected poses in ${results.length} of ${count} frames.`;
+}else{
+const metrics={knee,torso,stance};
+$("analysisSummary").textContent=`Analyzed ${results.length} of ${count} sampled frames. Here are your key technique observations:`;
+$("analysisBullets").innerHTML=feedback(metrics).map(x=>`<li style="margin:10px 0">${x}</li>`).join("");
+$("analysisMetrics").innerHTML=`
+<div class="feedback"><strong>Average knee angle</strong>${valid(knee)?knee.toFixed(0)+"°":"Unavailable"}</div>
+<div class="feedback"><strong>Average torso lean</strong>${valid(torso)?torso.toFixed(0)+"°":"Unavailable"}</div>
+<div class="feedback"><strong>Apparent stance ratio</strong>${valid(stance)?stance.toFixed(2):"Unavailable"}</div>
+<small>These are approximate 2D camera measurements, not a definitive assessment of surfing technique.</small>
+`;
+}
+$("analysisStatus").textContent="Analysis complete.";
+}catch(e){
+$("analysisStatus").textContent="Analysis couldn't finish: "+e.message;
+$("analysisSummary").textContent="No technique report was generated.";
+$("analysisBullets").innerHTML="<li>Try a shorter, browser-supported video with a clear view of the surfer.</li>";
+}finally{
+analyzing=false;
+$("analyzeBtn").disabled=!videoURL;
+}
+};
 
 renderQuestion();
 renderSpots();
